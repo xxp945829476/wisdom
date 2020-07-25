@@ -28,37 +28,33 @@ import { resetRouter } from '@/router';
 import MenuUtils from '@/utils/MenuUtils'
 var data = [
     {
-    "path": '/sys',
-    "name": '系统设置',
+    "path": '/system',
+    "name": '系统管理',
     "component": 'Home',
     "meta":{
         icon: 'setting'
     },
     "children":[
-        
             {
-                "path": '/about',
-                "name": 'about',
-                "component": 'About',
-                 "redirect": '/order',
+                "path": '/user',
+                "name": '用户管理',
+                "component": 'system/User',
                 "meta":{
                    
-                },
-                "children":[
-                    {
-                        "path": '/order',
-                        "name": 'order',
-                        "component": 'Order',
-                        "meta":{
-                        
-                        },
-                    }
-                ]
+                }
             },
             {
-                "path": '/index',
-                "name": 'index',
-                "component": 'Index',
+                "path": '/roleUser',
+                "name": '角色管理',
+                "component": 'system/RoleUser',
+                "meta":{
+                      
+                    },
+            },
+            {
+                "path": '/newPermission',
+                "name": '菜单管理',
+                "component": 'system/NewPermission',
                 "meta":{
                       
                     },
@@ -113,7 +109,7 @@ export default {
             this.saveMeun(data);
             this.$router.addRoutes(this.routersData);
             this.$nextTick(()=>{
-                this.$router.push('/about')
+                this.$router.push('/user')
             })
         },
         saveMeun(data){

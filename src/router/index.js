@@ -61,14 +61,14 @@ router.beforeEach((to,from,next)=>{
     if(Vue.prototype.$getStorage('subNav')){
       subNavList = JSON.parse(Vue.prototype.$getStorage('subNav'))
     };
-    console.log(subNavList)
+
     if(subNavList.length>0){
       isNavListExist = subNavList.some(cur=>{
-        return cur.title==to.path
+        return cur.title==to.name
       });
     };
     if(!isNavListExist){
-      subNavList.push({'title':to.path,'key':to.path});
+      subNavList.push({'title':to.name,'key':to.path});
       
     };
     store.dispatch("addSubNav",JSON.stringify(subNavList))

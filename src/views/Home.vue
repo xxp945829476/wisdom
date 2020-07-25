@@ -1,11 +1,3 @@
-<!--
- * @Descripttion: 
- * @version: 
- * @Author: sueRimn
- * @Date: 2020-07-04 18:28:20
- * @LastEditors: sueRimn
- * @LastEditTime: 2020-07-13 20:33:03
- -->
 <template>
     <a-layout id="main">
 
