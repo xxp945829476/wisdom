@@ -1,29 +1,89 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import store from '@/store'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 
 Vue.use(VueRouter)
+
+const originalPush = VueRouter.prototype.push
+   VueRouter.prototype.push = function push(location) {
+   return originalPush.call(this, location).catch(err => err)
+}
+
 
   const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    redirect: '/login'
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/Login.vue')
+  },
+  {
+    path: '*',
+    redirect: '/403'
+  },
+  {
+    path: '/403',
+    name: '403',
+    component: () => import('@/views/403.vue')
   }
 ]
 
-const router = new VueRouter({
+
+
+
+
+
+const createRouter = () => new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes
+})
+
+
+const router = createRouter()
+
+export function resetRouter () {
+  const newRouter = createRouter()
+  router.matcher = newRouter.matcher // the relevant part
+}//解决路由重复
+
+
+// 路由守卫
+router.beforeEach((to,from,next)=>{
+  let subNavList = [];
+  let isNavListExist = false;
+  if(to.path !='/login'){
+    if(Vue.prototype.$getStorage('subNav')){
+      subNavList = JSON.parse(Vue.prototype.$getStorage('subNav'))
+    };
+    console.log(subNavList)
+    if(subNavList.length>0){
+      isNavListExist = subNavList.some(cur=>{
+        return cur.title==to.path
+      });
+    };
+    if(!isNavListExist){
+      subNavList.push({'title':to.path,'key':to.path});
+      
+    };
+    store.dispatch("addSubNav",JSON.stringify(subNavList))
+    Vue.prototype.$setStorage('subNav',JSON.stringify(subNavList))
+  }
+  
+  NProgress.start()
+    next()
+
+  
+
+});
+
+router.afterEach(() => {
+  NProgress.done()
 })
 
 export default router

@@ -1,18 +1,108 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: sueRimn
+ * @Date: 2020-07-04 18:28:20
+ * @LastEditors: sueRimn
+ * @LastEditTime: 2020-07-13 20:33:03
+ -->
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <a-layout id="main">
+
+      <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
+        <div class="logo">Ant Design Vue</div>
+        
+        <Sider ref="sider"></Sider>
+
+      </a-layout-sider>
+
+
+      <a-layout class="left_main" :class="{'large_content':collapsed}">
+
+        <Header @switchMenu="switchMenu" :collapsed="collapsed"></Header>
+
+        <a-tabs v-model="activeKey" type="editable-card" @edit="onEdit" hide-add @change="subLink" class="sub_nav">
+          <a-tab-pane v-for="list in subNavList" :key="list.key" :tab="list.title">
+          </a-tab-pane>
+        </a-tabs>
+
+        <a-layout-content class="content_box">
+          <router-view></router-view>
+        </a-layout-content>
+      </a-layout>
+    </a-layout>
+
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Header from '@/components/Header.vue'
+import Sider from '@/components/Sider.vue'
+
 
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
+  data() {
+    return {
+      current: '1',
+      collapsed: false,
+    };
+  },
+  created(){
+    
+  },
+  computed: {
+    subNavList(){
+      return this.$store.getters.subNavList
+    },
+    activeKey:{
+      get: function () {
+        return this.$route.path
+      },
+      set: function (val) {
+        return val
+      }
+    }
+  },
+  mounted(){
+    let that = this;
+    window.onresize = function(){
+      let clientWidth = document.documentElement.clientWidth || document.body.clientWidth;
+      that.collapsed = clientWidth<=900 ? true : false;
+    };//当屏幕宽度小于900，菜单缩小
+  },
+  components:{
+    Header,
+    Sider
+  },
+  methods:{
+    switchMenu(){
+      this.collapsed = !this.collapsed
+    },
+    onEdit(key){
+      let isExist = true;
+      let i = -1;
+      this.subNavList.forEach((element,index) => {
+          if(element.key==key){
+            this.subNavList.splice(index,1);//删除当前值
+            i = index
+          };
+          this.$setStorage('subNav',JSON.stringify(this.subNavList))
+          this.$store.dispatch("addSubNav",JSON.stringify(this.subNavList))
+      });
+
+      isExist = this.subNavList.some(cur=>{
+        return cur.key == this.$router.path
+      });//判断删除的是否是当前路由
+      if(!isExist){//如果是则向前导航跳转
+        this.$router.push(this.subNavList[i-1].title)
+      }
+    },
+    subLink(key){
+      this.$refs.sider.getMenu();
+      this.$router.push(key)
+    }
   }
-}
+};
 </script>
+
+
+
