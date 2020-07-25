@@ -33,14 +33,18 @@
                   <a-input v-model="form.fieldB" placeholder="input placeholder" />
                 </a-form-model-item>
               </a-col>
-  
-            
             </a-row>
 
             
             
           </a-form-model>
       </div>
+
+      <div class="table-operator">
+             <a-button type="primary" icon="plus">
+              新增
+            </a-button>
+        </div>
    </div>
 </template>
 
