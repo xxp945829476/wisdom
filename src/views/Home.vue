@@ -81,23 +81,28 @@ export default {
       let isExist = true;
       let i = -1;
       this.subNavList.forEach((element,index) => {
-          if(element.key==key){
+          if(element.key==key && index != 0){
             this.subNavList.splice(index,1);//删除当前值
-            i = index
+            this.$setStorage('subNav',JSON.stringify(this.subNavList))
+            this.$store.dispatch("addSubNav",JSON.stringify(this.subNavList))
           };
-          this.$setStorage('subNav',JSON.stringify(this.subNavList))
-          this.$store.dispatch("addSubNav",JSON.stringify(this.subNavList))
+          i = index
       });
+
+ 
 
       isExist = this.subNavList.some(cur=>{
         return cur.key == this.$router.path
       });//判断删除的是否是当前路由
-      if(!isExist){//如果是则向前导航跳转
+
+      if(!isExist && i != 0){//如果是则向前导航跳转
         this.$router.push(this.subNavList[i-1].title)
+      }else{
+        this.$message.warning('This is a warning message');
       }
     },
     subLink(key){
-      this.$refs.sider.getMenu();
+      // this.$refs.sider.getMenu();
       this.$router.push(key)
     }
   }
