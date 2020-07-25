@@ -1,29 +1,10 @@
-# antd
+环境和依赖项
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+    • node
+    • cnpm
+    • ant-design-vue - Ant Design Of Vue
+ 
+ 组件库
+     • nprogress 页面加载进度条
+    
+    
