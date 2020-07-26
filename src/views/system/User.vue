@@ -53,7 +53,7 @@
       </div>
 
         <div class="table-operator">
-             <a-button type="primary" icon="plus">
+             <a-button type="primary" icon="plus" @click="showModal">
               新增
             </a-button>
              <a-button type="primary" icon="export">
@@ -63,6 +63,19 @@
         <a-table :columns="columns" :data-source="data" bordered :row-selection="rowSelection">
           <a slot="name" slot-scope="text">{{ text }}</a>
         </a-table>
+
+        <a-modal v-model="visible" @ok="handleOk" v-dialogDrag="dialog" v-fullscreen='fullscreen'>
+          <div slot="title">
+            标题
+            <span class="fullscreen_model">
+              <a-icon type="fullscreen" class="fullscreen_icon" />
+              <a-icon type="fullscreen-exit" class="fullscreen_exit_icon" />
+            </span>
+          </div>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </a-modal>
    </div>
 </template>
 
@@ -200,6 +213,8 @@ export default {
   mixins: [toggleSearch],
   data() {
     return {
+      fullscreen:true,
+      dialog:true,
       form: {
         fieldA: '',
         fieldB: '',
@@ -207,11 +222,18 @@ export default {
       advanced:false,
       data,
       columns,
-      rowSelection
+      rowSelection,
+      visible: false,
     }
   },
   methods:{
-
+    showModal() {
+      this.visible = true;
+    },
+    handleOk(e) {
+      console.log(e);
+      this.visible = false;
+    },
   }
 }
 </script>

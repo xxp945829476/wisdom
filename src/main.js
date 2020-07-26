@@ -1,6 +1,6 @@
 import "babel-polyfill";
 import Vue from 'vue'
-import { Button,Layout,Menu,Icon,Tabs,FormModel,Input,Tree,Table,message,Divider,Dropdown,Row,Col  } from 'ant-design-vue';
+import { Button,Layout,Menu,Icon,Tabs,FormModel,Input,Tree,Table,message,Divider,Dropdown,Row,Col,Modal } from 'ant-design-vue';
 import App from './App.vue'
 import base from '@/utils/base';
 
@@ -23,6 +23,7 @@ Vue.use(Divider);
 Vue.use(Dropdown);
 Vue.use(Row);
 Vue.use(Col);
+Vue.use(Modal);
 Vue.use(message);
 Vue.prototype.$message = message;
 

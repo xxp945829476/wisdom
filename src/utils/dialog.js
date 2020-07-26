@@ -4,8 +4,8 @@ Vue.directive('dialogDrag', {
   bind(el, binding, vnode, oldVnode) {
     // 自定义属性，判断是否可拖拽　
     if (!binding.value) return
-    const dialogHeaderEl = el.querySelector('.el-dialog__header')
-    const dragDom = el.querySelector('.el-dialog')
+    const dialogHeaderEl = el.querySelector('.ant-modal-header')
+    const dragDom = el.querySelector('.ant-modal-content')
     dialogHeaderEl.style.cssText += ';cursor:move;'
     dragDom.style.cssText += ';top:0px;'
 
