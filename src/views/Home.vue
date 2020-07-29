@@ -29,6 +29,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Sider from '@/components/Sider.vue'
+import debounce from 'lodash/debounce'
 
 
 export default {
@@ -56,10 +57,13 @@ export default {
   },
   mounted(){
     let that = this;
-    window.onresize = function(){
-      let clientWidth = document.documentElement.clientWidth || document.body.clientWidth;
-      that.collapsed = clientWidth<=900 ? true : false;
-    };//当屏幕宽度小于900，菜单缩小
+    window.onresize = debounce(changeClient, 300)//防抖
+  
+    function changeClient(){
+        let clientWidth = document.documentElement.clientWidth || document.body.clientWidth;
+        that.collapsed = clientWidth<=900 ? true : false;
+    }//窗口小于900时收缩菜单
+
   },
   components:{
     Header,
@@ -88,9 +92,9 @@ export default {
       });//判断删除的是否是当前路由
 
       if(!isExist && i != 0){//如果是则向前导航跳转
-        this.$router.push(this.subNavList[i-1].title)
+        this.$router.push(this.subNavList[i-1].key)
       }else{
-        this.$message.warning('This is a warning message');
+        this.$message.warning('首页无法删除');
       }
     },
     subLink(key){

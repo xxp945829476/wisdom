@@ -107,7 +107,6 @@ export default {install (Vue, options) {
             };
 
             function hasClass(obj, cls) {
-               console.log(obj.className)
                if( obj.className.indexOf(cls)>1){
                   return true
                };
