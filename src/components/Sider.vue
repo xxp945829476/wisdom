@@ -29,7 +29,7 @@ import  SubMenu from "./SubMenu.vue";
 export default {
   data() {
     return {
-      rootSubmenuKeys:['/system','/tb'],
+      rootSubmenuKeys:['/system','/eacrts'],
       list: [],
       openKeys:[]
     };

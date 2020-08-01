@@ -63,7 +63,7 @@ var data = [
     ]
   },
   {
-    "path": '/tb',
+    "path": '/eacrts',
     "name": '图表设置',
     "component": 'Home',
     "meta":{
@@ -71,9 +71,9 @@ var data = [
         },
     "children":[
         {
-            "path": '/eacrts',
+            "path": '/echart',
             "name": '图表',
-            "component": 'Eacrts',
+            "component": 'eacrts/Eacrts',
             "meta":{
                
             },
