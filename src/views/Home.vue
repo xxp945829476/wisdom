@@ -1,13 +1,12 @@
 <template>
     <a-layout id="main">
 
-      <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
-        <div class="logo">Ant Design Vue</div>
+      <a-layout-sider v-model="collapsed" :trigger="null" collapsible class="vertical_menu" v-if="navigationMode=='vertical'">
+        <div class="logo" title="智慧渣土管理平台">智慧渣土管理平台</div>
         
-        <Sider ref="sider"></Sider>
+        <SiderVertical></SiderVertical>
 
       </a-layout-sider>
-
 
       <a-layout class="left_main" :class="{'large_content':collapsed}">
 
@@ -28,21 +27,24 @@
 
 <script>
 import Header from '@/components/Header.vue'
-import Sider from '@/components/Sider.vue'
 import debounce from 'lodash/debounce'
+import SiderVertical from '@/components/SiderVertical.vue'
 
 
 export default {
   data() {
     return {
       current: '1',
-      collapsed: false,
+       collapsed: false,
     };
   },
   created(){
     
   },
   computed: {
+    navigationMode(){
+      return this.$store.getters.navigationMode
+    },
     subNavList(){
       return this.$store.getters.subNavList
     },
@@ -57,17 +59,17 @@ export default {
   },
   mounted(){
     let that = this;
-    window.onresize = debounce(changeClient, 300)//防抖
+    window.addEventListener('resize',debounce(changeClient, 300))//防抖
+    // window.onresize = debounce(changeClient, 300)//防抖
   
     function changeClient(){
         let clientWidth = document.documentElement.clientWidth || document.body.clientWidth;
         that.collapsed = clientWidth<=900 ? true : false;
     }//窗口小于900时收缩菜单
-
   },
   components:{
     Header,
-    Sider
+    SiderVertical
   },
   methods:{
     switchMenu(){

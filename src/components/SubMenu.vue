@@ -1,7 +1,7 @@
 <template functional>
   <a-sub-menu :key="props.menuInfo.path">
     <span slot="title">
-      <a-icon :type="props.menuInfo.meta.icon" />
+      <i class="iconfont menuicon" :class="props.menuInfo.meta.icon"></i>
       <span>{{ props.menuInfo.name }}</span>
     </span>
     <template v-for="item in props.menuInfo.children">

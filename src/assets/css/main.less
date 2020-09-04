@@ -1,152 +1,567 @@
-.ant-form-item-control,.ant-form-item-label{
+.layout_card_search .ant-form-item-control,
+.layout_card_search .ant-form-item-label {
     line-height: 32px;
 }
-.fullscreen_model{
+
+
+.fullscreen_model {
     float: right;
     margin-right: 50px;
     cursor: pointer;
-    .fullscreen_exit_icon{
+
+    .fullscreen_exit_icon {
         display: none;
     }
 }
-.ant-modal-fullscreen{
-    width:100% !important;
-    top:0!important;
-    padding-bottom:0!important;
-    height:100%!important;
+.ant-modal{
+    padding-bottom: 0 !important;  
+}
+.ant-modal-body {
+    max-height: calc(100vh - 108px - 15vh);
+    overflow: auto;
+}
+.ant-modal-fullscreen {
+    width: 100% !important;
+    top: 0 !important;
+    padding-bottom: 0 !important;
+    height: 100% !important;
     left: 0 !important;
-    .ant-modal-content{
-        height:100%!important;
+
+    .ant-modal-content {
+        height: 100% !important;
     }
-    .fullscreen_icon{
+
+    .fullscreen_icon {
         display: none;
     }
-    .fullscreen_exit_icon{
+
+    .fullscreen_exit_icon {
         display: block;
     }
-    .ant-modal-body{
-        height: calc(100vh - 108px);
+    .ant-modal-body {
+        height:calc(100vh - 108px);
+        max-height: calc(100vh - 108px);
         overflow: auto;
     }
 }
-// 头部与菜单开始
 
-#main .trigger {
-    font-size: 20px;
-    line-height: 60px;
-    padding: 0 24px;
-    cursor: pointer;
-    color: #fff;
-}
-  
-#main .logo {
-    color: #fff;
-    text-align: center;
-    height: 60px;
-    line-height: 60px;
-    font-size: 20px;
+.ant-table-body {  //样式穿透
+    overflow-x: auto !important;
 }
 
-.ant-layout-header{
-    height: 60px;
-    padding: 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 20;
+.ant-menu-inline-collapsed > .ant-menu-item .iconfont + span, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item .iconfont + span, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title .iconfont + span, .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title .iconfont + span{
+    opacity: 0;
+}
+// 隐藏地图logo
+.BMap_cpyCtrl {
+    display:none;
+}
+.anchorBL{
+    display:none;
 }
 
-.ant-layout-sider{
-    position: fixed;
-    left: 0;
+
+//垂直菜单
+
+.vertical_menu{
     height: 100vh;
     background: #fff !important;
+    .logo{
+        color: #fff;
+        text-align: center;
+        height: 60px;
+        line-height: 60px;
+        font-size: 20px;
+    }
+    .ant-menu-root{
+        height: calc(100vh - 60px);
+        overflow: auto;
+    }
+    
 }
-
-.content_box{
-    margin: 15px;
+.trigger{
+    height:60px;
+    line-height:60px;
+    font-size: 20px;
+}
+// 头部与菜单开始
+.drawer_button{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #e9e9e9;
+    padding: 10px 16px;
     background: #fff;
-    min-height: calc(100vh - 130px);
+    text-align: right;
+    z-index: 1;
+}
+.set_title{
+    padding-bottom: 15px;
+    
+}
+.set_content{
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e8e8e8;
 }
 
-.left_main{
-    margin-top: 60px;
-    margin-left: 200px;
-    transition: all 0.2s;
-}
-
-.large_content{
-    margin-left: 80px;
-}
-.user_wrapper{
-    float: right;
-    margin-right: 230px;
+.ant-layout-header {
+    padding: 0;
+    width: 100%;
+    height: auto !important;
+    line-height: 1.6 !important;
+    padding: 0 20px;
+    overflow: hidden;
     color: #fff;
+    position: relative;
+    .header_content{
+        // height: 60px;
+    }
+    .logo {
+        font-size: 20px;
+        padding: 14px 0;
+        width: 200px !important;
+    }
+
+    .ant-menu {
+        background: transparent !important;
+        color: #fff !important;
+    }
+
+    .ant-menu-horizontal {
+        border: none !important;
+        line-height: 60px;
+        height: 60px;
+    }
+    .ant-menu-horizontal>.ant-menu-item:hover,
+    .ant-menu-horizontal>.ant-menu-submenu:hover,
+    .ant-menu-horizontal>.ant-menu-item-active,
+    .ant-menu-horizontal>.ant-menu-submenu-active,
+    .ant-menu-horizontal>.ant-menu-item-open,
+    .ant-menu-horizontal>.ant-menu-submenu-open,
+    .ant-menu-horizontal>.ant-menu-item-selected,
+    .ant-menu-horizontal>.ant-menu-submenu-selected {
+        color: #fff !important;
+        background: rgba(7, 91, 147,0.5);
+    }
+    .ant-menu-submenu:hover,
+    .ant-menu-submenu-title:hover {
+        color: #fff !important;
+
+    }
 }
-.large_content .user_wrapper{
-    margin-right: 110px;
+
+
+
+.user_wrapper {
+    position: absolute;
+    right: 30px;
+    text-align: right;
+    top: 0;
+    color: #fff;
+    span {
+        padding:19px 0 18px 15px;
+        cursor: pointer;
+        display: inline-block;
+    }
 }
-.logout{
+
+.logout {
     cursor: pointer;
 }
+
+.menuicon {
+    padding-right: 5px;
+    font-size: 20px;
+}
+
 // 头部与菜单 结束
 
 // 子导航
-.sub_nav{
-    background: #fff;
-    .ant-tabs-bar{
+.sub_nav {
+    margin-top: 0px;
+
+    .ant-tabs-bar {
         margin-bottom: 0;
     }
 }
 
 // 登陆页
 
-.login_box{
+.login_box {
     height: 100%;
     position: relative;
-    .login_container{
+
+    .login_container {
         background: #f0f2f5 url(../images/background.svg) no-repeat 50%;
         background-size: 100%;
         padding: 110px 0 144px;
         height: 100%;
     }
-    .login_main{
+
+    .login_main {
         width: 400px;
         margin: 0 auto;
-        h1{
+
+        h1 {
             text-align: center;
             font-size: 22px;
         }
-        .ant-input{
+
+        .ant-input {
             height: 40px;
         }
     }
 }
 
 //搜索、查询
-.reload_btn{
-    margin:0 8px;
-}
 
+.layout_card_search,.right_btn{
+    float: right;
+}
+.layout_card_search{
+ width: 50%;
+}
+.layout_card_search_1{
+    width: 30%;
+}
+.layout_card_search_w{
+    width: 100%;
+}
+.right_btn{
+    margin-left: 15px;
+}
+.left_button{
+    float: left;
+}
+.reload_btn {
+    margin: 0 8px;
+}
+.right_operator_btn{
+    text-align: right;
+}
 // 内容
-.layout_card_content{
-    padding: 20px;
-    .table-operator{
-        margin-bottom: 16px;
-    }
-    .ant-form-inline .ant-form-item{
+
+.layout_card_content {
+    padding: 20px 20px 0;
+    background: #fff;
+    .layout_card_search .ant-form-inline .ant-form-item {
         display: flex;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
         margin-right: 0;
-        .ant-form-item-control-wrapper{
+        .ant-form-item-control-wrapper {
             flex: 1;
         }
     }
 }
+.layout_card_content_p{
+    position: absolute;
+    width: 100%;
+}
 
-.table-operator{
-    button{
+
+.table-operator {
+    overflow: hidden;
+    background: #e6f7ff;
+    padding:10px 15px 0;
+    .left_button button {
         margin-right: 8px;
     }
 }
+.sel_tips{
+    padding: 8px 15px 8px 30px;
+    border-radius: 4px;
+    background-color: #e6f7ff;
+    border: 1px solid #91d5ff;
+    margin-bottom: 13px;
+    span{
+        padding:0 24px 0 10px;
+    }
+    .anticon-info-circle{
+        color: #0086DF;
+    }
+}
+
+// 实时监控
+.left_content {
+    width: 280px;
+    border-right: 1px solid #e8e8e8;
+    height: calc(100vh - 101px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    background: #fff;
+}
+
+.car_status {
+    text-align: center;
+    img{
+        width: 46px;
+    }
+    em,
+    span {
+        display: block;
+    }
+
+    em {
+        color: #0083ff;
+    }
+
+    span {
+        font-size: 12px;
+        padding-bottom: 5px;
+    }
+
+    .num_tc {
+        color: #ffcb01;
+    }
+
+    .num_zx {
+        color: #ff0101;
+    }
+
+    .num_lx {
+        color: #727171;
+    }
+
+    .ant-col {
+        padding-bottom: 0.5em;
+        cursor: pointer;
+    }
+}
+
+.driving_route {
+    padding: 0 10px;
+}
+
+.left_search {
+    padding: 15px 0;
+    margin: 0 10px;
+    .ant-form-item {
+        margin-right: 0px;
+        display: block;
+    }
+}
+
+.all_car {
+    font-size: 14px;
+    padding: 15px 10px;
+    font-weight: normal;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.left_tree {
+    margin-top: 15px;
+    padding: 15px 15px 0;
+    img{
+        width: 30px;
+        padding-right: 5px;
+    }
+    .play_icon{
+        color: #f67e07;
+        cursor: pointer;
+    }
+    .route_icon{
+        padding: 0 10px;
+        color: #089a55;
+        cursor: pointer;
+    }
+}
+
+.left_tree_single{
+    .ant-tree li .ant-tree-node-content-wrapper{
+        cursor: auto !important;
+    }
+}
+
+.bm-view {
+    width: 100%;
+    height: calc(50vh + 40px);
+}
+.status_list{
+    width: 100%;
+    position: relative;
+    background: #fff;
+    .status_list_content{
+        position: absolute;
+        width: 100%;
+    }
+}
+.right_map{
+    position: relative;
+    .drag_status_list_nav{
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        top: calc(50vh + 39px);;
+        background: #0472fd;
+        cursor: n-resize;
+    }
+}
+.status_list_nav {
+    text-align: center;
+    border-bottom: 1px solid #ebedf0;
+    position: relative;
+    .ant-col{
+        padding: 12px 0;
+        cursor: pointer;
+    }
+    .enlarge_icon{
+        position: absolute;
+        right: 10px;
+        padding: 12px;
+        cursor: pointer;
+    }
+}
+.double_left{
+    position: absolute;
+    top: 40%;
+    color: #fff;
+    padding: 12px 5px;
+    border-radius: 0 4px 4px 0;
+    z-index: 1000;
+    cursor: pointer;
+    left: 0;
+}
+
+.real_time_video{
+    position: fixed;
+    z-index: 10000;
+    top: 100px;
+    left: 280px;
+}
+
+.fullscreen_btn{
+    position: fixed;
+    z-index: 1000;
+    right: 20px;
+    top: 50vh;
+    background: #0086DF;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.set_video{
+    position: absolute;
+    background: #fff;
+    right: -56px;
+    top: 0;
+    text-align: center;
+    i{
+        font-size: 20px;
+        display: block;
+        padding: 15px;
+        border-bottom:1px solid #ccc;
+        border-right:1px solid #ccc;
+        cursor: pointer;
+    }
+}
+
+
+.vehicle_details{
+    position: fixed;
+    top: 20vh;
+    right: 50px;
+    z-index: 1000;
+    width: 600px;
+    background: #fff;
+    box-shadow: 0px 0 10px 2px #c8dce8;
+    .vehicleDetail_brand{
+        color: #333;
+        font-weight: 600;
+    }
+    .vehicle_details_title{
+        color: #333;
+        padding-left: 20px;
+    }
+    .vehicle_details_close{
+        text-align: center;
+        padding: 10px 0;
+        cursor: pointer;
+    }
+    .vehicle_details_fuc{
+        padding: 0 20px 20px;
+        span{
+            padding: 6px 30px;
+            background: #fff4eb;
+            border-radius: 4px;
+            display: inline-block;
+            margin-right: 40px;
+            cursor: pointer;
+            color: #ff872e;
+        }
+    }
+    .vehicle_details_content{
+        padding:20px
+    }
+}
+
+// 电子围栏
+.fence_view{
+    width: 100%;
+    height: calc(100vh - 101px);
+}
+//轨迹回放
+.sel_date{
+    padding: 0 15px;
+    .ant-calendar-picker,.ant-time-picker{
+        width: 100%;
+    }
+    .ant-form-item{
+        margin-bottom: 5px;
+    }
+}
+
+
+//部门设置
+.lr_layout{
+    height:  calc(100vh - 101px);
+}
+.right_layout{
+    background: #fff;
+    .right_layout_t{
+        padding: 12px 24px;
+        font-size: 16px;
+        border-bottom: 1px solid #e8e8e8;
+    }
+    .creat_account{
+        padding: 40px;
+    }
+}
+.button_left{
+    margin-left: 10px;
+}
+.tree_btn{
+    padding-left: 40px;
+}
+
+
+// 企业
+.upload_enclosure {
+    .ant-upload-picture-card-wrapper{
+        display: block;
+    }
+    p{
+        text-align: center;
+    }
+}
+
+//车辆
+.left_tree_1{
+    margin-top: 0;
+}
+
+//地区设置
+.but_margin_right{
+    margin-right: 8px;
+}
+
+.fence_view .BMap_Marker{
+    z-index: 1 !important;
+}
+
 

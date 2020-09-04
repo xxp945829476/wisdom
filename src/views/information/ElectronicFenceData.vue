@@ -1,35 +1,48 @@
 <template>
    <div class="layout_card_content">
-      <div class="layout_card_search">
-          <a-form-model layout="inline" :model="form">
-            <a-row :gutter="24">
-              <a-col :md="12" :sm="24">
-                <a-form-model-item label="角色名称">
-                  <a-input v-model="form.fieldA" placeholder="" />
-                </a-form-model-item>
-              </a-col>
-              <a-col :md="12" :sm="24">
-                  <span class="table-page-search-submitButtons">
-                     <a-button type="primary" icon="search" class="search_btn">查询</a-button>
-                     <a-button icon="reload" class="reload_btn">重置</a-button>
-                  </span>
-              </a-col>
-            </a-row>
-
-           
-            
-          </a-form-model>
-      </div>
-
         <div class="table-operator">
-             <a-button type="primary" icon="plus">
-              新增
-            </a-button>
-             <a-button type="primary" icon="export">
-              导出
-            </a-button>
+          <a-row :gutter="24">
+            <a-col :md="7">
+                <a-button type="primary" icon="plus">
+                  新增
+                </a-button>
+                <a-button type="primary" icon="export">
+                  导出
+                </a-button>
+            </a-col>
+            <a-col :md="13">
+              <div class="layout_card_search">
+                    <a-form-model layout="inline" :model="form">
+                      <a-row :gutter="24">
+                        <a-col :md="8" :sm="24">
+                          <a-form-model-item label="企业名称">
+                            <a-input v-model="form.fieldA" placeholder="" />
+                          </a-form-model-item>
+                        </a-col>
+                        <a-col :md="8" :sm="24">
+                          <a-form-model-item label="车牌号码">
+                            <a-input v-model="form.fieldB" placeholder="" />
+                          </a-form-model-item>
+                        </a-col>
+                        <a-col :md="8" :sm="24">
+                            <a-form-model-item label="sim卡号">
+                              <a-input v-model="form.fieldB" placeholder="" />
+                            </a-form-model-item>
+                          </a-col>
+                      </a-row>
+                    </a-form-model>
+              </div>
+            </a-col>
+            <a-col :md="4">
+              <span class="table-page-search-submitButtons">
+                  <a-button type="primary" icon="search" class="search_btn">查询</a-button>
+                  <a-button icon="reload" class="reload_btn">重置</a-button>
+              </span>
+            </a-col>
+          </a-row>
+             
         </div>
-        <a-table :columns="columns" :data-source="data" bordered :row-selection="rowSelection">
+        <a-table :columns="columns" :data-source="data" :scroll="{ y: height }" :row-selection="rowSelection" bordered>
           <a slot="name" slot-scope="text">{{ text }}</a>
         </a-table>
    </div>
@@ -42,6 +55,7 @@ const columns = [
     dataIndex: 'name',
     key: 'name',
     scopedSlots: { customRender: 'name' },
+    width: '20%',
   },
   {
     title: 'Age',
@@ -53,13 +67,14 @@ const columns = [
     title: 'Address',
     dataIndex: 'address',
     key: 'address 1',
-    ellipsis: true,
+    width: '20%',
   },
   {
     title: 'Long Column Long Column Long Column',
     dataIndex: 'address',
     key: 'address 2',
     ellipsis: true,
+    width: '20%',
   },
   {
     title: 'Long Column Long Column',
@@ -168,15 +183,20 @@ const rowSelection = {
 export default {
   data() {
     return {
+      height:'',
       form: {
         fieldA: '',
         fieldB: '',
       },
-      advanced:false,
       data,
       columns,
       rowSelection
     }
+  },
+  mounted(){
+    this.$nextTick(()=>{
+      this.height = document.documentElement.clientHeight - 286
+    })
   },
   methods:{
   }

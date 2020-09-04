@@ -30,7 +30,7 @@ footer, header, menu, nav, section {
 
 body {
     line-height: 1;
-    background: #efefef;
+    background: #f0f2f5 !important;
 }
 
 blockquote, q {
