@@ -3,37 +3,36 @@
     <a-row type="flex">
       <a-col :flex="leftWidth" class="left_content" ref="left_content">
         <a-form-model :model="form" layout="inline" class="left_search" :label-col="labelCol" :wrapper-col="wrapperCol">
-          <a-form-model-item label="车牌号">
+          <a-form-model-item>
             <a-input-search
               v-model="form.name"
-              placeholder=""
+              placeholder="请输入车牌号"
               enter-button="搜索"
             />
           </a-form-model-item>
         </a-form-model>
-         <div id="panel">dsds</div>
+
+        <div class="query_way">
+          <a-radio-group name="radioGroup" :default-value="1">
+            <a-radio :value="1">
+              按天查询
+            </a-radio>
+            <a-radio :value="2">
+              按时间段查询
+            </a-radio>
+          </a-radio-group>
+        </div>
+
         <div class="sel_date">
           <a-form-model :model="form" :label-col="labelCol_1" :wrapper-col="wrapperCol_1">
-            <a-form-model-item label="选择年月">
-             <a-month-picker />
-            </a-form-model-item>
-            <a-form-model-item label="开始时间">
-              <a-time-picker>
-                <a-button slot="addon" size="small" type="primary" >
-                  确定
-                </a-button>
-              </a-time-picker>
-            </a-form-model-item>
-            <a-form-model-item label="结束时间">
-             <a-time-picker>
-                <a-button slot="addon" size="small" type="primary" >
-                  确定
-                </a-button>
-              </a-time-picker>
+            <a-form-model-item label="日期">
+             <a-date-picker  />
             </a-form-model-item>
           </a-form-model>
-          <a-calendar :fullscreen="false" :header-render="headerRender" @panelChange="onPanelChange" />
+         
         </div>
+
+        
        
       </a-col>
 
@@ -80,11 +79,11 @@ export default {
         name:'',
         date:''
       },
-      labelCol: { span: 5 },
-      wrapperCol: { span: 19 },
-      leftWidth:'300px',
-      labelCol_1: { span: 6 },
-      wrapperCol_1: { span: 18 },
+      labelCol: { span: 4 },
+      wrapperCol: { span: 24 },
+      leftWidth:'280px',
+      labelCol_1: { span: 4 },
+      wrapperCol_1: { span: 20 },
       play: true,
        path: [],
       icon: {

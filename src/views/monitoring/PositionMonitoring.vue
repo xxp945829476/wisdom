@@ -2,12 +2,13 @@
   <div>
     <a-row type="flex">
       <a-col :flex="leftWidth" class="left_content" ref="left_content">
-        <a-form-model :model="form" layout="inline" class="left_search" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form-model :model="form" layout="inline" class="left_search" :label-col="labelCol" :wrapper-col="wrapperCol" @submit="onSearch" @submit.native.prevent>
           <a-form-model-item>
             <a-input-search
-              v-model="form.name"
-              placeholder="请输入"
+              v-model="form.keyName"
+              placeholder="查找地区、公司、车辆"
               enter-button="搜索"
+              @search="onSearch"
             />
           </a-form-model-item>
         </a-form-model>
@@ -23,36 +24,35 @@
             <a-col :span="6">
               <img src="@/assets/images/tc.png"/>
               <span>停车</span>
-              <em class="num_tc">12</em>
+              <em class="num_tc">0</em>
             </a-col>
             <a-col :span="6">
               <img src="@/assets/images/yc.png"/>
               <span>在线</span>
-              <em class="num_zx">1235</em>
+              <em class="num_zx">0</em>
             </a-col>
             <a-col :span="6">
               <img src="@/assets/images/lx.png"/>
               <span>离线</span>
-              <em class="num_lx">562</em>
+              <em class="num_lx">0</em>
             </a-col>
           </a-row>
         </div>
         
         <div class="left_tree left_tree_single">
-
-          <div v-for="item in list" :key="item.id" @click="open(item.vehicleNo)">{{item.vehicleNo}}</div>
           <a-tree
             v-model="checkedKeys"
             :show-line="true"
             checkable
             :tree-data="treeData"
             @check="location"
+            :replaceFields="replaceFields"
           >
               <template slot="custom" slot-scope="item">
                   <img src="@/assets/images/xs.png"/>
-                  <span>{{ item.title }}</span>
+                  <span>{{ item.keyName }}</span>
                   <i class="iconluxian iconfont route_icon"></i>
-                  <i class="iconbofang1 iconfont play_icon" @click.stop="previewVideo"></i>
+                  <i class="iconbofang1 iconfont play_icon" @click.stop="previewVideo(item)"></i>
               </template>
           </a-tree> 
         </div>
@@ -190,27 +190,7 @@
 <script>
 
 
-const treeData = [
-  {
-    title: '广州市',
-    key: '0-0',
-    children: [
-      {
-        title: '广州市昌岗道路运输有限责任公司',
-        key: '0-0-0',
-        children: [
-          { title: '粤ACP217', key: '0-0-0-0',scopedSlots: { title: 'custom' } },
-          { title: '粤ADK837', key: '0-0-0-1',scopedSlots: { title: 'custom' } },
-          { title: '粤ADU438', key: '0-0-0-2',scopedSlots: { title: 'custom' } },
-        ],
-      },
-      {
-        title: '广东轲达建设工程有限公司',
-        key: '0-0-1'
-      }
-    ],
-  }
-];
+
 
 
 
@@ -256,7 +236,7 @@ import mapLabel from 'vue-baidu-map/components/overlays/Label.vue'
 import mapOverlay from 'vue-baidu-map/components/overlays/Overlay.vue'
 import {launchFullscreen,exitfullscreen,isJSON} from '@/utils/utils.js'
 
-import {getVehicleList} from "@/network/api"
+import {IndexTree,GetJsession} from "@/network/api"
 
 
 /*!
@@ -301,13 +281,13 @@ export default {
 
     return {
       videoMultiple:[
-        {num:1,icon:'icon1beixuanzhong'},
+        {num:1,icon:'iconweibiaoti-1'},
         {num:2,icon:'icon2bei'},
         {num:4,icon:'icon4bei'},
-        {num:6,icon:'icon6beixuanzhong'},
-        {num:9,icon:'icon9beixuanzhong'},
-        {num:16,icon:'icon16beixuanzhong'},
-        {num:36,icon:'icon36beixuanzhong'},
+        {num:6,icon:'icon6bei'},
+        {num:9,icon:'icon9bei'},
+        {num:16,icon:'icon16bei'},
+        {num:36,icon:'icon36bei'},
       ],
       videoVisible:false,//视频显示
       isEnlarge:false,
@@ -316,9 +296,9 @@ export default {
       data,
       columns,
       checkedKeys: [],
-      treeData,
+      treeData:[],
       form:{
-        name:''
+        keyName:'',
       },
       labelCol: { span: 4 },
       wrapperCol: { span: 24 },
@@ -344,13 +324,19 @@ export default {
       isInitFinished:false,
       maxChnCount:4,
       devIdno:'',
-      vehiIdno:'沪A0001',
-      jsession:'10b3573b03cf45a1a5ba2efaa5eecd49',
+      vehiIdno:'',
+      jsession:'',
       abbr:'',
       closeSecond:0,
       list:[],
       websock: null,
-      carNumber:'',
+      carNumber:[],
+      replaceFields:{
+        children:'nexts',
+        title:'keyName',
+        key:'id'
+      },
+      sendTime:'',
     }
   },
   components:{
@@ -361,7 +347,8 @@ export default {
     mapOverlay
   },
   created(){
-    this.init()
+    this.init();
+
   },
   mounted(){
     this.$nextTick(()=>{
@@ -372,11 +359,16 @@ export default {
       this.initVideo(h1)
     });
 
+
+    this.$once('hook:beforeDestroy', () => {
+      this.websocketclose();
+      clearTimeout(this.sendTime);
+    })
     
   },
   methods:{
     init(){
-      this.websocketclose()
+      this.websocketclose();
       this.getVehicleList();
       this.initWebSocket()
     },
@@ -388,14 +380,28 @@ export default {
         };
       ttxVideoAll.init("cmsv6flash", h1, h1, params);
       setTimeout(this.initFlash, 50);
-      this.loadDeviceInfo()
+      
     },
     getVehicleList(){
-      let params = {}
-           getVehicleList(params).then(res=>{
-              this.list = res.data.data.records;
-              console.log(this.list)
-           }) 
+           IndexTree(this.form).then(res=>{
+             if(res.data.code == 0){
+                this.treeData = res.data.data;
+                this.loop(this.treeData)
+             };
+           });
+    },
+    onSearch(){
+      this.getVehicleList()
+    },
+    loop(arr){
+          arr.forEach(cur=>{
+              if(cur.vehicleId){
+                this.$set(cur,'scopedSlots', {title: 'custom' })
+              };
+              if(cur.nexts){
+                this.loop(cur.nexts)
+              };
+          });
     },
     initWebSocket(){ //初始化weosocket
         const wsuri = "ws://192.168.20.120:8001/api/websocket/0";
@@ -423,11 +429,11 @@ export default {
           {lng: position[0].pos.split(',')[1], lat: position[0].pos.split(',')[0]}
         ]
         
-        this.zoom = 12
+        this.zoom = 15
         this.iconUrl = require('@/assets/images/xs.png')
-        this.content = this.carNumber
-        setTimeout(() => {
-          this.websocketsend(this.carNumber)
+        this.content = this.carNumber[0]
+        this.sendTime = setTimeout(() => {
+          this.websocketsend(this.carNumber[0])
         }, 5000);
       };
       
@@ -446,16 +452,21 @@ export default {
       this.zoom = 15
      
     },
-    location(){
-      this.center.lng = 120.344394
-      this.center.lat = 31.503154
-      this.centerList = [
-        {lng:121.308090, lat: 31.137268},
-      ],
-      
-      this.zoom = 15
-      this.iconUrl = require('@/assets/images/xs.png')
-      this.content = '粤ACP217'
+    bd_encrypt(gcjLat, gcjLon){
+      let x_pi = 3.14159265358979324 * 3000.0 / 180.0;
+      var x = gcjLon, y = gcjLat;
+        var z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi);
+        var theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi);
+        let bdLon = z * Math.cos(theta) + 0.0065;
+        let bdLat = z * Math.sin(theta) + 0.006;
+        return {'lat' : bdLat,'lng' : bdLon};
+    },
+    location(checkedKeys){
+      this.carNumber = [];
+      checkedKeys.forEach(cur=>{
+        this.loopCar(this.treeData,cur)
+      });
+
 
       //  let point = {
       //   lng:120.344394,
@@ -467,6 +478,25 @@ export default {
       //   lat:39.915
       // }
       // this.rotation = this.getAngle(point,pointNext)
+      if(this.carNumber.length>0){
+        this.websocketsend(this.carNumber[0]);
+      }else{
+        this.websocketclose();
+        clearTimeout(this.sendTime);
+        this.centerList = [];
+      }
+      
+    },
+    loopCar(arr,cur){
+      
+        arr.forEach(ele=>{
+          if(ele.vehicleId && ele.id == cur){
+            this.carNumber.push(ele.keyName)
+          };
+          if(ele.nexts){
+            this.loopCar(ele.nexts,cur)
+          };
+        });
     },
     getAngle(n,next){
             // 计算车辆实时方向角度
@@ -576,7 +606,7 @@ export default {
     },
     initFlash(){
 
-       if (typeof swfobject == "undefined" || swfobject.getObjectById("cmsv6flash") == null ||
+       if (typeof swfobject == "undefined" || typeof swfobject == undefined || swfobject.getObjectById("cmsv6flash") == null ||
             typeof swfobject.getObjectById("cmsv6flash").setWindowNum == "undefined" ) {
             setTimeout(this.initFlash, 50);
            
@@ -592,11 +622,30 @@ export default {
             this.isInitFinished = true;
     }
     },
-    previewVideo(){
-          this.videoVisible = true;
+    previewVideo(obj){
+      this.devIdno = obj.keyName;
+      this.getJsession();
+        
+    },
+    getJsession(){
+      let params = {
+            };
+           GetJsession(params).then(res=>{
+             if(res.data.code == 0){
+                this.jsession = res.data.data;
+                this.previewVideoOK();
+                // this.loadDeviceInfo()
+             }else{
+               this.closeVideo();
+             };
+           })
+    },
+    previewVideoOK(){
+      this.videoVisible = true;
          //视频插件初始化完成
             if (this.isInitFinished) {
                 //再一次设置flash窗口数量
+                
                 this.loadFlashWindowNum(this.maxChnCount);
                 // if (this.closeSecond != 0) {
                 //     $("#closeTip").show();
@@ -610,7 +659,7 @@ export default {
                     swfobject.getObjectById('cmsv6flash').startVideo(i, this.jsession, this.devIdno, i, 1, true);
                 }
             } else {
-                setTimeout(this.previewVideo, 500);
+                setTimeout(this.previewVideoOK, 500);
             }
     },
     loadFlashWindowNum(num) {
@@ -639,6 +688,7 @@ export default {
 
             this.doAjaxSubmit('http://dzkjbd.com/StandardApiAction_getVideoDevice.action', param, function (json, action, success) {
                 if (success) {
+                  
                     //不是视频设备
                     if (!json.isVideoDevice) {
                         alert(lang.errorVideoDevice);
@@ -652,18 +702,18 @@ export default {
                         // loadOtherInfo();
                     }
                 } else {
-                    // //没有操作权限
-                    // if (json) {
-                    //     if (json.result == 5) {
-                    //         alert(lang.jsessionError);
-                    //     } else if (json.result == 8) {
-                    //         alert(lang.vehicleNotOperate);
-                    //     } else {
-                    //         alert(lang.deviceNoExist);
-                    //     }
-                    // } else {
-                    //     alert(lang.deviceNoExist);
-                    // }
+                    //没有操作权限
+                    if (json) {
+                        if (json.result == 5) {
+                             that.$message.warning('会话号不存在')
+                        } else if (json.result == 8) {
+                            that.$message.warning('没有车辆或者设备操作权限')
+                        } else {
+                          that.$message.warning('找不到车辆信息')
+                        }
+                    } else {
+                        that.$message.warning('找不到车辆信息')
+                    }
                 }
             });
         },
@@ -691,10 +741,6 @@ export default {
                 }
             });
         },
-        open(val){
-          this.carNumber = val;
-          this.websocketsend(this.carNumber);
-        },
         closeVideo(){
            this.videoVisible = false;
            for (let index = this.maxChnCount; index >= 0; index--) {
@@ -703,7 +749,7 @@ export default {
         },
         splitScreen(num){
           this.maxChnCount = num;
-          this.previewVideo()
+          this.getJsession();
         },
   }
   

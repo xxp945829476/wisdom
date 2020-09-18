@@ -1,23 +1,44 @@
 {
   "id": "2036779",
-  "name": "智慧渣土",
+  "name": "苏州智慧渣土",
   "font_family": "iconfont",
   "css_prefix_text": "icon",
   "description": "",
   "glyphs": [
+    {
+      "icon_id": "17248891",
+      "name": "用户",
+      "font_class": "yonghu",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "17248896",
+      "name": "密 码 ",
+      "font_class": "mima1",
+      "unicode": "e644",
+      "unicode_decimal": 58948
+    },
+    {
+      "icon_id": "17248920",
+      "name": "验证码",
+      "font_class": "yanzhengma",
+      "unicode": "e646",
+      "unicode_decimal": 58950
+    },
+    {
+      "icon_id": "17068697",
+      "name": "重绘",
+      "font_class": "zhongxin2",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
     {
       "icon_id": "16928965",
       "name": "1倍",
       "font_class": "weibiaoti-1",
       "unicode": "e635",
       "unicode_decimal": 58933
-    },
-    {
-      "icon_id": "16929143",
-      "name": "1倍选中",
-      "font_class": "1beixuanzhong",
-      "unicode": "e636",
-      "unicode_decimal": 58934
     },
     {
       "icon_id": "16929144",
@@ -34,32 +55,11 @@
       "unicode_decimal": 58936
     },
     {
-      "icon_id": "16929146",
-      "name": "6倍选中",
-      "font_class": "6beixuanzhong",
-      "unicode": "e639",
-      "unicode_decimal": 58937
-    },
-    {
       "icon_id": "16929147",
       "name": "6倍",
       "font_class": "6bei",
       "unicode": "e63a",
       "unicode_decimal": 58938
-    },
-    {
-      "icon_id": "16929148",
-      "name": "9倍选中",
-      "font_class": "9beixuanzhong",
-      "unicode": "e63b",
-      "unicode_decimal": 58939
-    },
-    {
-      "icon_id": "16929149",
-      "name": "2倍选中",
-      "font_class": "2beixuanzhong",
-      "unicode": "e63c",
-      "unicode_decimal": 58940
     },
     {
       "icon_id": "16929150",
@@ -76,20 +76,6 @@
       "unicode_decimal": 58942
     },
     {
-      "icon_id": "16929152",
-      "name": "16倍选中",
-      "font_class": "16beixuanzhong",
-      "unicode": "e63f",
-      "unicode_decimal": 58943
-    },
-    {
-      "icon_id": "16929153",
-      "name": "36倍选中",
-      "font_class": "36beixuanzhong",
-      "unicode": "e640",
-      "unicode_decimal": 58944
-    },
-    {
       "icon_id": "16929154",
       "name": "16倍",
       "font_class": "16bei",
@@ -97,11 +83,18 @@
       "unicode_decimal": 58945
     },
     {
-      "icon_id": "16929155",
-      "name": "4倍选中",
-      "font_class": "4beixuanzhong",
+      "icon_id": "16969719",
+      "name": "车辆顶视图",
+      "font_class": "huochedingshitu-copy",
       "unicode": "e642",
       "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "16969722",
+      "name": "车辆顶视图",
+      "font_class": "huochedingshitu-copy1",
+      "unicode": "e643",
+      "unicode_decimal": 58947
     },
     {
       "icon_id": "16870173",
@@ -165,6 +158,13 @@
       "font_class": "kuaijin",
       "unicode": "e60a",
       "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "16969729",
+      "name": "车辆顶视图",
+      "font_class": "huochedingshitu-copy-copy",
+      "unicode": "e645",
+      "unicode_decimal": 58949
     },
     {
       "icon_id": "16870254",

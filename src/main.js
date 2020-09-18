@@ -28,7 +28,11 @@ import {
   Upload,
   Switch,
   Cascader,
-  Spin 
+  Spin,
+  Empty,
+  Checkbox,
+  Popover,
+  Badge
 } from 'ant-design-vue';
 import App from './App.vue'
 import base from '@/utils/base';
@@ -41,7 +45,10 @@ import toggleSearch from '@/utils/toggleSearch'
 
 Vue.mixin(toggleSearch);
 
+import moment  from 'moment'
+Vue.prototype.$moment = moment;
 import 'moment/locale/zh-cn';
+
 
 import VueDraggableResizable from 'vue-draggable-resizable'
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
@@ -77,6 +84,16 @@ Vue.use(Upload);
 Vue.use(Switch);
 Vue.use(Cascader);
 Vue.use(Spin);
+Vue.use(Empty);
+Vue.use(Checkbox);
+Vue.use(Popover);
+Vue.use(Badge);
+
+
+
+
+
+Vue.prototype.$confirm = Modal.confirm;
  
 
 
@@ -89,12 +106,15 @@ Vue.config.productionTip = false;
 
 
 //这里是防止用户手动刷新页面，整个系统要重新加载,动态新增的路由会消失，所以再次addRoutes
-let menuList = JSON.parse(Vue.prototype.$getStorage('menuList'))
-if (menuList) {
-  let routersData = [];
-  MenuUtils(routersData, menuList)
-  router.addRoutes(routersData);
+if(Vue.prototype.$getStorage('menuList')){
+  let menuList = JSON.parse(Vue.prototype.$getStorage('menuList'))
+  if (menuList) {
+    let routersData = [];
+    MenuUtils(routersData, menuList)
+    router.addRoutes(routersData);
+  }
 }
+
 
 //防止刷新切换原始菜单
 if(Vue.prototype.$getStorage('navigationMode')){

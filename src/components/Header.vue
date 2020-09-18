@@ -22,17 +22,30 @@
         </a-row>
         
         <div class="user_wrapper">
-            <span>
+            <!-- <span>
                 <a-icon type="bell" />
-            </span>
-            
-            <span class="logout" @click="logout">
+            </span> -->
+            <a-dropdown :trigger="['click']">
+                <span class="ant-dropdown-link" @click="e => e.preventDefault()">
+                {{account}}<a-icon type="down" />
+                </span>
+                <a-menu slot="overlay">
+                <a-menu-item key="0">
+                    <a @click="showDrawerSetting">基础设置</a>
+                </a-menu-item>
+                <a-menu-divider />
+                <a-menu-item key="3">
+                    <a  @click="logout">退出登录</a>
+                </a-menu-item>
+                </a-menu>
+            </a-dropdown>
+            <!-- <span class="logout" @click="logout">
                 <a-icon type="logout" />
                 退出登录
             </span>
             <span class="setting_base" @click="showDrawerSetting">
                 <a-icon type="setting" />
-            </span>
+            </span> -->
          </div>
          
         </a-layout-header>
@@ -72,7 +85,8 @@ export default {
     data () {
         return {
             setVisible:false,
-            navValue:''
+            navValue:'',
+            account:''
         }
     },
     props:{
@@ -90,7 +104,11 @@ export default {
         },
     },
     created(){
-        this.navValue = this.navigationMode
+        this.navValue = this.navigationMode;
+        this.$nextTick(()=>{
+            let userInfoList = JSON.parse(this.$getStorage('userInfoList'))
+            this.account = userInfoList.account;
+        })
     },
     methods:{
         switchMenu(){

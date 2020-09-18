@@ -47,21 +47,24 @@ export function isJSON(str) {
  * @return {[type]} tree 多层级树状结构
  */
 
+
+
 export function buildTree(list) {
   let temp = {};
   let tree = [];
   for (let i in list) {
     temp[list[i].id] = list[i];
-  }
+  };
+
   for (let i in temp) {
-    if (temp[i].pid) {
+    if (parseInt(temp[i].pid)) {
         if (!temp[temp[i].pid].children) {
           temp[temp[i].pid].children = [];
         };
         temp[temp[i].pid].children.push(temp[i]);
     } else {
       tree.push(temp[i]);
-    }
+    };
   }
   return tree;
 }
@@ -73,7 +76,7 @@ export function buildAreaTree(list) {
     temp[list[i].areaId] = list[i];
   }
   for (let i in temp) {
-    if (temp[i].pid) {
+    if (parseInt(temp[i].pid)) {
       if (!temp[temp[i].pid].children) {
         temp[temp[i].pid].children = [];
       }
@@ -83,4 +86,12 @@ export function buildAreaTree(list) {
     }
   }
   return tree;
+}
+
+// 文件流转化为bob
+
+export function getBobimg(data) {
+  let blob = new Blob([data]);
+  let url = window.URL.createObjectURL(blob);
+  return url
 }

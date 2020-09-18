@@ -2,19 +2,15 @@ import Vue from 'vue';
 import router from '../router';
 import axios from "axios";
 import Qs from "qs";
+import url from "./requestUrl";
 
-let baseURL = '';
-if (process.env.NODE_ENV == 'development') {    
-    baseURL = 'http://192.168.20.120:8001';
-} else if (process.env.NODE_ENV == 'production') {    
-    baseURL = 'http://192.168.20.120:8001';
-}
+
 
 const request = axios.create({//npm创建axios实例，设置请求的默认配置
     // 设置超时时间
     // timeout: 50000,
     // 基础url，会在请求url中自动添加前置链接
-    baseURL: baseURL,
+    baseURL: url.baseURL,
 })
 
 // 请求拦截
@@ -32,7 +28,7 @@ request.interceptors.request.use(
     error => {
         // 对错误请求的处理
         // 弹出错误请求消息
-       
+      
         return Promise.reject(error)
     }
 )
@@ -44,6 +40,7 @@ request.interceptors.response.use(
         return config
     },
     error => {
+        console.log(error.response.status)
         return Promise.reject(error)
     }
 )

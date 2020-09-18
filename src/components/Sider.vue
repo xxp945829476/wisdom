@@ -6,10 +6,9 @@
       @click="menuClick"
     >
       <template v-for="item in list">
-        <a-menu-item v-if="item.children.length<2" :key="item.children[0].path">
-         
-          <i class="iconfont" :class="item.meta.icon"></i>
-          <span>{{ item.children[0].name }}</span>
+        <a-menu-item v-if="!item.children && item.hidenMenu==0" :key="item.path">
+          <i class="iconfont menuicon" :class="item.meta.icon"></i>
+          <span>{{ item.name }}</span>
         </a-menu-item>
         <sub-menu v-else :key="item.path" :menu-info="item"/>
       </template>
@@ -43,7 +42,9 @@ export default {
       this.list =  JSON.parse(this.$getStorage('menuList'))
     },
     menuClick({ item, key, keyPath }){
-      this.$router.push(key);
+      if(item.level>1){
+        this.$router.push(key);
+      };
     },
     
   }

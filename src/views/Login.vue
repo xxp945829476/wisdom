@@ -1,33 +1,55 @@
 <template>
     <div class="login_box">
         <div class="login_container">
+            <div class="pt_logo">
+                <img src="../assets/images/logo.png" class="login_logo">
+                <img src="../assets/images/login3.png">
+            </div>
             <div class="login_main">
-                <h1>账户登录</h1>
+                <div class="login_left">
+                    <img src="../assets/images/gd.png">
+                </div>
 
-                <a-form-model :model="formInline" @submit="handleSubmit" @submit.native.prevent>
-                    <a-form-model-item>
-                    <a-input v-model="formInline.user" placeholder="Username">
-                        <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
-                    </a-input>
-                    </a-form-model-item>
-                    <a-form-model-item>
-                    <a-input v-model="formInline.password" type="password" placeholder="Password">
-                        <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.25)" />
-                    </a-input>
-                    </a-form-model-item>
-                    <a-form-model-item>
-                        <a-button :loading="logging" style="width: 100%;" size="large" htmlType="submit" type="primary">登录</a-button>
-                    </a-form-model-item>
-                </a-form-model>
+                <div class="login_right">
+                    <h1>账户登录</h1>
+                    <a-form-model :model="formInline" ref="ruleForm" :rules="rules" @submit="handleSubmit" @submit.native.prevent>
+                        <a-form-model-item prop="account">
+                        <a-input v-model="formInline.account" placeholder="请输入用户账号">
+                            <i class="iconfont iconyonghu" slot="prefix" type="user"></i>
+                        </a-input>
+                        </a-form-model-item>
+                        <a-form-model-item prop="password">
+                        <a-input v-model="formInline.password" type="password" placeholder="请输入密码">
+                            <i class="iconfont iconmima1" slot="prefix" type="user"></i>
+                        </a-input>
+                        </a-form-model-item>
+                        <a-form-model-item>
+                            <a-row :gutter="8">
+                                <a-col :md="14">
+                                    <a-input v-model="code" placeholder="验证码">
+                                        <i class="iconfont iconyanzhengma" slot="prefix" type="user"></i>
+                                    </a-input>
+                                </a-col>
+                                <a-col :md="10">
+                                    <span @click="refreshCode">
+                                        <Identify :identifyCode="identifyCode"></Identify>
+                                    </span>
+                                </a-col>
+                            </a-row>
+                            
+                        </a-form-model-item>
+                        <a-form-model-item>
+                            <div class="login_btn">
+                                <a-button :loading="logging" style="width: 100%" size="large" htmlType="submit" type="primary">登录</a-button>
+                            </div>
+                            
+                        </a-form-model-item>
+                    </a-form-model>
+                </div>
+                
                
             </div>
         </div>
-         <!-- <a-upload
-               
-            :beforeUpload = "uploadOne"
-            >
-            <a-button> <a-icon type="upload" /> Upload </a-button>
-        </a-upload> -->
     </div>
 </template>
 
@@ -35,7 +57,9 @@
 import { resetRouter } from '@/router';
 import MenuUtils from '@/utils/MenuUtils'
 import {buildTree} from '@/utils/utils.js'
-import {login,menuList,uploadOne} from '@/network/api'
+import {login,menuList,GetUser,GetMenuList} from '@/network/api'
+
+import Identify from './Identify.vue'
 
 // var data = [
 //     {
@@ -44,9 +68,9 @@ import {login,menuList,uploadOne} from '@/network/api'
 //     "component": 'Home',//前端组件
 //     "hidenMenu":false,//是否禁用
 //     "meta":{
-//         icon: 'iconjiankong',//图标
-//         btnList:[],//按钮权限
-//         keepAlive:false,//是否缓存路由
+//         "icon": 'iconjiankong',//图标
+//         "btnList":[],//按钮权限
+//         "keepAlive":false,//是否缓存路由
 //     },
 //     "children":[
 //             {
@@ -256,65 +280,175 @@ import {login,menuList,uploadOne} from '@/network/api'
 export default {
     data() {
         return {
+            code:'',
+            identifyCodes: '1234567890',
+            identifyCode: '',
             routersData:[],//存储路由数据
             formInline: {
-                user: '',
+                account: '',
                 password: '',
             },
             logging: false,//登录加载
+            allMeunList:[],
+             rules:{
+                account:[
+                    { required: true, message: '请输入用户账号', trigger: 'blur' },
+                ],
+                password:[
+                    { required: true, message: '请输入密码', trigger: 'blur' },
+                ]
+            }
         }
+    },
+    components: {
+       Identify
+    },
+    mounted () {
+        this.identifyCode = ''
+        this.makeCode(this.identifyCodes, 4)
     },
     created(){
         this.$removeStorage('subNav');
+        this.$removeStorage('menuList');
         this.$removeStorage('taken');
     },
     methods:{
-        login(){
-            let params = {
-                "account": "admin",
-                "password": "123456"
+         makeCode (o, l) {
+            for (let i = 0; i < l; i++) {
+                this.identifyCode += this.identifyCodes[
+                this.randomNum(0, this.identifyCodes.length)
+                ]
             }
-           login(params).then(res=>{
+        },
+        // 生成随机数
+        randomNum (min, max) {
+        return Math.floor(Math.random() * (max - min) + min)
+        },
+        // 切换验证码
+        refreshCode () {
+        this.identifyCode = ''
+        this.makeCode(this.identifyCodes, 4)
+        },
+        login(){
+           login(this.formInline).then(res=>{
+               this.logging = false;
                if(res.data.code == 0){
                   this.$setStorage('taken',res.data.data)
                }else{
-                 this.$message.success('登录成功')
+                   this.refreshCode();
+                   this.code = '';
+                 this.$message.warning(res.data.message)
                };
            }).then(res=>{
-               this.getMenu();
+             
+                this.getUser();
+                this.GetMenuList();
+               
+               
            });
+        },
+        getUser(){
+            GetUser({}).then(res=>{
+               if(res.data.code == 0){
+                  this.$setStorage('userInfoList',JSON.stringify(res.data.data))
+               }else{};
+            });
+        },
+        GetMenuList(){
+            let params = {
+                menuType: 7
+            }
+            GetMenuList(params).then(res=>{
+               if(res.data.code == 0){
+                   this.allMeunList = res.data.data;
+                   this.getMenu();
+               }
+            });
         },
         getMenu(){
             let params = {
-                pageSize: 1,
-                pageNum: 999,
-                menuType: 1
+                pageSize: 999,
+                pageNum: 1,
+                menuType: 7
             }
             menuList(params).then(res=>{
                if(res.data.code == 0){
                    let data = res.data.data.records;
-                   data = buildTree(data)
-                   this.getNavigationTree(data)
+                   let screenList = this.screen(data)
+                   data = [...data,...screenList]
+                  
+                    let new_arr=[];
+                    let json_arr=[];
+
+                    for (let index = 0; index < data.length; index++) {
+                        const element = data[index];
+                        if (new_arr.indexOf(element['id']) ==-1) {
+                           new_arr.push(element['id']);   //如果没有找到就把这个name放到arr里面，以便下次循环时用
+                            json_arr.push(element);
+                        }
+                    } //去重
+
+ 
+                    
+                   let buildData = buildTree(json_arr);
+                    buildData.sort(function(a,b){
+                    return a.sort - b.sort;
+                    });
+                   this.getNavigationTree(buildData)
                }
             });
         },
-        uploadOne(file, fileList){
+        screen(data){
+            let arr = [];
+            let newData = [];
+            data.forEach(cur=>{
+                arr.push(cur.pid)
+            });
 
-           
-            let param = new FormData()
+            let newArr = Array.from(new Set(arr)) //去掉相同的pid
+     
 
-           param.append('file',file);
-            
-            uploadOne(param).then(res=>{
-              
-           })
-            return false
+            this.recursionData(newArr,newData) //选择上级菜单
+          
+            console.log(newData)
+
+            return  newData
         },
-         handleSubmit(e) {
+        recursionData(newArr,newData){
+              newArr.forEach(cur=>{
+                this.allMeunList.forEach(ele=>{
+                    if(cur == ele.id){
+                        newData.push(ele)
+                        if(ele.pid != '0'){
+                            this.recursionData([ele.pid],newData)
+                        };
+                    };
+                });
+            });
+
+        },
+        handleSubmit(e) {
              //登录
-            this.logging = true;
-            resetRouter()
-            this.login()
+             console.log(this.code)
+             console.log(this.identifyCode)
+
+              this.$refs.ruleForm.validate(valid => {
+                if (valid) {
+                    if(this.code == this.identifyCode){
+                        this.logging = true;
+                        resetRouter()
+                        this.login()
+                    }else{
+                        this.$message.warning('验证码输入错误,请重新输入') 
+                    }
+                
+                } else {
+                return false;
+                };
+            });
+
+             
+            
            
         },
         getNavigationTree(data){
