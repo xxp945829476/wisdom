@@ -26,7 +26,7 @@
                         </a-col>
                         <a-col :md="12">
                             <a-form-model-item label="企业类型">
-                                 <a-select v-model="formParmas.deptType" allowClear>
+                                 <a-select v-model="formParmas.deptBusinessType" allowClear>
                                     <a-select-option v-for="item in depList" :key="item.id">
                                         {{item.name}}
                                     </a-select-option>
@@ -39,7 +39,7 @@
        </div>
         
 
-        <a-table :columns="columns" bordered :data-source="tableData" :rowKey='record' size="middle" :pagination="pagination" :loading="loading" :scroll="{x:1200,y:height}">
+        <a-table :columns="columns" bordered :data-source="tableData" :rowKey='record' size="middle" :pagination="pagination" :loading="loading" :scroll="{x:1800,y:height}">
                 <a slot="deptName" slot-scope="text,record" @click="viewDetails(record)">
                     {{record.deptName}}
                 </a>
@@ -83,7 +83,7 @@ export default {
         key: 'deptAbbreviation',
         align:'center',
         ellipsis:true,
-        width:120
+        width:120,
       },
       {
         title: '企业名称',
@@ -96,18 +96,19 @@ export default {
       },
       {
         title: '企业类型',
-        dataIndex: 'deptTypeName',
-        key: 'deptTypeName',
+        dataIndex: 'deptBusinessTypeName',
+        key: 'deptBusinessTypeName',
         align:'center',
         ellipsis:true,
-        width:100
+        width:200,
       },
       {
         title: '管辖区',
         align:'center',
         ellipsis:true,
-        width:200,
+        width:160,
         scopedSlots: { customRender: 'deptJurisdictionalArea' },
+  
       },
       {
         title: '企业法人',
@@ -115,7 +116,7 @@ export default {
         key: 'deptLegalPerson',
         align:'center',
         ellipsis:true,
-        width:100
+     
       },
       {
         title: '企业地址',
@@ -123,7 +124,7 @@ export default {
         key: 'deptAddress',
         align:'center',
         ellipsis:true,
-        width:300
+        width:200,
       },
       {
         title: '负责人',
@@ -131,7 +132,6 @@ export default {
         key: 'deptChargePerson ',
         align:'center',
         ellipsis:true,
-        width:100
       },
       {
         title: '负责人电话',
@@ -139,7 +139,6 @@ export default {
         key: 'deptChargePersonTel',
         align:'center',
         ellipsis:true,
-        width:140
       },
       {
         title: '车辆数',
@@ -147,7 +146,6 @@ export default {
         key: 'vehicleNums',
         align:'center',
         ellipsis:true,
-        width:100
       },
       {
         title: '新增时间',
@@ -155,7 +153,6 @@ export default {
         key: 'createTime',
         align:'center',
         ellipsis:true,
-        width:100
       },
       {
         title: '有效状态',
@@ -163,7 +160,6 @@ export default {
         key: 'activition',
         align:'center',
         ellipsis:true,
-        width:100,
         scopedSlots: { customRender: 'activition' },
       },
       {
@@ -188,7 +184,8 @@ export default {
         deptName: '',
         pageNum:1,
         pageSize:20,
-        deptType:''
+        deptType:'3',
+        deptBusinessType:''
       },
       advanced:false,
       tableData:[],
@@ -246,7 +243,7 @@ export default {
     },
     getDepType(){
         let params = {
-              pid: "1"
+              pid: "77"
             };
         BaseList(params).then(res=>{
           if(res.data.code == 0){
@@ -263,7 +260,7 @@ export default {
       this.formParmas.pageNum = 1;
       this.pagination.current = 1;
       this.formParmas.deptName = '';
-      this.formParmas.deptType = '';
+      this.formParmas.deptBusinessType = '';
       this.getData()
     },
     record(key){

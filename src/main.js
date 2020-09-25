@@ -32,7 +32,9 @@ import {
   Empty,
   Checkbox,
   Popover,
-  Badge
+  Badge,
+  Pagination,
+  Steps
 } from 'ant-design-vue';
 import App from './App.vue'
 import base from '@/utils/base';
@@ -88,6 +90,9 @@ Vue.use(Empty);
 Vue.use(Checkbox);
 Vue.use(Popover);
 Vue.use(Badge);
+Vue.use(Pagination);
+Vue.use(Steps);
+
 
 
 

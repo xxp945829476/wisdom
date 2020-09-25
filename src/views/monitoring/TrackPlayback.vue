@@ -28,8 +28,15 @@
             <a-form-model-item label="日期">
              <a-date-picker  />
             </a-form-model-item>
+            <a-form-model-item label="开始时间" >
+             <a-date-picker show-time placeholder="请选择开始时间" :disabled-date="disabledStartDate" format="YYYY-MM-DD HH:mm:ss"/>
+            </a-form-model-item>
+            <a-form-model-item label="结束时间">
+            <a-date-picker show-time  placeholder="请选择结束时间" :disabled-date="disabledEndDate" format="YYYY-MM-DD HH:mm:ss"/>
+            </a-form-model-item>
           </a-form-model>
-         
+
+          
         </div>
 
         
@@ -82,12 +89,12 @@ export default {
       labelCol: { span: 4 },
       wrapperCol: { span: 24 },
       leftWidth:'280px',
-      labelCol_1: { span: 4 },
-      wrapperCol_1: { span: 20 },
+      labelCol_1: { span: 6 },
+      wrapperCol_1: { span: 18 },
       play: true,
        path: [],
       icon: {
-        url: 'http://api.map.baidu.com/library/LuShu/1.2/examples/car.png',
+        url: require('@/assets/images/car.png'),
         size: {width: 52, height: 26},
         opts: {anchor: {width: 27, height:13}},
       },
@@ -167,6 +174,20 @@ export default {
             polyline.setStrokeWeight(8); //设置宽度
             polyline.setStrokeOpacity(0.1); //设置透明度
           
+    },
+    disabledStartDate(startValue) {
+      const endValue = this.endValue;
+      if (!startValue || !endValue) {
+        return false;
+      }
+      return startValue.valueOf() > endValue.valueOf();
+    },
+    disabledEndDate(endValue) {
+      const startValue = this.startValue;
+      if (!endValue || !startValue) {
+        return false;
+      }
+      return startValue.valueOf() >= endValue.valueOf();
     },
   }
 }

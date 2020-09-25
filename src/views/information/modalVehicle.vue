@@ -1,7 +1,7 @@
 <template>
     <a-modal v-model="vehicleVisible" :maskClosable="false" width="80%" :keyboard="false" v-dialogDrag="dialog" v-fullscreen>
         <div slot="title">
-        新增车辆
+        {{title}}
         <span class="fullscreen_model">
             <a-icon type="fullscreen" class="fullscreen_icon" />
             <a-icon type="fullscreen-exit" class="fullscreen_exit_icon" />
@@ -14,6 +14,7 @@
                     <a-col :md="8">
                         <a-form-model-item label="所属企业" prop="deptId">
                             <a-select v-model="addForm.deptId"
+                            placeholder="请选择所属企业"
                             :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}">
                               <a-select-option v-for="item in depList" :key="item.id">
                                   {{item.deptName}}
@@ -24,6 +25,7 @@
                     <a-col :md="8">
                         <a-form-model-item label="车辆类型" prop="vehicleType">
                             <a-select v-model="addForm.vehicleType"
+                            placeholder="请选择车辆类型"
                             :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}">
                               <a-select-option v-for="item in typeList" :key="item.id">
                                   {{item.name}}
@@ -33,12 +35,13 @@
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="车牌号码" prop="vehicleNo">
-                            <a-input v-model="addForm.vehicleNo" />
+                            <a-input v-model="addForm.vehicleNo" placeholder="请输入车牌号码"/>
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="车牌颜色" prop="vehicleLicenceColor">
-                           <a-select v-model="addForm.vehicleLicenceColor" 
+                           <a-select v-model="addForm.vehicleLicenceColor"
+                           placeholder="请选择车牌颜色"
                            :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}">
                               <a-select-option v-for="item in colorList" :value="item.id" :key="item.id">
                                   {{item.name}}
@@ -48,12 +51,13 @@
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="车辆颜色" prop="vehicleColor">
-                            <a-input v-model="addForm.vehicleColor" />
+                            <a-input v-model="addForm.vehicleColor" placeholder="请输入车辆颜色" />
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="设备名称-主" prop="deviceMaster">
                             <a-select v-model="addForm.deviceMaster" 
+                             placeholder="请选择设备名称-主"
                            :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}">
                               <template v-for="item in devicelist">
                                 <a-select-option :value="item.id" :key="item.id" v-if="item.deviceMasterSlave == 22">
@@ -67,6 +71,7 @@
                     <a-col :md="8">
                         <a-form-model-item label="设备名称-从" prop="deviceSlave">
                             <a-select v-model="addForm.deviceSlave" 
+                             placeholder="请选择设备名称-从"
                            :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
                               <template v-for="item in devicelist">
                                 <a-select-option :value="item.id" :key="item.id" v-if="item.deviceMasterSlave == 23">
@@ -88,7 +93,7 @@
                                     </a-select-option>
                                 </a-select>
                                 <template v-if="isVolume=='0'">
-                                    <a-input style="width: 76%" v-model="addForm.volume" placeholder=""/>
+                                    <a-input style="width: 76%" v-model="addForm.volume" placeholder="请输入货箱体积"/>
                                 </template>
                                 <template v-else>
                                      <a-input style="width: 20%" v-model="volumeList.long" placeholder="长/m" />
@@ -101,22 +106,23 @@
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="车辆简称" prop="vehicleAbbr">
-                            <a-input v-model="addForm.vehicleAbbr" />
+                            <a-input v-model="addForm.vehicleAbbr" placeholder="请输入车辆简称"/>
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="车主姓名" prop="ownerName">
-                            <a-input v-model="addForm.ownerName" />
+                            <a-input v-model="addForm.ownerName" placeholder="请输入车主姓名"/>
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="联系电话" prop="ownerTel">
-                            <a-input v-model="addForm.ownerTel" />
+                            <a-input v-model="addForm.ownerTel" placeholder="请输入联系电话" />
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="车辆星标" prop="vehicleStarBeacon">
                             <a-select v-model="addForm.vehicleStarBeacon"
+                            placeholder="请选择车辆星标"
                             :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
                               <a-select-option v-for="item in starList" :key="item.id">
                                   {{item.name}}
@@ -127,6 +133,7 @@
                     <a-col :md="8">
                         <a-form-model-item label="车辆品牌" prop="vehicleBrand">
                              <a-select v-model="addForm.vehicleBrand"
+                             placeholder="请选择车辆品牌"
                              :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
                               <a-select-option v-for="item in brandList" :key="item.id">
                                   {{item.name}}
@@ -137,6 +144,7 @@
                     <a-col :md="8">
                         <a-form-model-item label="车辆型号" prop="vehicleModel">
                             <a-select v-model="addForm.vehicleModel"
+                             placeholder="请选择车辆型号"
                              :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
                               <a-select-option v-for="item in modelList" :key="item.id">
                                   {{item.name}}
@@ -146,12 +154,12 @@
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="车架号" prop="vehicleFrameNo">
-                            <a-input v-model="addForm.vehicleFrameNo" />
+                            <a-input v-model="addForm.vehicleFrameNo"  placeholder="请输入车架号"/>
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="车辆新旧" prop="vehicleNewOld">
-                            <a-select v-model="addForm.vehicleNewOld" :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
+                            <a-select v-model="addForm.vehicleNewOld" placeholder="请选择车辆新旧" :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
                                 <a-select-option value="1">
                                     新
                                 </a-select-option>
@@ -164,9 +172,10 @@
                     <a-col :md="8">
                         <a-form-model-item label="经销商" prop="distributor">
                             <a-select v-model="addForm.distributor"
+                            placeholder="请选择经销商"
                              :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
                               <a-select-option v-for="item in distributorList" :key="item.id">
-                                  {{item.name}}
+                                  {{item.deptName}}
                               </a-select-option>
                             </a-select>
                         </a-form-model-item>
@@ -188,7 +197,7 @@
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="备注" prop="vehicleRemark">
-                            <a-input v-model="addForm.vehicleRemark" />
+                            <a-input v-model="addForm.vehicleRemark" placeholder="..."/>
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="24">
@@ -335,6 +344,7 @@ import debounce from 'lodash/debounce'
 export default {
   data() {
     return {
+      title:"新增车辆",
       isVolume:'0',
       dialog:true,
       vehicleVisible:false,
@@ -345,24 +355,24 @@ export default {
       },
       addForm:{
          id:'',
-         deptId:'',
-         vehicleType:'',
+         deptId:undefined,
+         vehicleType:undefined,
          vehicleNo:'',
          volume:'',
          ownerName:'',
          ownerTel:'',
-         vehicleStarBeacon:'',
-         vehicleBrand:'',
-         vehicleModel:'',
+         vehicleStarBeacon:undefined,
+         vehicleBrand:undefined,
+         vehicleModel:undefined,
          vehicleFrameNo:'',
-         distributor:'',
-         deviceMaster:'',
-         deviceSlave :'',
+         distributor:undefined,
+         deviceMaster:undefined,
+         deviceSlave :undefined,
          vehicleRemark:'',
          manufactureTime:undefined,
          yearlyInspectionTime:undefined,
          expireTime:undefined,
-         vehicleNewOld:'',
+         vehicleNewOld:undefined,
          vehiclePhoto:'',
          vehicleDriveLicensePhoto:'',//行驶证图
          vehicleRegistrationPhoto:'',
@@ -370,8 +380,9 @@ export default {
          vehicleContainerPhoto:'',
          vehicleOtherPhoto:'',
          vehicleColor:'',
-         vehicleLicenceColor:'',
-         vehicleAbbr:''
+         vehicleLicenceColor:undefined,
+         vehicleAbbr:'',
+         deviceSource:1
       },
       labelCol: { span: 5 },
       wrapperCol: { span: 16 },
@@ -419,10 +430,12 @@ export default {
     addvehicle(val,record){
       this.vehicleVisible = true;
       this.isEdit = val;
-      this.isVolume = '0'
+      this.isVolume = '0';
+      this.addForm.deviceSource = 1;
       this.$nextTick(()=>{
           this.$refs.ruleForm.resetFields();
           if(val == 0){
+              this.title = '新增车辆';
               this.addForm.id = '';
               this.addForm.vehiclePhoto = '';
               this.addForm.vehicleDriveLicensePhoto = '';
@@ -431,6 +444,7 @@ export default {
               this.addForm.vehicleContainerPhoto = '';
               this.addForm.vehicleOtherPhoto = '';
           }else{
+              this.title = '编辑车辆';
              this.addForm.id = record.id;
              this.addForm.deptId = record.deptId;
               this.addForm.vehicleType = record.vehicleType;
@@ -464,26 +478,32 @@ export default {
           document.querySelector('.ant-modal-body').scrollTop = 0;
       })
       this.getDepart();
+      this.getDepart(82);
       this.getDevice();
       this.getType(51,1);
       this.getType(31,2);
       this.getType(38,3);
       this.getType(42,4);
       this.getType(45,5);
-      this.getType(48,6);
     },
-    getDepart(){
+    getDepart(type){
          let params = {
             deptName: '',
             pageNum:1,
             pageSize:999,
-            deptType:3
+            deptType:3,
+            deptBusinessType:type
          };
          this.spinning = true;
          DepartmentList(params).then(res=>{
              this.spinning = false;
             if(res.data.code == 0){
-                this.depList = res.data.data.records;
+                if(type == 82){
+                     this.distributorList = res.data.data.records
+                }else{
+                     this.depList = res.data.data.records;
+                }
+               
             }else{
                 this.$message.warning('加载失败')
             };
@@ -522,8 +542,6 @@ export default {
                   this.brandList = res.data.data
               }else if(val == 5){
                   this.modelList = res.data.data
-              }else if(val == 6){
-                  this.distributorList = res.data.data
               }
             
           };

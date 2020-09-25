@@ -13,45 +13,45 @@
         <a-spin :spinning="spinning">
         <div>
             <a-descriptions layout="vertical" bordered>
-                <a-descriptions-item label="SIM卡号">
-                    {{commonFun(addForm.simNo)}}
+                <a-descriptions-item label="设施名称">
+                    {{commonFun(addForm.facilityName)}}
                 </a-descriptions-item>
-                <a-descriptions-item label="设备名称">
+                <a-descriptions-item label="设施类型">
+                    {{commonFun(addForm.facilityTypeName)}}
+                </a-descriptions-item>
+                <a-descriptions-item label="设施简称">
+                    {{commonFun(addForm.facilityAbbr)}}
+                </a-descriptions-item>
+                <a-descriptions-item label="所在工地">
+                    {{commonFun(addForm.fieldName)}}
+                </a-descriptions-item>
+                <a-descriptions-item label="所在位置">
+                    {{commonFun(addForm.facilityPositionName)}}
+                </a-descriptions-item>
+                <a-descriptions-item label="绑定设备">
                     {{commonFun(addForm.deviceName)}}
                 </a-descriptions-item>
-                <a-descriptions-item label="主从设备">
-                    {{commonFun(addForm.msName)}}
+                <a-descriptions-item label="默认视频通道">
+                    {{commonFun(addForm.vedioChannelName)}}
                 </a-descriptions-item>
-                <a-descriptions-item label="设备类型">
-                    {{commonFun(addForm.typeName)}}
+                <a-descriptions-item label="负责人">
+                    {{commonFun(addForm.facilityFzr)}}
                 </a-descriptions-item>
-                <a-descriptions-item label="设备ID">
-                    {{commonFun(addForm.deviceId)}}
-                </a-descriptions-item>
-                <a-descriptions-item label="设备型号">
-                    {{commonFun(addForm.deviceModel)}}
-                </a-descriptions-item>
-                <a-descriptions-item label="IMEI号">
-                    {{commonFun(addForm.devideImeiNo)}}
-                </a-descriptions-item>
-                <a-descriptions-item label="运营商">
-                    {{commonFun(addForm.operatorName)}}
-                </a-descriptions-item>
-                <a-descriptions-item label="厂商ID">
-                    {{commonFun(addForm.devideManufacturer)}}
+                <a-descriptions-item label="联系电话">
+                    {{commonFun(addForm.facilityFzrTel)}}
                 </a-descriptions-item>
                 <a-descriptions-item label="是否标定">
                     <span v-if="addForm.deviceCalibration == 0">是</span>
                     <span v-else>否</span>
                 </a-descriptions-item>
-                <a-descriptions-item label="防伪码">
-                    {{commonFun(addForm.deviceSecurityCode)}}
-                </a-descriptions-item>
-                <a-descriptions-item label="设备套件">
-                    {{commonFun(addForm.name)}}
+                <a-descriptions-item label="品牌">
+                    {{commonFun(addForm.facilityBrand)}}
                 </a-descriptions-item>
                 <a-descriptions-item label="备注">
-                     {{commonFun(addForm.deviceRemark)}}
+                    {{commonFun(addForm.facilityRemark)}}
+                </a-descriptions-item>
+                <a-descriptions-item label="设施照片">
+                    <img v-if="addForm.facilityEnclosure" :src="pathUrl.imgurl + addForm.facilityEnclosure" class="img_style">
                 </a-descriptions-item>
                
             </a-descriptions>

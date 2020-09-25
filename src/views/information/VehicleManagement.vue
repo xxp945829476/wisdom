@@ -517,6 +517,7 @@ export default {
       this.formParmas.pageNum = 1;
       this.pagination.current = 1;
       this.formParmas.deptId = selectedKeys[0];
+      this.formParmas.realAreaId = '';
       this.selectedKeys = selectedKeys;
       this.treeData.forEach(cur=>{
         if(cur.areaId == selectedKeys[0]){

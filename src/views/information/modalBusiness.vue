@@ -22,8 +22,8 @@
                     </a-form-model-item>
                 </a-col>
                 <a-col :md="8">
-                    <a-form-model-item label="企业类型" prop="deptType">
-                       <a-select v-model="addForm.deptType" placeholder="请选择企业类型">
+                    <a-form-model-item label="企业类型" prop="deptBusinessType">
+                       <a-select v-model="addForm.deptBusinessType" placeholder="请选择企业类型">
                             <a-select-option v-for="item in depList" :key="item.id">
                                 {{item.name}}
                             </a-select-option>
@@ -197,7 +197,8 @@ export default {
         id:'',
         deptAbbreviation: '',
         deptName: '',
-        deptType:undefined,
+        deptBusinessType:undefined,
+        deptType:3,
         deptCode:'',
         deptLegalPerson:'',
         deptAddress:'',
@@ -218,11 +219,11 @@ export default {
         deptName:[
           { required: true, message: '请输入企业名称', trigger: 'blur' },
         ],
-        deptType:[
-          { required: true, message: '请输入企业简称', trigger: 'blur' },
+        deptBusinessType:[
+          { required: true, message: '请选择企业类型', trigger: 'blur' },
         ],
         deptAbbreviation:[
-          { required: true, message: '请选择企业类型', trigger: 'blur' },
+          { required: true, message: '请选择企业简称', trigger: 'blur' },
         ],
         jurisdiction:[
           { required: true, message: '请选择管辖区', trigger: 'blur' },
@@ -248,6 +249,7 @@ export default {
         //val 0新增 1编辑
       this.businessVisible = true;
       this.isEdit = val;
+      this.addForm.deptType = 3;
       this.$nextTick(()=>{
           this.$refs.ruleForm.resetFields();
           if(val==0){
@@ -271,7 +273,7 @@ export default {
               this.addForm.deptAbbreviation = record.deptAbbreviation;
               this.addForm.deptAddress = record.deptAddress;
               this.addForm.deptName = record.deptName;
-              this.addForm.deptType = record.deptType;
+              this.addForm.deptBusinessType = record.deptBusinessType;
               this.addForm.jurisdiction = [record.province,record.city,record.region];
               this.addForm.deptCode = record.deptCode;
               this.addForm.deptLegalPerson = record.deptLegalPerson;
@@ -312,7 +314,7 @@ export default {
     },
     getDepType(){
         let params = {
-              pid: "1"
+              pid: "77"
             };
         BaseList(params).then(res=>{
           if(res.data.code == 0){

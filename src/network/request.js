@@ -3,6 +3,7 @@ import router from '../router';
 import axios from "axios";
 import Qs from "qs";
 import url from "./requestUrl";
+import {message} from "ant-design-vue";
 
 
 
@@ -41,6 +42,49 @@ request.interceptors.response.use(
     },
     error => {
         console.log(error.response.status)
+        if (error.response) {
+            switch (error.response.status) {
+                case 400:
+                    message.error('请求参数错误')
+                    break
+                case 401:
+                    // 返回401 清除token信息并跳转到登陆页面
+                    router.replace({
+                        path: '/login',
+                        query: {
+                            redirect: router.currentRoute.fullPath
+                        }
+                    })
+                    break
+                case 403:
+                    message.error('服务器拒绝本次访问')
+                    break
+                case 404:
+                    message.error('网络请求不存在')
+                    break
+                case 500:
+                    message.error('内部服务器错误')
+                    break
+                case 501:
+                    message.error('服务器不支持该请求中使用的方法')
+                    break
+                case 502:
+                    message.error('网关错误')
+                    break
+                case 504:
+                    message.error('网关超时')
+                    break
+                default:
+                    message.error(error.response.data.message)
+            }
+        } else {
+            // 请求超时或者网络有问题
+            if (error.message.includes('timeout')) {
+                message.error('请求超时！请检查网络是否正常')
+            } else {
+                message.error('请求失败，请检查网络是否已连接')
+            }
+        }
         return Promise.reject(error)
     }
 )

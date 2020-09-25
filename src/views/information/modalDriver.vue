@@ -14,7 +14,7 @@
                 <a-row :gutter="40">
                     <a-col :md="8">
                        <a-form-model-item label="所属企业" prop="deptId">
-                            <a-select v-model="addForm.deptId">
+                            <a-select v-model="addForm.deptId" placeholder="请选择所属企业">
                               <a-select-option v-for="item in depList" :key="item.id">
                                   {{item.deptName}}
                               </a-select-option>
@@ -23,22 +23,22 @@
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="人员姓名" prop="driverName">
-                            <a-input v-model="addForm.driverName" />
+                            <a-input v-model="addForm.driverName" placeholder="请输入人员姓名"/>
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="联系电话" prop="driverTel">
-                            <a-input v-model="addForm.driverTel" />
+                            <a-input v-model="addForm.driverTel" placeholder="请输入联系电话"/>
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="身份证号" prop="driverIdNo">
-                          <a-input v-model="addForm.driverIdNo" />
+                          <a-input v-model="addForm.driverIdNo" placeholder="请输入身份证号"/>
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="驾驶证号" prop="driverLicenseNo">
-                            <a-input v-model="addForm.driverLicenseNo" />
+                            <a-input v-model="addForm.driverLicenseNo" placeholder="请输入驾驶证号"/>
                         </a-form-model-item>
                     </a-col>
                     
@@ -96,7 +96,7 @@ export default {
       driverVisible:false,
       addForm:{
         id: '',
-        deptId:'',
+        deptId:undefined,
         driverName:'',
         driverTel:'',
         driverIdNo:'',

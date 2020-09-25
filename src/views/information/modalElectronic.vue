@@ -5,7 +5,7 @@
     <div>
         <a-form-model :model="formElectronicParmas" ref="ruleForm" :label-col="labelCol" :wrapper-col="wrapperCol" :rules="rules">
                     <a-form-model-item label="管辖区名称" prop="region">
-                        <a-select v-model="formElectronicParmas.region" show-search  :filter-option="filterOption" @change="changeRegion">
+                        <a-select v-model="formElectronicParmas.region" show-search  :filter-option="filterOption" @change="changeRegion" placeholder="请选择管辖区">
                               <a-select-option v-for="item in originalData" :key="item.areaId">
                                   {{item.areaName}}
                               </a-select-option>
@@ -17,7 +17,7 @@
                     </a-form-model-item> 
 
                     <a-form-model-item label="管辖区类型" prop="fieldType">
-                        <a-select v-model="formElectronicParmas.fieldType">
+                        <a-select v-model="formElectronicParmas.fieldType" placeholder="请选择管辖区类型">
                               <a-select-option v-for="item in fieldTypeData" :key="item.id">
                                   {{item.name}}
                               </a-select-option>
@@ -31,7 +31,7 @@
                     <a-form-model-item label="备注" prop="remark">
                         <a-textarea
                           v-model="formElectronicParmas.remark"
-                          placeholder=""
+                          placeholder="..."
                           :auto-size="{ minRows: 3}"
                         />
                     </a-form-model-item>
@@ -74,12 +74,12 @@ export default {
       eletronicVisible:false,
       formElectronicParmas:{
           id:'',
-          region:'',
+          region:undefined,
           remark:'',
           address:'',
           lat:'',
           lng:'',
-          fieldType:'',
+          fieldType:undefined,
           regionName:'',
           upRegion:'',
           upRegionName:'',
@@ -96,7 +96,7 @@ export default {
           { required: true, message: '请绘制管辖范围', trigger: 'change' },
         ],
         fieldType:[
-          { required: true, message: '请绘制管辖范围', trigger: 'change' },
+          { required: true, message: '请选择管辖区类型', trigger: 'change' },
         ],
       },
       isEdit:0,
@@ -131,7 +131,7 @@ export default {
             this.formElectronicParmas.address = record.address;
             this.formElectronicParmas.lng = record.lng;
             this.formElectronicParmas.lat = record.lat;
-            this.formElectronicParmas.region = record.region;
+            this.formElectronicParmas.region = record.region == 0 ? undefined : record.region;
             this.formElectronicParmas.fieldType = record.fieldType;
             this.formElectronicParmas.remark = record.remark;
             this.formElectronicParmas.regionName = record.regionName;
@@ -224,16 +224,24 @@ export default {
       let latArr = [];
       let lngArr = [];
       let positionList = JSON.parse(arr)[0];
-      positionList.forEach(cur=>{
-          latArr.push(cur.lat);
-          lngArr.push(cur.lng);
-      });
-      let index = 0;
-      index =  areaList.length;
-      this.value = '点击进入地图绘制管辖区（已绘制' +  index +'个点）'
-      this.formElectronicParmas.lat = latArr.join(',');
-      this.formElectronicParmas.lng = lngArr.join(',');
-      this.formElectronicParmas.address = areaList.join(',');;
+      if(positionList){
+         positionList.forEach(cur=>{
+            latArr.push(cur.lat);
+            lngArr.push(cur.lng);
+        });
+        let index = 0;
+        index =  areaList.length;
+        this.value = '点击进入地图绘制管辖区（已绘制' +  index +'个点）'
+        this.formElectronicParmas.lat = latArr.join(',');
+        this.formElectronicParmas.lng = lngArr.join(',');
+        this.formElectronicParmas.address = areaList.join(',');
+      }else{
+        this.value = '点击进入地图绘制管辖区（已绘制' +  0 +'个点）'
+        this.formElectronicParmas.lat = '';
+        this.formElectronicParmas.lng = '';
+        this.formElectronicParmas.address = '';
+      }
+     
      
     },
     changeRegion(val){

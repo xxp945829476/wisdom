@@ -448,4 +448,114 @@ export function GetJsession(data){
     })
 }
 
+// 工地列表
+export function SiteList(data){
+    return fetch({
+        url:'/api/sz-field/list',
+        method:'post',
+        data:data,
+    })
+}
+
+// 工地新增
+export function SiteAdd(data){
+    return fetch({
+        url:'/api/sz-field/add',
+        method:'post',
+        data:data,
+    })
+}
+
+// 工地编辑
+export function SiteEdit(data){
+    return fetch({
+        url:'/api/sz-field/edit',
+        method:'post',
+        data:data,
+    })
+}
+
+// 工地左侧
+export function SiteleftList(data){
+    return fetch({
+        url:'/api/sz-field/leftList',
+        method:'post',
+        data:data,
+    })
+}
+
+// 审核工地
+export function SitePermit(data){
+    return fetch({
+        url:'/api/sz-field/permit',
+        method:'post',
+        data:data,
+    })
+}
+
+// 新增工地设施
+export function AddFacility(data){
+    return fetch({
+        url:'/api/sz-facility/add',
+        method:'post',
+        data:data,
+    })
+}
+
+// 编辑工地设施
+export function EditFacility(data){
+    return fetch({
+        url:'/api/sz-facility/edit',
+        method:'post',
+        data:data,
+    })
+}
+
+// 工地设施列表
+export function FacilityList(data){
+    return fetch({
+        url:'/api/sz-facility/list',
+        method:'post',
+        data:data,
+    })
+}
+
+
+
+// 工地设备列表
+export function SiteEquipmentList(data){
+    return fetch({
+        url:'/api/sz-field-device/list',
+        method:'post',
+        data:data,
+    })
+}
+
+// 新增工地设备
+export function AddSiteEquipment(data){
+    return fetch({
+        url:'/api/sz-field-device/add',
+        method:'post',
+        data:data,
+    })
+}
+
+// 编辑工地设备
+export function EditSiteEquipment(data){
+    return fetch({
+        url:'/api/sz-field-device/edit',
+        method:'post',
+        data:data,
+    })
+}
+
+// 解绑工地设备
+export function UnbindSiteEquipment(data){
+    return fetch({
+        url:'/api/sz-field-device/unbind',
+        method:'post',
+        data:data,
+    })
+}
+
 

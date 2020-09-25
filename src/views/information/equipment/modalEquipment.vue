@@ -13,17 +13,17 @@
             <a-row :gutter="40">
                 <a-col :md="8">
                     <a-form-model-item label="SIM卡号" prop="simNo">
-                        <a-input v-model="addForm.simNo" placeholder="请输入企业名称"/>
+                        <a-input v-model="addForm.simNo" placeholder="请输入SIM卡号"/>
                     </a-form-model-item>
                 </a-col>
                 <a-col :md="8">
                     <a-form-model-item label="设备名称" prop="deviceName">
-                        <a-input v-model="addForm.deviceName"  placeholder="请输入企业简称"/>
+                        <a-input v-model="addForm.deviceName"  placeholder="请输入设备名称"/>
                     </a-form-model-item>
                 </a-col>
                 <a-col :md="8">
                     <a-form-model-item label="主从设备" prop="deviceMasterSlave">
-                       <a-select v-model="addForm.deviceMasterSlave" placeholder="请选择企业类型">
+                       <a-select v-model="addForm.deviceMasterSlave" placeholder="请选择主从设备">
                             <a-select-option v-for="item in masterSlave" :key="item.id">
                                 {{item.name}}
                             </a-select-option>
@@ -32,7 +32,7 @@
                 </a-col>
                 <a-col :md="8">
                     <a-form-model-item label="设备类型" prop="deviceType">
-                      <a-select v-model="addForm.deviceType" placeholder="请选择企业类型">
+                      <a-select v-model="addForm.deviceType" placeholder="请选择设备类型">
                             <a-select-option v-for="item in typeList" :key="item.id">
                                 {{item.name}}
                             </a-select-option>
@@ -41,36 +41,36 @@
                 </a-col>
                 <a-col :md="8">
                     <a-form-model-item label="设备ID" prop="deviceId">
-                        <a-input v-model="addForm.deviceId" placeholder="请输入企业地址"/>
+                        <a-input v-model="addForm.deviceId" placeholder="请输入设备ID"/>
                     </a-form-model-item>
                 </a-col>
                 <a-col :md="8">
                     <a-form-model-item label="设备型号" prop="deviceModel">
-                        <a-input v-model="addForm.deviceModel" placeholder="请输入企业编号"/>
+                        <a-input v-model="addForm.deviceModel" placeholder="请输入设备型号"/>
                     </a-form-model-item>
                 </a-col>
                 <a-col :md="8">
                     <a-form-model-item label="IMEI号" prop="devideImeiNo">
-                        <a-input v-model="addForm.devideImeiNo" placeholder="请输入企业法人"/>
+                        <a-input v-model="addForm.devideImeiNo" placeholder="请输入IMEI号"/>
                     </a-form-model-item>
                 </a-col>
                 <a-col :md="8">
                     <a-form-model-item label="运营商" prop="deviceOperator">
-                        <a-select v-model="addForm.deviceOperator" placeholder="请选择企业类型" allowClear>
+                        <a-select v-model="addForm.deviceOperator" placeholder="请选择运营商" allowClear>
                             <a-select-option v-for="item in operaterList" :key="item.id">
-                                {{item.name}}
+                                {{item.deptName}}
                             </a-select-option>
                         </a-select>
                     </a-form-model-item>
                 </a-col>
                 <a-col :md="8">
                     <a-form-model-item label="厂商ID" prop="devideManufacturer">
-                        <a-input v-model="addForm.devideManufacturer" placeholder="请输入负责人电话"/>
+                        <a-input v-model="addForm.devideManufacturer" placeholder="请输入厂商ID"/>
                     </a-form-model-item>
                 </a-col>
                 <a-col :md="8">
                     <a-form-model-item label="是否标定" prop="deviceCalibration">
-                         <a-select v-model="addForm.deviceCalibration" placeholder="请选择企业类型">
+                         <a-select v-model="addForm.deviceCalibration" placeholder="请选择是否标定">
                             <a-select-option value='0'>
                                 是
                             </a-select-option>
@@ -82,12 +82,12 @@
                 </a-col>
                 <a-col :md="8">
                     <a-form-model-item label="防伪码" prop="deviceSecurityCode">
-                        <a-input v-model="addForm.deviceSecurityCode" placeholder="请输入车管联系人电话" />
+                        <a-input v-model="addForm.deviceSecurityCode" placeholder="请输入防伪码" />
                     </a-form-model-item>
                 </a-col>
                 <a-col :md="8">
                     <a-form-model-item label="设备套件" prop="deviceKit">
-                        <a-select v-model="addForm.deviceKit" placeholder="请选择企业类型" allowClear>
+                        <a-select v-model="addForm.deviceKit" placeholder="请选择设备套件" allowClear>
                             <a-select-option v-for="item in kitList" :key="item.id">
                                 {{item.name}}
                             </a-select-option>
@@ -109,7 +109,7 @@
     </div>
     </a-spin>
     <template slot="footer">
-        <a-button key="back" @click="businessVisible = false">
+        <a-button key="back" @click="equipmentVisible = false">
         取消
         </a-button>
         <a-button key="submit" type="primary" @click="save">
@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import {BaseList,AddDevicelist,EditDevicelist} from '@/network/api'
+import {BaseList,AddDevicelist,EditDevicelist,DepartmentList} from '@/network/api'
 import {buildAreaTree,getBobimg} from '@/utils/utils.js'
 import debounce from 'lodash/debounce'
 
@@ -136,16 +136,17 @@ export default {
         id:'',
         simNo: '',
         deviceName: '',
-        deviceMasterSlave:'',
-        deviceType:'',
+        deviceMasterSlave:undefined,
+        deviceType:undefined,
         deviceId:'',
         devideImeiNo:'',
-        deviceOperator:'',
+        deviceOperator:undefined,
         devideManufacturer:'',
         deviceCalibration:'1',
         deviceSecurityCode:'',
-        deviceKit:'',
+        deviceKit:undefined,
         deviceRemark:'',
+        deviceSource:1
       },
       masterSlave:[],//主从设备
       typeList:[],//类型
@@ -178,15 +179,16 @@ export default {
         //val 0新增 1编辑
       this.equipmentVisible = true;
       this.isEdit = val;
+      this.addForm.deviceSource = 1;
       this.$nextTick(()=>{
           this.$refs.ruleForm.resetFields();
           if(val==0){
-              this.title = '新增设备';
+              this.title = '新增车辆设备';
               this.addForm.id = '';
               this.deviceCalibration = '1'
           }else{
               
-              this.title = '编辑设备';
+              this.title = '编辑车辆设备';
                this.addForm.id = record.id;
               this.addForm.simNo = record.simNo;
               this.addForm.deviceName =  record.deviceName;
@@ -194,7 +196,7 @@ export default {
               this.addForm.deviceType = record.deviceType;
               this.addForm.deviceId = record.deviceId;
               this.addForm.devideImeiNo = record.devideImeiNo;
-              
+              this.addForm.deviceModel = record.deviceModel;
               this.addForm.deviceOperator = record.deviceOperator == 0 ? undefined : record.deviceOperator;
               this.addForm.devideManufacturer = record.devideManufacturer;
               this.addForm.deviceCalibration = record.deviceCalibration;
@@ -205,11 +207,32 @@ export default {
           };
           document.querySelector('.ant-modal-body').scrollTop = 0;
       });
-
+      this.getDepart();
       this.getType(21,1);
       this.getType(17,2);
-      this.getType(24,3);
-      this.getType(28,4);
+      this.getType(28,3);
+    },
+    getDepart(){
+         let params = {
+            deptName: '',
+            pageNum:1,
+            pageSize:999,
+            deptType:3,
+            deptBusinessType:83
+         };
+         this.spinning = true;
+         DepartmentList(params).then(res=>{
+             this.spinning = false;
+            if(res.data.code == 0){
+
+                     this.operaterList = res.data.data.records
+
+               
+            }else{
+                this.$message.warning('加载失败')
+            };
+            
+        });
     },
     getType(id,val){
 
@@ -223,9 +246,7 @@ export default {
               }else if(val == 2){
                   this.typeList = res.data.data
               }else if(val == 3){
-                  this.operaterList = res.data.data
-              }else if(val == 4){
-                  this.kitList = res.data.data
+                   this.kitList = res.data.data
               }
             
           };
