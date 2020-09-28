@@ -769,7 +769,7 @@
 }
 .desion_left{
     padding: 0 10px;
-    height: 100vh;
+    height: calc(100vh - 62px);
     overflow: auto;
     background: #fff;
     .desion_left_t{
@@ -779,11 +779,12 @@
         color: #0472fd;
      }
      .desion_left_t1{
-         padding-bottom: 10px;
+         padding-bottom: 6px;
      }
 }
 
 .desion_left_l{
+    overflow: hidden;
     li{
         float: left;
         font-size: 12px;
@@ -798,6 +799,10 @@
         border: 1px solid #f4f6fc;
         cursor: move;
         background: #f4f6fc;
+        i{
+            padding:0 6px;
+            color:#333 ;
+        }
     }
 }
 .desion_middle{
@@ -807,7 +812,7 @@
     padding: 15px 0;
     .dragArea{
         width: 100%;
-        height: 100vh;
+        height: calc(100vh - 102px);
         overflow: auto;
     }
 }
@@ -826,7 +831,7 @@
 }
 .desion_right{
     padding: 0 10px;
-    height: 100vh;
+    height: calc(100vh - 62px);
     overflow: auto;
     background: #fff;
     .desion_right_t{
@@ -836,23 +841,57 @@
     .desion_right_c{
         padding-bottom: 10px;
         border-bottom: 1px solid #e4e7ed;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
+        span{
+            font-size: 12px;
+        }
+        h4{
+            margin-bottom: 10px;
+            span{
+                padding-left: 10px;
+                color: rgba(0, 0, 0, 0.25);
+                font-size: 12px;
+            }
+           
+            i{
+              color: #f4bd40;
+              padding-left: 10px;
+            }
+        }
+        .limit_data{
+            margin-top: 10px;
+        }
     }
 }
 
 .process_box{
-    height: 100vh;
+    .ant-col{
+        z-index: 1;
+    }
+    height: calc(100vh - 82px);
     background: #fff;
     margin-top: 82px;
+    overflow: auto;
+    .anticon-right{
+        font-size: 10px;
+        vertical-align: 0px;
+    }
     .process_single{
         text-align: center;
+        cursor: pointer;
+        background: #fff;
+    }
+    .process_multiple{
+        padding-top: 60px;
     }
     .add-node-btn-box {
+        cursor: pointer;
         width: 240px;
         position: relative;
         text-align: center;
-        background: #fff;
-        padding: 30px 0 40px;
+
+        padding: 45px 0 75px;
+        margin: 0 auto;
         &:before {
             content: "";
             position: absolute;
@@ -864,7 +903,7 @@
             margin: auto;
             width: 2px;
             height: 100%;
-            background-color: #cacaca;
+            background-color: #e4e7ed;
         }
         i{
             position: relative;
@@ -872,6 +911,29 @@
             background: #fff;
             color: #f4bd40;
             font-size: 26px;
+        }
+        .design_sel_box{
+            position: absolute;
+            top: 0;
+            right: -20px;
+            border:1px dashed #f4bd40;
+            z-index: 10;
+            background: #fff;
+            border-radius: 10px;
+            padding: 6px;
+            text-align: left;
+            width: 110px;
+            font-size: 12px;
+            line-height: 24px;
+            z-index: 55;
+            li{
+                cursor: pointer;
+            }
+            i{
+                font-size: 12px;
+                position: absolute;
+                right: 10px;
+            }
         }
         
     }
@@ -896,6 +958,100 @@
         margin: auto;
         border-radius: 50%;
         background: #dbdcdc;
+    }
+    .add_condition{
+        border-bottom: 2px solid #e4e7ed;
+        border-top: 2px solid #e4e7ed;
+        position: relative;
+        .left_top_line{
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background: #fff;
+            left: -1px;
+            top: -2px;
+            z-index: 2;
+        }
+        .right_top_line{
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background: #fff;
+            right: -1px;
+            top: -2px;
+            z-index: 2; 
+        }
+        .left_bottom_line{
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background: #fff;
+            left: -1px;
+            bottom: -2px;
+            z-index: 2; 
+        }
+        .right_bottom_line{
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background: #fff;
+            right: -1px;
+            bottom: -2px;
+            z-index: 2; 
+        }
+        .condition_content{
+            position: relative;
+            &::after{
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 0;
+                margin: auto;
+                width: 2px;
+                height: 100%;
+                background-color: #e4e7ed;
+            }
+            
+        }
+    }
+    
+    .condition_tip{
+        position: relative;
+        z-index: 2;
+        background: #fff;
+        cursor: pointer;
+        i.iconshaixuan-youtiaojian{
+            color: #f4bd40;
+        }
+    }
+    .add_condition_box{
+        position: relative;
+        .condition_btn{
+            position: absolute;
+            z-index: 3;
+            top:-16px
+        }
+    }
+    .multiple_box{
+        position: relative;
+        padding-top: 20px;
+        &:before{
+            content: "";
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+            width: 0;
+            height: 4px;
+            border-style: solid;
+            border-width: 8px 6px 4px;
+            border-color: #cacaca transparent transparent;
+            z-index: 3;
+        }
     }
 }
 

@@ -6,6 +6,55 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4954910",
+      "name": "正确",
+      "font_class": "zhengque",
+      "unicode": "e64f",
+      "unicode_decimal": 58959
+    },
+    {
+      "icon_id": "435952",
+      "name": "时间",
+      "font_class": "shijian",
+      "unicode": "e7cb",
+      "unicode_decimal": 59339
+    },
+    {
+      "icon_id": "633020",
+      "name": "选中",
+      "font_class": "xuanzhong",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "1621077",
+      "name": "Aa",
+      "font_class": "Aa",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "2152776",
+      "name": "位置",
+      "font_class": "weizhi",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "14148148",
+      "name": "连接",
+      "font_class": "lianjie",
+      "unicode": "e749",
+      "unicode_decimal": 59209
+    },
+    {
+      "icon_id": "15144585",
+      "name": "icon_有效期@2x",
+      "font_class": "icon_youxiaoqi2x",
+      "unicode": "e64e",
+      "unicode_decimal": 58958
+    },
+    {
       "icon_id": "17426000",
       "name": "发起人",
       "font_class": "faqiren",

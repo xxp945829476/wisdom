@@ -20,7 +20,7 @@
                         </a-form-model-item>
                         <a-form-model-item prop="password">
                         <a-input v-model="formInline.password" type="password" placeholder="请输入密码">
-                            <i class="iconfont iconmima1" slot="prefix" type="user"></i>
+                            <i class="iconfont iconicon-mima" slot="prefix" type="user"></i>
                         </a-input>
                         </a-form-model-item>
                         <a-form-model-item>

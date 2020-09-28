@@ -1,55 +1,55 @@
 <template>
     <div class="process_box">
-        <a-row type="flex" justify="center">
-          <a-col flex="200px">
-                <div class="process_single">
-                  <img src="@/assets/images/fqr.svg">
-                  <div>选择发起人</div>
-                </div>
-                <div class="add-node-btn-box">
-                  <i class="iconfont icontianjia1"></i>
-                </div>
-          </a-col>
-        </a-row>
-
-        <a-row type="flex" justify="center">
-          <a-col flex="200px">
-                <div class="process_single process_arrow">
-                  <img src="@/assets/images/spr.svg">
-                  <div>选择审批人</div>
-                </div>
-                <div class="add-node-btn-box">
-                  <i class="iconfont icontianjia1"></i>
-                </div>
-          </a-col>
-        </a-row>
-
-        <a-row type="flex" justify="center">
-          <a-col flex="200px">
-                <div class="process_single process_arrow">
-                  <img src="@/assets/images/hqr.svg">
-                  <div>选择会签人</div>
-                </div>
-                <div class="add-node-btn-box">
-                  <i class="iconfont icontianjia1"></i>
-                </div>
-          </a-col>
-        </a-row>
-
-         <a-row type="flex" justify="center">
+      
+       
+      <processTree :progressList="progressList" :depth="0"></processTree>
+        
+      <a-row type="flex" justify="center">
           <a-col flex="200px">
                 <div class="process_single">
                   <div class="end-node-circle"></div>
-                  <div>选择审批人</div>
+                  <div>流程结束</div>
                 </div>
           </a-col>
         </a-row>
-
     </div>    
 </template>
 
 <script>
+import processTree from './processLoopTree.vue'
 export default {
-  
+  data () {
+    return {
+      progressList:[
+        {id:'',workflowId:'',progressType:1,preProgressId:'',nextProgressId:'',show:false,progressDetailList:[
+          {id:'',progressId:'',nodeType:'',operateUserIds:'',operateDeptIds:'',operateDeptTypes:'',detailValue:'',show:false,progressDetailList:[]}
+        ]},//发起人
+        {id:'',workflowId:'',progressType:2,preProgressId:'',nextProgressId:'',show:false,progressDetailList:[
+          {id:'',progressId:'',nodeType:'',operateUserIds:'',operateDeptIds:'',operateDeptTypes:'',detailValue:'',show:false,progressDetailList:[]}
+        ]},//审批人
+        {id:'',workflowId:'',progressType:3,preProgressId:'',nextProgressId:'',show:false,progressDetailList:[
+          {id:'',progressId:'',nodeType:'',operateUserIds:'',operateDeptIds:'',operateDeptTypes:'',detailValue:'',show:false,progressDetailList:[
+             {id:'',workflowId:'',progressType:3,preProgressId:'',nextProgressId:'',show:false,progressDetailList:[
+                {id:'',progressId:'',nodeType:'',operateUserIds:'',operateDeptIds:'',operateDeptTypes:'',detailValue:'',show:false,progressDetailList:[]},
+                {id:'',progressId:'',nodeType:'',operateUserIds:'',operateDeptIds:'',operateDeptTypes:'',detailValue:'',show:false,progressDetailList:[]}
+              ]}
+          ]},
+          {id:'',progressId:'',nodeType:'',operateUserIds:'',operateDeptIds:'',operateDeptTypes:'',detailValue:'',show:false,progressDetailList:[]}
+        ]},//条件
+        {id:'',workflowId:'',progressType:4,preProgressId:'',nextProgressId:'',show:false,progressDetailList:[
+          {id:'',progressId:'',nodeType:'',operateUserIds:'',operateDeptIds:'',operateDeptTypes:'',detailValue:'',show:false,progressDetailList:[]}
+        ]},//会签人
+        {id:'',workflowId:'',progressType:5,preProgressId:'',nextProgressId:'',progressDetailList:[
+          {id:'',progressId:'',nodeType:'',operateUserIds:'',operateDeptIds:'',operateDeptTypes:'',detailValue:'',show:false,progressDetailList:[]}
+        ]},//第三方调用
+        {id:'',workflowId:'',progressType:6,preProgressId:'',nextProgressId:'',progressDetailList:[
+          {id:'',progressId:'',nodeType:'',operateUserIds:'',operateDeptIds:'',operateDeptTypes:'',detailValue:'',show:false,progressDetailList:[]}
+        ]},//并行
+      ],
+    }
+  },
+  components:{
+    processTree
+  }
 }
 </script>

@@ -15,8 +15,8 @@
                     </a-steps>
                 </a-col>
                 <a-col flex="200px" class="save_template">
-                     <a-button type="primary">
-                        <a-icon type="save" />保存
+                     <a-button type="primary"  @click="save">
+                        <a-icon type="save"/>保存
                     </a-button>
                     <a-button class="bh_btn_right">
                         发布
@@ -29,33 +29,51 @@
             <!-- 基础设置 -->
             <div class="template_base" v-show="current == 0">
                 <a-form-model :model="addForm" ref="ruleForm" :label-col="labelCol" :wrapper-col="wrapperCol" :rules="rules">
-                    <a-form-model-item label="角色名称" prop="roleName">
-                        <a-input v-model="addForm.roleName" placeholder="请输入角色名称"/>
+                    <a-form-model-item label="名称" prop="workflowName">
+                        <a-tooltip>
+                             <template slot="title">
+                                最多20字
+                            </template>
+                        <a-input v-model="addForm.workflowName" :maxLength="20" placeholder="请输入名称"/>
+                        </a-tooltip>
                     </a-form-model-item>
 
-                    <a-form-model-item label="设置发起人" prop="roleName">
-                        <a-input v-model="addForm.roleName" placeholder="请输入角色名称"/>
+                    <a-form-model-item label="设置发起人" prop="sponsorNames">
+                        <a-input v-model="addForm.sponsorNames" placeholder="请选择设置发起人"/>
                     </a-form-model-item>
 
-                    <a-form-model-item label="操作" prop="roleName">
-                        <a-input v-model="addForm.roleName" placeholder="请输入角色名称"/>
+                    <a-form-model-item label="操作" prop="workflowType">
+                        <a-select v-model="addForm.workflowType"  mode="multiple" placeholder="请选择操作类型">
+                            <a-select-option value="1">
+                                申请延期
+                            </a-select-option>
+                             <a-select-option value="2">
+                                申请换证
+                            </a-select-option>
+                        </a-select>
                     </a-form-model-item>
 
-                    <a-form-model-item label="审批意见" prop="roleName">
-                    <a-checkbox>
-                            Checkbox
+                    
+
+                    <a-form-model-item label="审批意见提示" prop="workflowOpinion">
+                        <a-textarea
+                        v-model="addForm.workflowOpinion"
+                       placeholder="请输入审批意见(最多200字)"
+                        :auto-size="{ minRows: 5}"
+                        />
+                    </a-form-model-item>
+
+                    <a-form-model-item label="审批意见" prop="require">
+                        <a-checkbox v-model="addForm.require" @change="changeOpinion">
+                                必填
                         </a-checkbox>
-                    </a-form-model-item>
-
-                    <a-form-model-item label="审批意见提示" prop="roleName">
-                        <a-input v-model="addForm.roleName" placeholder="请输入角色名称"/>
                     </a-form-model-item>
                 </a-form-model>
             </div>
 
             <!-- 表单设计 -->
             <div v-show="current == 1">
-                <formDesign></formDesign>
+                <formDesign ref="formDesign" @getFromDesign="getFromDesign"></formDesign>
             </div>
 
             <!-- 流程设计 -->
@@ -79,9 +97,22 @@ export default {
             templateShow:false,
             labelCol: { span: 5 },
             wrapperCol: { span: 16 },
-            rules:{},
+            rules:{
+                workflowName:[
+                    { required: true, message: '请输入名称', trigger: 'blur' },
+                ],
+            },
             addForm:{
-                roleName:'',
+                id:'',
+                workflowName:'',
+                sponsorUserIds:'',
+                sponsorDeptIds:'',
+                sponsorDeptTypes:'',
+                workflowType:[],
+                sponsorNames:'',
+                workflowOpinionRequire:'',
+                workflowOpinion:'',
+                require:false
             }
         }
     },
@@ -96,6 +127,15 @@ export default {
         onChange(current) {
             this.current = current;
         },
+        save(){
+           this.$refs.formDesign.getFromDesign()
+        },
+        getFromDesign(arr){
+            console.log(arr) 
+        },
+        changeOpinion(e){
+            this.addForm.workflowOpinionRequire = e.target.checked ? 1 : 0;
+        }
   }
 }
 </script>

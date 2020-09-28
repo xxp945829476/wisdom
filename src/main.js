@@ -34,7 +34,8 @@ import {
   Popover,
   Badge,
   Pagination,
-  Steps
+  Steps,
+  Tooltip
 } from 'ant-design-vue';
 import App from './App.vue'
 import base from '@/utils/base';
@@ -92,6 +93,7 @@ Vue.use(Popover);
 Vue.use(Badge);
 Vue.use(Pagination);
 Vue.use(Steps);
+Vue.use(Tooltip);
 
 
 
