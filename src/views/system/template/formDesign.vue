@@ -1,6 +1,5 @@
 <template>
   <div class="desion_box">
-    
      <a-row type="flex" justify="space-between">
         <a-col flex="280px" class="desion_left">
             <h3 class="desion_left_t">控件库</h3>
@@ -411,7 +410,7 @@
 
 <script>
 import draggable from "vuedraggable";
-import {BaseList} from '@/network/api'
+import {BaseList,GetId} from '@/network/api'
 export default {
   name: "clone",
   display: "Clone",
@@ -424,32 +423,32 @@ export default {
       labelCol: { span: 4 },
       wrapperCol: { span: 18 },
       list1: [
-        { workflowId:'',formIcon:'iconAa',controlType:1,controlFormType:1,nextFormId:'',controlOriginName:'证件编号',controlName: "证件编号",controlRemindContent:'系统生成',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconicon_youxiaoqi2x',controlType:2,controlFormType:2,nextFormId:'',controlOriginName:'申报有效期范围',controlName: "申报有效期范围",controlRemindContent:'年-月-日',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconshijian',controlType:3,controlFormType:3,nextFormId:'',controlOriginName:'准行时段',controlName: "准行时段",controlRemindContent:'时-分',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:1,permitTime:'00:00:00~06:00:00',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconshijian',controlType:4,controlFormType:4,nextFormId:'',controlOriginName:'禁行日期',controlName: "禁行日期",controlRemindContent:'年-月-日',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconxuanzhong',controlType:5,controlFormType:5,nextFormId:'',controlOriginName:'项目原因',controlName: "项目原因",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconxuanzhong',controlType:6,controlFormType:6,nextFormId:'',controlOriginName:'申报企业',controlName: "申报企业",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconxuanzhong',controlType:7,controlFormType:7,nextFormId:'',controlOriginName:'申报工地',controlName: "申报工地",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:0,associateRoadName:''},
-        { workflowId:'',formIcon:'iconxuanzhong',controlType:8,controlFormType:8,nextFormId:'',controlOriginName:'申报土场',controlName: "申报土场",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconAa',controlType:1,controlFormType:1,nextFormId:'',controlOriginName:'证件编号',controlName: "证件编号",controlRemindContent:'系统生成',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconicon_youxiaoqi2x',controlType:2,controlFormType:2,nextFormId:'',controlOriginName:'申报有效期范围',controlName: "申报有效期范围",controlRemindContent:'年-月-日',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconshijian',controlType:3,controlFormType:3,nextFormId:'',controlOriginName:'准行时段',controlName: "准行时段",controlRemindContent:'时-分',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:1,permitTime:'00:00:00~06:00:00',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconshijian',controlType:4,controlFormType:4,nextFormId:'',controlOriginName:'禁行日期',controlName: "禁行日期",controlRemindContent:'年-月-日',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconxuanzhong',controlType:5,controlFormType:5,nextFormId:'',controlOriginName:'项目原因',controlName: "项目原因",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconxuanzhong',controlType:6,controlFormType:6,nextFormId:'',controlOriginName:'申报企业',controlName: "申报企业",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconxuanzhong',controlType:7,controlFormType:7,nextFormId:'',controlOriginName:'申报工地',controlName: "申报工地",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:0,associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconxuanzhong',controlType:8,controlFormType:8,nextFormId:'',controlOriginName:'申报土场',controlName: "申报土场",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
         
-        { workflowId:'',formIcon:'iconzhengque',controlType:9,controlFormType:9,nextFormId:'',controlOriginName:'申报车辆',controlName: "申报车辆",controlRemindContent:'请选择',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:0,vehicleTypeSelect:[],vehicleProhibitSelect:[],defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconzhengque',controlType:10,controlFormType:10,nextFormId:'',controlOriginName:'借调车辆',controlName: "借调车辆",controlRemindContent:'请选择',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:0,associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconzhengque',controlType:9,controlFormType:9,nextFormId:'',controlOriginName:'申报车辆',controlName: "申报车辆",controlRemindContent:'请选择',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:0,vehicleTypeSelect:[],vehicleProhibitSelect:[],defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconzhengque',controlType:10,controlFormType:10,nextFormId:'',controlOriginName:'借调车辆',controlName: "借调车辆",controlRemindContent:'请选择',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:0,associateRoadName:''},
 
-        { workflowId:'',formIcon:'iconweizhi',controlType:11,controlFormType:11,nextFormId:'',controlOriginName:'线路规划',controlName: "线路规划",controlRemindContent:'请绘制',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:0,uploadNum:'',associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconweizhi',controlType:12,controlFormType:12,nextFormId:'',controlOriginName:'线路绘制',controlName: "线路绘制",controlRemindContent:'请绘制',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:0,uploadNum:'',associateDept:'',associateRoadName:0},
-        { workflowId:'',formIcon:'iconAa',controlType:13,controlFormType:13,nextFormId:'',controlOriginName:'线路信息',controlName: "线路信息",controlRemindContent:'请输入线路信息',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},  
+        { id:'',workflowId:'',formIcon:'iconweizhi',controlType:11,controlFormType:11,nextFormId:'',controlOriginName:'线路规划',controlName: "线路规划",controlRemindContent:'请绘制',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:0,uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconweizhi',controlType:12,controlFormType:12,nextFormId:'',controlOriginName:'线路绘制',controlName: "线路绘制",controlRemindContent:'请绘制',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:0,uploadNum:'',associateDept:'',associateRoadName:0},
+        { id:'',workflowId:'',formIcon:'iconAa',controlType:13,controlFormType:13,nextFormId:'',controlOriginName:'线路信息',controlName: "线路信息",controlRemindContent:'请输入线路信息',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},  
 
 
-        { workflowId:'',formIcon:'iconlianjie',controlType:14,controlFormType:14,nextFormId:'',controlOriginName:'出土申报表',controlName: "出土申报表",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconlianjie',controlType:15,controlFormType:15,nextFormId:'',controlOriginName:'需求申报表',controlName: "需求申报表",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconlianjie',controlType:16,controlFormType:16,nextFormId:'',controlOriginName:'建筑垃圾运输证',controlName: "建筑垃圾运输证",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:1,uploadNum:'',associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconlianjie',controlType:17,controlFormType:17,nextFormId:'',controlOriginName:'接纳证明',controlName: "接纳证明",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconlianjie',controlType:18,controlFormType:18,nextFormId:'',controlOriginName:'保洁责任书',controlName: "保洁责任书",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconlianjie',controlType:19,controlFormType:19,nextFormId:'',controlOriginName:'承运协议',controlName: "承运协议",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconlianjie',controlType:20,controlFormType:20,nextFormId:'',controlOriginName:'处置计划书',controlName: "处置计划书",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
-        { workflowId:'',formIcon:'iconlianjie',controlType:21,controlFormType:21,nextFormId:'',controlOriginName:'工地出土照片',controlName: "工地出土照片",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
-         { workflowId:'',formIcon:'iconxuanzhong',controlType:22,controlFormType:22,nextFormId:'',controlOriginName:'延期呈报',controlName: "延期呈报",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconlianjie',controlType:14,controlFormType:14,nextFormId:'',controlOriginName:'出土申报表',controlName: "出土申报表",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconlianjie',controlType:15,controlFormType:15,nextFormId:'',controlOriginName:'需求申报表',controlName: "需求申报表",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconlianjie',controlType:16,controlFormType:16,nextFormId:'',controlOriginName:'建筑垃圾运输证',controlName: "建筑垃圾运输证",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:1,uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconlianjie',controlType:17,controlFormType:17,nextFormId:'',controlOriginName:'接纳证明',controlName: "接纳证明",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconlianjie',controlType:18,controlFormType:18,nextFormId:'',controlOriginName:'保洁责任书',controlName: "保洁责任书",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconlianjie',controlType:19,controlFormType:19,nextFormId:'',controlOriginName:'承运协议',controlName: "承运协议",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconlianjie',controlType:20,controlFormType:20,nextFormId:'',controlOriginName:'处置计划书',controlName: "处置计划书",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconlianjie',controlType:21,controlFormType:21,nextFormId:'',controlOriginName:'工地出土照片',controlName: "工地出土照片",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconxuanzhong',controlType:22,controlFormType:22,nextFormId:'',controlOriginName:'延期呈报',controlName: "延期呈报",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
       ],
       list2: [
         
@@ -460,15 +459,29 @@ export default {
       vehicleTypeList:[],
     };
   },
+  props:{
+    workflowId:String
+  },
   created(){
     this.list1.forEach(cur=>{
             this.$set(cur,'isSelect',false) 
       });
       this.init();
+      
+  },
+  mounted(){
+    this.$nextTick(()=>{
+      this.getWorkId();
+    })
   },
   methods: {
     init(){
       this.getType()
+    },
+    getWorkId(){
+      this.list1.forEach(cur=>{
+        cur.workflowId = this.workflowId
+      })
     },
     allow(evt){
         // console.log(evt.draggedContext.index)
@@ -496,13 +509,13 @@ export default {
        this.list2[i].isSelect = true;
     },
     end(evt) {
-      console.log(this.list2.length)
       if(!this.isAllow&&this.list2.length>0){
         this.currentIdex = evt.newIndex;
         this.list2.forEach(cur=>{
             this.$set(cur,'isSelect',false) 
         })
-       this.$set(this.list2[evt.newIndex],'isSelect',true) 
+       this.$set(this.list2[evt.newIndex],'isSelect',true);
+       this.getId(evt.newIndex)
       };
       
       // evt.item //可以知道拖动的本身
@@ -570,12 +583,24 @@ export default {
       }
     },
     getFromDesign(){
+      this.list2.forEach((cur,index)=>{
+        this.$set(cur,'sort',index)
+      })
       this.$emit('getFromDesign',this.list2)
     },
     changeRequired(e){
-      console.log(e)
       this.list2[this.currentIdex].required = e.target.checked ? 1 :0
-    }
+    },
+    getId(index){
+            GetId().then(res=>{
+                if(res.data.code == 0){
+                  this.list2[index].id = res.data.data[0]
+                }else{
+                    this.$message.warning('加载失败')
+                };
+                
+            });
+    },
   }
 };
 </script>

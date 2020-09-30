@@ -558,4 +558,38 @@ export function UnbindSiteEquipment(data){
     })
 }
 
+// 审批获取id
+export function GetId(data){
+    return fetch({
+        url:'/api/common/getId',
+        method:'post',
+        data:data,
+    })
+}
+
+// 审批获取用户
+export function GetUseBaseInfo(data){
+    return fetch({
+        url:'/api/sys-user/baseInfo',
+        method:'post',
+        data:data,
+    })
+}
+// 审批获取部门
+export function GetDeptBaseInfo(data){
+    return fetch({
+        url:'/api/sys-dept/baseInfo',
+        method:'post',
+        data:data,
+    })
+}
+// 审批获取部门类型
+export function GetBaseInfo(data){
+    return fetch({
+        url:'/api/sys-base/baseInfo',
+        method:'post',
+        data:data,
+    })
+}
+
 

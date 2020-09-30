@@ -39,7 +39,13 @@
                     </a-form-model-item>
 
                     <a-form-model-item label="设置发起人" prop="sponsorNames">
-                        <a-input v-model="addForm.sponsorNames" placeholder="请选择设置发起人"/>
+
+                        <a-input-search v-model="addForm.sponsorNames" placeholder="请设置发起人" @search="setSponsor">
+                        <a-button slot="enterButton" icon="setting">
+                            
+                        </a-button>
+                        </a-input-search>
+                            
                     </a-form-model-item>
 
                     <a-form-model-item label="操作" prop="workflowType">
@@ -72,16 +78,21 @@
             </div>
 
             <!-- 表单设计 -->
-            <div v-show="current == 1">
-                <formDesign ref="formDesign" @getFromDesign="getFromDesign"></formDesign>
+            <div v-if="current == 1">
+                <formDesign ref="formDesign" @getFromDesign="getFromDesign" :workflowId='addForm.id'></formDesign>
             </div>
 
             <!-- 流程设计 -->
-            <div v-show="current == 2">
+            <div v-if="current == 2">
                 <ProcessDesign></ProcessDesign>
             </div>
 
         </div>
+
+
+        <!-- 设置发起人 -->
+        <modalSponsor ref="sel_sponsor" @getValue="getValue"></modalSponsor>
+        
         
     </div>
 </template>
@@ -89,6 +100,8 @@
 <script>
 import formDesign from './formDesign.vue'
 import ProcessDesign from './ProcessDesign.vue'
+import modalSponsor from './modalSponsor.vue'
+import {GetId,GetUseBaseInfo,GetDeptBaseInfo} from '@/network/api'
 
 export default {
     data() {
@@ -113,16 +126,36 @@ export default {
                 workflowOpinionRequire:'',
                 workflowOpinion:'',
                 require:false
-            }
+            },
+            
         }
     },
     components:{
         formDesign,
-        ProcessDesign
+        ProcessDesign,
+        modalSponsor
+    },
+    created(){
+        this.init()
     },
     methods:{
+        init(){
+           
+        },
+        getId(){
+            GetId().then(res=>{
+                if(res.data.code == 0){
+                    this.addForm.id = res.data.data[0]
+                }else{
+                    this.$message.warning('加载失败')
+                };
+                
+            });
+        },
+        
         editTemplate(){
             this.templateShow = true;
+             this.getId();
         },
         onChange(current) {
             this.current = current;
@@ -135,6 +168,18 @@ export default {
         },
         changeOpinion(e){
             this.addForm.workflowOpinionRequire = e.target.checked ? 1 : 0;
+        },
+        setSponsor(){
+           this.sponsorVisible = true
+           this.$refs.sel_sponsor.setSponsor()
+        },
+        getValue(depArr,useArr,name){
+            console.log(depArr)
+             console.log(useArr)
+             console.log(name)
+            this.addForm.sponsorDeptIds = depArr.length>0 ? depArr.join(',') : ''
+            this.addForm.sponsorUserIds = useArr.length>0 ? useArr.join(',') : ''
+            this.addForm.sponsorNames = name.length>0 ? name.join(',') : '';
         }
   }
 }

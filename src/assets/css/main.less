@@ -865,6 +865,7 @@
 }
 
 .process_box{
+    
     .ant-col{
         z-index: 1;
     }
@@ -880,18 +881,69 @@
         text-align: center;
         cursor: pointer;
         background: #fff;
+        .sel_val{
+            width: 240px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
     }
     .process_multiple{
         padding-top: 60px;
+        .sel_val{
+            padding: 0 10px;
+        }
+    }
+    .process_multiple_b{
+        &:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -1px;
+            bottom: 0;
+            z-index: 0;
+            margin: auto;
+            width: 3px;
+            height: 100%;
+            background-color: #fff;
+        }
     }
     .add-node-btn-box {
+        .add-node-btn-box-b{
+            padding: 45px 0 75px;
+            &:after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -1px;
+                bottom: 0;
+                z-index: 0;
+                margin: auto;
+                width: 3px;
+                height: 100%;
+                background-color: #fff;
+            }
+        }
         cursor: pointer;
         width: 240px;
         position: relative;
         text-align: center;
 
-        padding: 45px 0 75px;
+        
         margin: 0 auto;
+        &:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: -1px;
+            bottom: 0;
+            z-index: 0;
+            margin: auto;
+            width: 2px;
+            height: 100%;
+            background-color: #fff;
+        }
         &:before {
             content: "";
             position: absolute;
@@ -915,7 +967,7 @@
         .design_sel_box{
             position: absolute;
             top: 0;
-            right: -20px;
+            right: -30px;
             border:1px dashed #f4bd40;
             z-index: 10;
             background: #fff;
@@ -1001,7 +1053,7 @@
         }
         .condition_content{
             position: relative;
-            &::after{
+            &:before{
                 content: "";
                 position: absolute;
                 top: 0;
@@ -1037,11 +1089,22 @@
     }
     .multiple_box{
         position: relative;
-        padding-top: 20px;
+        &:after{
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -1px;
+            bottom: 0;
+            z-index: 5;
+            margin: auto;
+            width: 3px;
+            height: 100%;
+            background-color: #fff;
+        }
         &:before{
             content: "";
             position: absolute;
-            top: -6px;
+            top: -25px;
             left: 50%;
             -webkit-transform: translateX(-50%);
             transform: translateX(-50%);
@@ -1053,5 +1116,20 @@
             z-index: 3;
         }
     }
+}
+
+.drawer_btn{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #e8e8e8;
+    padding: 10px 16px;
+    text-align: right;
+    left: 0;
+    background: #fff;
+    border-radius: 0 0 4px 4px;
+}
+.base_dep{
+    margin-top: 10px;
 }
 
