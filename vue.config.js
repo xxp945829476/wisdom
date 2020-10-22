@@ -4,6 +4,7 @@ const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i
 const webpack = require('webpack')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 function resolve(dir){
   return path.join(__dirname,'..',dir)
 }
@@ -55,7 +56,14 @@ module.exports = {
     return config
   },
   configureWebpack: (config) => {
-    const plugins =  [themePlugin]
+    const plugins =  [
+      themePlugin,
+      new CopyWebpackPlugin([
+        { from: 'node_modules/@liveqing/liveplayer/dist/component/crossdomain.xml'},
+        { from: 'node_modules/@liveqing/liveplayer/dist/component/liveplayer.swf'},
+        { from: 'node_modules/@liveqing/liveplayer/dist/component/liveplayer-lib.min.js', to: 'js/'},
+      ])
+    ]
   
     Object.assign(config, {
       // 开发生产共同配置
@@ -74,7 +82,7 @@ module.exports = {
           filename: '[path].gz[query]',
           algorithm: 'gzip',
           test: productionGzipExtensions,
-          threshold: 0,
+          threshold: 10240,
           minRatio: 0.8
         }),
         new webpack.ProvidePlugin({

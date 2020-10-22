@@ -23,6 +23,8 @@
                           <a-input v-model="addForm.component" />
                       </a-form-model-item>
 
+                     
+
                       <a-form-model-item label="图标" prop="menuIcon">
                           <a-input v-model="addForm.menuIcon" />
                       </a-form-model-item>
@@ -37,6 +39,10 @@
                               {{item.name}}
                               </a-radio>
                           </a-radio-group>
+                      </a-form-model-item>
+
+                       <a-form-model-item label="权限名称" prop="menuPermission" v-if="addForm.menuType==8">
+                          <a-input v-model="addForm.menuPermission" />
                       </a-form-model-item>
 
                       <a-form-model-item label="是否缓存路由">
@@ -203,7 +209,6 @@ export default {
       let params = JSON.parse(JSON.stringify(this.addForm));
       params.hidenMenu = this.addForm.hidenMenu ? 1 : 0;
       params.keepAlive = this.addForm.keepAlive ? 1 : 0;
-
       EditMenu(params).then(res=>{
           this.spinning = false;
           if(res.data.code == 0){

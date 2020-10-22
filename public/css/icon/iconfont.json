@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4577004",
+      "name": "表单模板",
+      "font_class": "biaodanmoban",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "10149474",
+      "name": "审批流程管理",
+      "font_class": "shenpiliuchengguanli",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
       "icon_id": "4954910",
       "name": "正确",
       "font_class": "zhengque",

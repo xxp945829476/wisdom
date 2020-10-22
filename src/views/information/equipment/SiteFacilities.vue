@@ -34,7 +34,7 @@
         <div class=" layout_card_content layout_card_content_p">
         <div class="table-operator">
             <div class="left_button">
-                <a-button type="primary" icon="plus" @click="addFacilities(0,siteParams)">
+                <a-button type="primary" icon="plus" @click="addFacilities(0,siteParams)" v-if="isAdd">
                     新增
                   </a-button>
                   <!-- <a-button>
@@ -73,7 +73,7 @@
                     {{text}}
                   </a>
                   <span slot="action" slot-scope="text,record">
-                      <a @click="addFacilities(1,record)">编辑</a>
+                      <a @click="addFacilities(1,record)" v-if="isEdit">编辑</a>
                   </span>
           </a-table>
 
@@ -225,7 +225,9 @@ export default {
         siteId:'',
         lat:'',
         lng:'',
-      }
+      },
+      isAdd:false,
+      isEdit:false
     }
   },
   components:{
@@ -245,9 +247,23 @@ export default {
       this.height = document.documentElement.clientHeight - 295
     },
     init(){
+      this.permissionControl();
       this.getTree();
       this.getData();
       this.getType();
+    },
+    permissionControl(){
+     
+      let permission =  JSON.parse(this.$getStorage('permission'));
+      
+      console.log(permission)
+      permission.forEach(cur=>{
+        if(cur.menuPermission == 'sys:facility:add'){
+          this.isAdd = true;
+        }else if(cur.menuPermission == 'sys:facility:edit'){
+          this.isEdit = true;
+        }
+      })
     },
     compareTime(start,end){
       let time = parseInt(new Date().getTime() / 1000);
@@ -335,7 +351,8 @@ export default {
       this.$refs.view_details.viewDetails(record,val)
     },
     changeTable(pagination){
-      this.pagination.current = pagination.current
+      this.pagination.current = pagination.current;
+      this.formParmas.pageNum = pagination.current;
       this.getData()
     },
     selectArea(selectedKeys,e){

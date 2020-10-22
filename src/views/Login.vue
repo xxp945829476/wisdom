@@ -3,7 +3,7 @@
         <div class="login_container">
             <div class="pt_logo">
                 <img src="../assets/images/logo.png" class="login_logo">
-                <img src="../assets/images/login3.png">
+                <span>鼎州智慧渣土管控平台</span>
             </div>
             <div class="login_main">
                 <div class="login_left">
@@ -169,7 +169,7 @@ import Identify from './Identify.vue'
 //         {
 //             "path": '/badDriving',
 //             "name": '不良驾驶行为监控',
-//             "component": 'process/BadDriving',
+//             "component": '/',
 //             "meta":{
 //                 icon: 'iconjiankong'
 //             }, 
@@ -344,7 +344,7 @@ export default {
                 this.getUser();
                 this.GetMenuList();
                
-               
+                this.getPermission();
            });
         },
         getUser(){
@@ -364,6 +364,20 @@ export default {
                    this.getMenu();
                }
             });
+        },
+        getPermission(){
+            let params = {
+                pageSize: 999,
+                pageNum: 1,
+                menuType: 8
+            };
+             menuList(params).then(res=>{
+                if(res.data.code == 0){
+                     let data = res.data.data.records;
+                     console.log(data)
+                     this.$setStorage('permission',JSON.stringify(data))
+                }
+             });
         },
         getMenu(){
             let params = {
@@ -456,7 +470,7 @@ export default {
             this.$router.addRoutes(this.routersData);
             this.$nextTick(()=>{
                 this.$message.success('登录成功')
-                this.$router.push(data[0].children[0].path)
+                this.$router.replace(data[0].children[0].path)
             })
         },
         saveMeun(data){

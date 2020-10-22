@@ -3,7 +3,7 @@
 
        <div class="table-operator">
            <div class="left_button">
-               <a-button type="primary" icon="plus" @click="addDriver(0)">
+               <a-button type="primary" icon="plus" @click="addDriver(0)" v-if="isAdd">
                   新增
                 </a-button>
                 <!-- <a-button>
@@ -44,7 +44,7 @@
                 </span>
                 
                 <span slot="action" slot-scope="text,record">
-                    <a @click="addDriver(1,record)">编辑</a>
+                    <a @click="addDriver(1,record)" v-if="isEdit">编辑</a>
                     <!-- <a-divider type="vertical" />
                     <a>删除</a> -->
                 </span>
@@ -181,6 +181,8 @@ export default {
       },
       tableData:[],
       pathUrl,
+      isAdd:false,
+      isEdit:false
     }
   },
   components:{
@@ -199,7 +201,21 @@ export default {
       this.height = document.documentElement.clientHeight - 295
     },
     init(){
+      this.permissionControl();
       this.getData();
+    },
+    permissionControl(){
+     
+      let permission =  JSON.parse(this.$getStorage('permission'));
+      
+
+      permission.forEach(cur=>{
+        if(cur.menuPermission == 'sys:driver:add'){
+          this.isAdd = true;
+        }else if(cur.menuPermission == 'sys:driver:edit'){
+          this.isEdit = true;
+        };
+      })
     },
     getData(){
         this.loading = true;
@@ -231,7 +247,8 @@ export default {
       this.getData()
     },
     changeTable(pagination){
-      this.pagination.current = pagination.current
+      this.pagination.current = pagination.current;
+      this.formParmas.pageNum = pagination.current;
       this.getData()
     },
     viewImg(val){

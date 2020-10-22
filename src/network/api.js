@@ -563,7 +563,7 @@ export function GetId(data){
     return fetch({
         url:'/api/common/getId',
         method:'post',
-        data:data,
+        data:Qs.stringify(data),
     })
 }
 
@@ -587,6 +587,214 @@ export function GetDeptBaseInfo(data){
 export function GetBaseInfo(data){
     return fetch({
         url:'/api/sys-base/baseInfo',
+        method:'post',
+        data:data,
+    })
+}
+
+// 审批流新增
+export function AddWorkflow(data){
+    return fetch({
+        url:'/api/workflow/add',
+        method:'post',
+        data:data,
+    })
+}
+
+
+// 获取模板列表
+export function ListWorkflow(data){
+    return fetch({
+        url:'/api/workflow/listWorkflow',
+        method:'post',
+        data:data,
+    })
+}
+
+// 获取审批模板
+export function GetFormInfo(data){
+    return fetch({
+        url:'/api/workflow/getFormInfo',
+        method:'post',
+        data:data,
+    })
+}
+
+// 审批
+export function AddInst(data){
+    return fetch({
+        url:'/api/workflow/addInst',
+        method:'post',
+        data:data,
+    })
+}
+
+// 审批列表
+export function ListMyWorkflow(data){
+    return fetch({
+        url:'/api/workflow/listMyWorkflow',
+        method:'post',
+        data:data,
+    })
+}
+
+// 查看审批列表
+export function GetInstTmpl(data){
+    return fetch({
+        url:'/api/workflow/getInstTmpl/' + data,
+        method:'post',
+    })
+}
+
+// 查看审批列表
+export function WorkflowComment(data){
+    return fetch({
+        url:'/api/workflow/comment',
+        method:'post',
+        data:data,
+    })
+}
+
+// 查看审批列表
+export function ListMyLaunchWorkflow(data){
+    return fetch({
+        url:'/api/workflow/listMyLaunchWorkflow',
+        method:'post',
+        data:data,
+    })
+}
+
+// 审批获取车辆
+export function ListByVehicleTypes(data){
+    return fetch({
+        url:'/api/sz-vehicle/listByVehicleTypes',
+        method:'post',
+        data:data,
+    })
+}
+
+// 获取所有模板列表
+export function ListAllWorkflow(data){
+    return fetch({
+        url:'/api/workflow/listAllWorkflow',
+        method:'post',
+        data:data,
+    })
+}
+
+// 修改模板
+export function EditWorkflow(data){
+    return fetch({
+        url:'/api/workflow/editWorkflow',
+        method:'post',
+        data:data,
+    })
+}
+
+// 下载
+export function Download(data){
+    return fetch({
+        url:'/api/sys-file/download',
+        method:'post',
+        data:data,
+        responseType:'arraybuffer'
+    })
+}
+
+// 获取流程基本信息
+export function GetBaseInfoWorkflow(data){
+    return fetch({
+        url:'/api/workflow/getBaseInfo',
+        method:'post',
+        data:data,
+    })
+}
+
+// 获取流程信息
+export function GetProgressInfo(data){
+    return fetch({
+        url:'/api/workflow/getProgressInfo',
+        method:'post',
+        data:data,
+    })
+}
+
+// 获取首页车辆信息
+export function IndexVehicleList(data){
+    return fetch({
+        url:'/api/sz-vehicle/indexVehicleList',
+        method:'post',
+        data:data,
+    })
+}
+
+// 获取首页车辆轨迹
+export function QueryTrackDetail(data){
+    return fetch({
+        url:'/api/sz-vehicle/queryTrackDetail',
+        method:'post',
+        data:data,
+    })
+}
+
+// 车辆证件列表
+export function ListVehicleCertificate(data){
+    return fetch({
+        url:'/api/sz-vehicle/listVehicleCertificate',
+        method:'post',
+        data:data,
+    })
+}
+
+// 新增黑名单
+export function AddBlacklist(data){
+    return fetch({
+        url:'/api/sz-blacklist/add',
+        method:'post',
+        data:data,
+    })
+}
+
+// 新增黑名单
+export function EditBlacklist(data){
+    return fetch({
+        url:'/api/sz-blacklist/edit',
+        method:'post',
+        data:data,
+    })
+}
+
+// 删除黑名单
+export function DelBlacklist(data){
+    return fetch({
+        url:'/api/sz-blacklist/del/' + data,
+        method:'post',
+    })
+}
+
+// 黑名单列表
+export function BlackList(data){
+    return fetch({
+        url:'/api/sz-blacklist/list',
+        method:'post',
+        data:data,
+    })
+}
+
+// 导出轨迹
+export function ExportLocust(data){
+    return fetch({
+        url:'/api/sz-vehicle/exportLocus',
+        method:'post',
+        data:data,
+        responseType:'arraybuffer'
+    })
+}
+
+// 获取当前位置
+export function Geocoding(data){
+    return fetch({
+        url:'/api/common/geocoding',
         method:'post',
         data:data,
     })

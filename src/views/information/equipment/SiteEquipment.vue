@@ -3,7 +3,7 @@
 
        <div class="table-operator">
            <div class="left_button">
-               <a-button type="primary" icon="plus" @click="addEquipment(0)">
+               <a-button type="primary" icon="plus" @click="addEquipment(0)" v-if="isAdd">
                   新增
                 </a-button>
                 <!-- <a-button>
@@ -91,13 +91,16 @@
                     <a-badge v-else status="error" text="无效"></a-badge>
                 </span>
                 <span slot="action" slot-scope="text,record">
+                  <template v-if="isEdit">
                     <a @click="addEquipment(1,record)">编辑</a>
                     <a-divider type="vertical" />
                     <a @click="unbundling(record)" v-if="record.facilityId != '0'">解绑</a>
                     <template v-else>
-                    <a @click="cancellation(record)" v-if="record.activition == 1">启用</a>
+                    <a @click="cancellation(record)" v-if="record.activition == 1">恢复</a>
                     <span class="yellow" @click="cancellation(record)" v-else>注销</span>
                     </template>
+                  </template>
+                    
                     
                 </span>
         </a-table>
@@ -259,7 +262,9 @@ export default {
 
       simNo:'',
       deviceId:'',
-      vehiclelist:[]
+      vehiclelist:[],
+      isAdd:false,
+      isEdit:false
     }
   },
   components:{
@@ -279,9 +284,23 @@ export default {
       this.height = document.documentElement.clientHeight - 295
     },
     init(){
+      this.permissionControl();
       this.getData();
       this.getType(17,2);
       this.getType(24,3);
+    },
+    permissionControl(){
+     
+      let permission =  JSON.parse(this.$getStorage('permission'));
+      
+      console.log(permission)
+      permission.forEach(cur=>{
+        if(cur.menuPermission == 'sys:fieldDevice:add'){
+          this.isAdd = true;
+        }else if(cur.menuPermission == 'sys:fieldDevice:edit'){
+          this.isEdit = true;
+        }
+      })
     },
     getData(){
          this.loading = true;
@@ -373,7 +392,8 @@ export default {
       this.$refs.view_equipment.viewDetails(record)
     },
     changeTable(pagination){
-      this.pagination.current = pagination.current
+      this.pagination.current = pagination.current;
+       this.formParmas.pageNum = pagination.current;
       this.getData()
     },
     unbundling(obj){

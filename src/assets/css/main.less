@@ -198,6 +198,12 @@
         height: 100%;
         .pt_logo{
             padding: 40px 0 0 45px;
+            span{
+                color: #fff;
+                font-size: 26px;
+                vertical-align: middle;
+                letter-spacing: 2px;
+            }
         }
         .login_logo{
             padding-right: 20px;
@@ -433,6 +439,7 @@
 .bm-view {
     width: 100%;
     height: calc(50vh + 40px);
+    position: relative;
 }
 .status_list{
     width: 100%;
@@ -450,8 +457,7 @@
         position: absolute;
         width: 100%;
         height: 1px;
-        top: calc(50vh + 39px);;
-        background: #0472fd;
+        top: calc(50vh + 39px);
         cursor: n-resize;
     }
 }
@@ -459,6 +465,7 @@
     text-align: center;
     border-bottom: 1px solid #ebedf0;
     position: relative;
+
     .ant-col{
         padding: 12px 0;
         cursor: pointer;
@@ -468,6 +475,10 @@
         right: 10px;
         padding: 12px;
         cursor: pointer;
+    }
+    .export_locust{
+        text-align: right;
+        padding-right: 60px;
     }
 }
 .double_left{
@@ -550,9 +561,31 @@
             cursor: pointer;
             color: #ff872e;
         }
+        .cancel_tracking{
+            color: #999;
+        }
     }
     .vehicle_details_content{
         padding:20px
+    }
+}
+
+.index_type {
+    padding: 0 10px;
+    span{
+        font-size: 12px;
+    }
+    .ant-radio-inner{
+        width: 14px !important;
+        height: 14px !important;
+        border-radius: 0;
+        &::after{
+            border-radius: 0;
+            width: 8px!important;
+            height: 8px!important;
+            top: 2px!important;
+            left: 2px!important;
+        }
     }
 }
 
@@ -560,6 +593,65 @@
 .fence_view{
     width: 100%;
     height: calc(100vh - 101px);
+}
+.ele_map{
+    position: absolute;
+    background: #fff;
+    right: 4%;
+    bottom: 40px;
+    border-radius: 6px;
+    width: 120px;
+    font-size: 13px;
+    h3{
+        font-size: 14px;
+        padding: 10px;
+        border-bottom: 1px solid #efefef;
+    }
+    ul{
+        padding: 0 10px;
+        li{
+            padding: 2px 0;
+            span{
+                display: inline-block;
+                width: 25px;
+                height: 14px;
+                background: #0099ff;
+                vertical-align: middle;
+                margin-right: 10px;
+            }
+            &:nth-child(2){
+                span{
+                    background: #996600;
+                }
+            }
+            &:nth-child(3){
+                span{
+                    background: #006600;
+                }
+            }
+            &:nth-child(4){
+                span{
+                    background: #9933ff;
+                }
+            }
+            &:nth-child(5){
+                span{
+                    background: #333fff;
+                }
+            }
+            &:nth-child(6){
+                span{
+                    background: #ff0000;
+                }
+            }
+            &:nth-child(7){
+                span{
+                    background: #18a45b;
+                }
+            }
+               
+        }
+    }
 }
 //轨迹回放
 .sel_date{
@@ -577,12 +669,112 @@
 .query_way{
    padding: 15px; 
    span{
-       color: #0472fd;
        font-size: 14px;
    }
 }
 
+.play_back_box{
+    padding: 0 10px;
+    li{
+        padding: 10px 40px 10px;
+        border-bottom: 1px dashed rgba(4, 114, 253, 0.6);
+        font-size: 13px;
+        position: relative;
+        cursor: pointer;
+        .play_back_tips{
+            position: absolute;
+            top:10px;
+            right: 0;
+            font-size: 12px;
+            background-color: rgb(255, 135, 46);
+            color: #fff;
+            padding: 0 5px;
+            border-radius: 2px;
+        }
+    }
+    .play_back_li{
+        background: #fff4eb;
+    }
+}
+.play_back_list_start{
+    position: relative;
+    em{
+        font-style: normal;
+    }
+    img{
+        position: absolute;
+        left: -32px;
+        width: 26px;
+    }
+    
+    
+}
+.mileage{
+    color:#ff872e;
+    font-size: 12px;
+}
 
+.track_control{
+    position: absolute;
+    bottom: 40px;
+    left: 80px;
+    display: flex;
+    .play_car{
+        width: 130px;
+        height: 60px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 6px;
+        color: #fff;
+        .play_car_btn{
+            display: flex;
+            justify-content: center;
+            i{
+                cursor: pointer;
+                padding: 4px 5px;
+            }
+        }
+        .trial_speed{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 8px;
+            .trial_speed_x{
+                cursor: pointer;
+            }
+            .ellipsis_car{
+                font-size: 20px;
+                color: #fff;
+                cursor: pointer;
+               
+            }
+        }
+        
+    }
+    .show_data_car{
+        width: 188px;
+        height: 60px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 6px;
+        color: #fff;
+        margin-left: 8px;
+        .show_data_car_list{
+            float: left;
+            font-size: 12px;
+            padding-left: 17px;
+            margin-top: 7px;
+            cursor: pointer;
+            span{
+                display: inline-block;
+                width: 10px;
+                height: 10px;
+                background: #fff;
+                border-radius: 50%;
+                border: 2px solid #fff;
+                margin-right: 5px;
+            }
+        }
+    }
+}
 
 //部门设置
 .lr_layout{
@@ -776,7 +968,6 @@
         font-size: 15px;
         padding: 15px 0;
         border-bottom: 1px solid #e4e7ed;
-        color: #0472fd;
      }
      .desion_left_t1{
          padding-bottom: 6px;
@@ -826,9 +1017,7 @@
         cursor: pointer;
     }
 }
-.widget_form_list_c{
-    border: 1px solid #0472fd;
-}
+
 .desion_right{
     padding: 0 10px;
     height: calc(100vh - 62px);
@@ -865,7 +1054,7 @@
 }
 
 .process_box{
-    
+    padding: 30px 0;
     .ant-col{
         z-index: 1;
     }
@@ -1086,6 +1275,12 @@
             z-index: 3;
             top:-16px
         }
+        .remove_node{
+            position: absolute;
+            z-index: 3;
+            top:20px;
+            cursor: pointer;
+        }
     }
     .multiple_box{
         position: relative;
@@ -1132,4 +1327,53 @@
 .base_dep{
     margin-top: 10px;
 }
-
+.approval_modal .anticon-delete{
+    display: none !important;
+}
+.copy_template{
+    border: 1px solid #cecece;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+    cursor: pointer;
+    .copy_template_icon{
+        width: 50px;
+        height: 50px;
+        border-radius: 6px;
+        text-align: center;
+        line-height: 50px;
+        color: #fff;
+        margin-right: 10px;
+    }
+}
+.ellipsis{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.portrait{
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    &:hover{
+        em{
+           display: block; 
+        }
+    }
+    em{
+        position: absolute;
+        color: #fff;
+        display: block;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.5);
+        top: 0;
+        line-height: 52px;
+        font-size: 40px;
+        cursor: pointer;
+        display: none;
+    }
+}

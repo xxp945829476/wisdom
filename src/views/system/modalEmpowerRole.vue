@@ -3,7 +3,7 @@
 
       <a-spin :spinning="spinning">
         <div>
-          <a-tree :tree-data="menuList" :selectable="false" v-model="roleMenuList" show-line :replaceFields="replaceFields" @check="onCheck" checkable>
+          <a-tree :tree-data="menuList" :selectable="false" v-model="roleMenuList" show-line :replaceFields="replaceFields" @check="onCheck" checkable checkStrictly>
                 
           </a-tree> 
         </div>
@@ -128,8 +128,82 @@ export default {
             
         });
     },
-    onCheck(selectedKeys){
+    onCheck(selectedKeys,e){
+      console.log(selectedKeys)
+     
+       console.log(e.checked)
+      console.log(e.node.$options.propsData.dataRef)
+      let pid = ''
+      let samePid = [];
+      this.originalData.forEach(cur=>{
+         if(cur.id == e.node.$options.propsData.eventKey){
+           pid = cur.pid;
+         };
+       });
+
+       this.originalData.forEach(cur=>{
+         if(cur.pid == pid){
+           samePid.push(cur.id);
+         };
+       });
+
+        console.log(samePid)
+      this.viewUp(this.originalData,pid,samePid);
+      if(e.node.$options.propsData.dataRef.children){
+        this.viewDown(e.node.$options.propsData.dataRef.children,e.checked)
+      }
+      
       console.log(this.roleMenuList)
+    },
+    viewUp(arr,pid,samePid){
+     
+      arr.forEach(cur=>{
+
+        if(cur.id == pid){
+            if(this.roleMenuList.checked.indexOf(cur.id) == -1){
+                let isPid = samePid.some(ele=>{
+                  return this.roleMenuList.checked.indexOf(ele) > -1
+                });
+                if(isPid){
+                  this.roleMenuList.checked.push(cur.id);
+                };
+            };
+            if(cur.pid != '0'){
+              this.viewUp(arr,cur.pid,samePid)
+            }
+        }
+      })
+    },
+    viewDown(arr,checked){
+       
+
+        arr.forEach(cur=>{
+              if(checked){
+                    if(this.roleMenuList.checked.indexOf(cur.id) == -1){
+                       this.roleMenuList.checked.push(cur.id)
+                    };
+                  
+              }else{
+                  
+                  for (let index = this.roleMenuList.checked.length-1; index > 0; index--) {
+                    const element = this.roleMenuList.checked[index];
+                    if(cur.id==element){
+                      this.roleMenuList.checked.splice(index,1)
+                    }
+                  };
+                  
+              };
+
+             if(cur.children){
+                this.viewDown(cur.children,checked)
+              } 
+
+
+             
+             
+        });
+
+        
     },
     save(){
  
@@ -143,12 +217,18 @@ export default {
     },
     onSubmit(){
       let arr = [];
-      this.roleMenuList.forEach(cur=>{
-        arr.push({
-          menuId:cur,//菜单id
-          roleId:this.roleId //角色id
-        })
-      });
+      if(this.roleMenuList.checked){
+        this.roleMenuList.checked.forEach(cur=>{
+          arr.push({
+            menuId:cur,//菜单id
+            roleId:this.roleId //角色id
+          })
+        });
+      }else{
+        this.empowerVisible = false;
+        return false
+      }
+      
       this.spinning = true;
       AddRoleSet(arr).then(res=>{
         this.spinning = false;
@@ -161,15 +241,21 @@ export default {
       });
     },
     onEditSubmit(){
-
+      
       
       let arr = [];
-      this.roleMenuList.forEach(cur=>{
-        arr.push({
-          menuId:cur,//菜单id
-          roleId:this.roleId //角色id
-        })
-      });
+      if(this.roleMenuList.checked){
+         this.roleMenuList.checked.forEach(cur=>{
+          arr.push({
+            menuId:cur,//菜单id
+            roleId:this.roleId //角色id
+          })
+        });
+      }else{
+        this.empowerVisible = false;
+        return false
+      }
+     
       this.spinning = true;
       EditRoleSet(arr).then(res=>{
           this.spinning = false;

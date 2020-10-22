@@ -34,7 +34,7 @@
         <div class=" layout_card_content layout_card_content_p">
         <div class="table-operator">
             <div class="left_button">
-                <a-button type="primary" icon="plus" @click="addvehicle(0)">
+                <a-button type="primary" icon="plus" @click="addvehicle(0)" v-if="isAdd">
                     新增
                   </a-button>
                   <!-- <a-button>
@@ -89,7 +89,7 @@
                              <a-form-model-item label="经销商">
                                   <a-select v-model="formParmas.distributor" allowClear>
                                     <a-select-option v-for="item in distributorList" :key="item.id">
-                                        {{item.name}}
+                                        {{item.deptName}}
                                     </a-select-option>
                                   </a-select>
                               </a-form-model-item>
@@ -108,7 +108,7 @@
                   </a>
                   <span slot="vehicleNewOld" slot-scope="text,record">
                     <span v-if="record.vehicleNewOld=='1'">新</span>
-                    <span v-else>旧</span>
+                    <span v-else-if="record.vehicleNewOld=='2'">旧</span>
                   </span>
                   <span slot="activition" slot-scope="text,record">
                     <a-badge v-if="record.activition == 0" status="success" text="有效" />
@@ -120,25 +120,31 @@
                     <a-badge v-else-if="record.permitStatus == 2" status="error" text="审核不通过" />
                   </span>
                   <span slot="action" slot-scope="text,record">
-                      <a @click="addvehicle(1,record)">编辑</a>
-                      <a-divider type="vertical" />
-                      <template v-if="record.deviceMaster==0 && record.deviceSlave==0">
-                        <span class="yellow" @click="cancellation(record)" v-if="record.activition == 0">注销</span>
-                        <a @click="cancellation(record)" v-else>启用</a>
-                        <template v-if="record.activition == 0">
+                  <span  v-if="isEdit">
+                     <a @click="addvehicle(1,record)">编辑</a>
+                      
+                         <template v-if="record.deviceMaster==0 && record.deviceSlave==0">
                           <a-divider type="vertical" />
-                          <a @click="bundling(record)">绑定</a>
-                        </template>
-                       
-                      </template>
-                      <template v-else>
-                         <a @click="unbundling(record)">解绑</a>
-                         <template v-if="record.permitStatus == 0" >
-                          <a-divider type="vertical" />
-                          <a @click="viewVehicle(record,2)">审核</a>
-                         </template>
+                          <span class="yellow" @click="cancellation(record)" v-if="record.activition == 0">注销</span>
+                          <a @click="cancellation(record)" v-else>恢复</a>
+                          <!-- <template v-if="record.activition == 0">
+                            <a-divider type="vertical" />
+                            <a @click="bundling(record)">绑定</a>
+                          </template> -->
                         
-                      </template>
+                        </template>
+                        <template v-else>
+                          <!-- <a @click="unbundling(record)">解绑</a> -->
+                          <template v-if="record.permitStatus == 0" >
+                            <a-divider type="vertical" />
+                            <a @click="viewVehicle(record,2)">审核</a>
+                          </template>
+                          
+                        </template>
+                  </span>
+                     
+                    
+                     
                    
                       
                   </span>
@@ -222,7 +228,7 @@
 
 import modalVehicle from './modalVehicle.vue'
 import modalVehicleDetails from './modalVehicleDetails.vue'
-import {ListEnterprise,Vehiclelist,BaseList,EditVehicle,UnbindVehicle,BindVehicle,Devicelist} from '@/network/api'
+import {ListEnterprise,Vehiclelist,BaseList,EditVehicle,UnbindVehicle,BindVehicle,Devicelist,DepartmentList} from '@/network/api'
 
 
 
@@ -399,6 +405,8 @@ export default {
         ],
       },
       VehicleNo:'',
+      isAdd:false,
+      isEdit:false,
     }
   },
   components:{
@@ -418,9 +426,23 @@ export default {
       this.height = document.documentElement.clientHeight - 295
     },
     init(){
+      this.permissionControl();
       this.getTree();
       this.getData();
-      this.getType();
+      this.getDepart();
+    },
+    permissionControl(){
+     
+      let permission =  JSON.parse(this.$getStorage('permission'));
+      
+      console.log(permission)
+      permission.forEach(cur=>{
+        if(cur.menuPermission == 'sys:vehicle:add'){
+          this.isAdd = true;
+        }else if(cur.menuPermission == 'sys:vehicle:edit'){
+          this.isEdit = true;
+        }
+      })
     },
     getData(){
          this.loading = true;
@@ -470,13 +492,17 @@ export default {
             
         });
     },
-    getType(){
-      let params = {
-              pid: 48
-            };
-        BaseList(params).then(res=>{
+    getDepart(){
+          let params = {
+            deptName: '',
+            pageNum:1,
+            pageSize:999,
+            deptType:3,
+            deptBusinessType:82
+         };
+        DepartmentList(params).then(res=>{
           if(res.data.code == 0){
-              this.distributorList = res.data.data
+              this.distributorList = res.data.data.records
           };
         });
     },
@@ -510,7 +536,8 @@ export default {
       this.$refs.view_vehicle.viewVehicle(record,val)
     },
     changeTable(pagination){
-      this.pagination.current = pagination.current
+      this.pagination.current = pagination.current;
+      this.formParmas.pageNum = pagination.current;
       this.getData()
     },
     selectArea(selectedKeys,e){

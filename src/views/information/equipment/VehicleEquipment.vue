@@ -3,7 +3,7 @@
 
        <div class="table-operator">
            <div class="left_button">
-               <a-button type="primary" icon="plus" @click="addEquipment(0)">
+               <a-button type="primary" icon="plus" @click="addEquipment(0)" v-if="isAdd">
                   新增
                 </a-button>
                 <!-- <a-button>
@@ -70,7 +70,7 @@
                             <a-form-model-item label="运营商">
                                  <a-select v-model="formParmas.deviceOperator" allowClear>
                                     <a-select-option v-for="item in operaterList" :key="item.id">
-                                        {{item.name}}
+                                        {{item.deptName}}
                                     </a-select-option>
                                   </a-select>
                             </a-form-model-item>
@@ -95,15 +95,18 @@
                     <a-badge v-else status="error" text="无效"></a-badge>
                 </span>
                 <span slot="action" slot-scope="text,record">
-                    <a @click="addEquipment(1,record)">编辑</a>
-                    <a-divider type="vertical" />
-                    <a @click="unbundling(record)" v-if="record.vehicleId != '0'">解绑</a>
-                    <template v-else>
-                    <a @click="cancellation(record)" v-if="record.activition == 1">启用</a>
-                    <span class="yellow" @click="cancellation(record)" v-else>注销</span>
-                    <a-divider type="vertical" />
-                    <a @click="bundling(record)">绑定</a>
-                    </template>
+                  <template v-if="isEdit">
+                      <a @click="addEquipment(1,record)">编辑</a>
+                        <a-divider type="vertical" />
+                        <!-- <a @click="unbundling(record)" v-if="record.vehicleId != '0'">解绑</a> -->
+                        <template>
+                        <a @click="cancellation(record)" v-if="record.activition == 1">恢复</a>
+                        <span class="yellow" @click="cancellation(record)" v-else>注销</span>
+                        <!-- <a-divider type="vertical" />
+                        <a @click="bundling(record)">绑定</a> -->
+                      </template>
+                  </template>
+                   
                     
                 </span>
         </a-table>
@@ -154,7 +157,7 @@
 import modalEquipment from './modalEquipment.vue'
 import modalEquipmentDetails from './modalEquipmentDetails.vue'
 
-import {Devicelist,BaseList,EditDevicelist,bindDevice,unbindDevice,Vehiclelist} from '@/network/api'
+import {Devicelist,BaseList,EditDevicelist,bindDevice,unbindDevice,Vehiclelist,DepartmentList} from '@/network/api'
 
 
 
@@ -308,7 +311,9 @@ export default {
       },
       simNo:'',
       deviceId:'',
-      vehiclelist:[]
+      vehiclelist:[],
+      isAdd:false,
+      isExport:false
     }
   },
   components:{
@@ -328,7 +333,9 @@ export default {
       this.height = document.documentElement.clientHeight - 295
     },
     init(){
+      this.permissionControl();
       this.getData();
+      this.getDepart();
       this.getType(17,2);
       this.getType(24,3);
     },
@@ -345,6 +352,19 @@ export default {
             };
             
         });
+    },
+    permissionControl(){
+     
+      let permission =  JSON.parse(this.$getStorage('permission'));
+      
+      console.log(permission)
+      permission.forEach(cur=>{
+        if(cur.menuPermission == 'sys:device:add'){
+          this.isAdd = true;
+        }else if(cur.menuPermission == 'sys:device:edit'){
+          this.isEdit = true;
+        }
+      })
     },
     getVehiclelist(){
          let params = {
@@ -363,6 +383,27 @@ export default {
             
         });
     },
+    getDepart(){
+         let params = {
+            deptName: '',
+            pageNum:1,
+            pageSize:999,
+            deptType:3,
+            deptBusinessType:83
+         };
+         this.spinning = true;
+         DepartmentList(params).then(res=>{
+             this.spinning = false;
+            if(res.data.code == 0){
+
+                     this.operaterList = res.data.data.records
+               
+            }else{
+                this.$message.warning('加载失败')
+            };
+            
+        });
+    },
     getType(id,val){
         let params = {
               pid: id
@@ -371,8 +412,6 @@ export default {
           if(res.data.code == 0){
               if(val == 2){
                   this.typeList = res.data.data
-              }else if(val == 3){
-                  this.operaterList = res.data.data
               }
           };
         });
@@ -421,7 +460,8 @@ export default {
       this.$refs.view_equipment.viewDetails(record)
     },
     changeTable(pagination){
-      this.pagination.current = pagination.current
+      this.pagination.current = pagination.current;
+      this.formParmas.pageNum = pagination.current;
       this.getData()
     },
     unbundling(obj){

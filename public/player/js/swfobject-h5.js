@@ -448,7 +448,7 @@
             if (lstSvrIp != null && lstSvrIp.length > 0) {
                 var host = window.location.host.split(':');
                 if (host.length >= 1) {
-                    var addr = 'www.dzkjbd.com';
+                    var addr = '221.231.140.166';
                     if (addr == 'localhost') {
                         return "127.0.0.1";
                     }

@@ -41,7 +41,7 @@
                     {{commonFun(addForm.vehicleAbbr)}}
                 </a-descriptions-item>
                 <a-descriptions-item label="车主姓名">
-                    {{commonFun(addForm.ownerName)}}
+                    {{commonFun(addForm.driverName)}}
                 </a-descriptions-item>
                 <a-descriptions-item label="联系电话">
                     {{commonFun(addForm.ownerTel)}}

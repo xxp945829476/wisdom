@@ -118,7 +118,7 @@ export default {
               this.addForm.deptName = record.deptName;
               this.addForm.deptAddress = record.deptAddress;
               this.addForm.deptTypeName = record.deptTypeName;
-              this.addForm.jurisdictionName = record.realAreaName +','+record.cityName+','+record.realAreaName;
+              this.addForm.jurisdictionName = record.realAreaName
               this.addForm.deptCode = record.deptCode;
               this.addForm.deptLegalPerson = record.deptLegalPerson;
               this.addForm.deptChargePerson = record.deptChargePerson;

@@ -49,7 +49,7 @@
                 </a-col>
                 <a-col :md="8">
                     <a-form-model-item label="绑定设备" prop="deviceId">
-                        <a-select  v-model="addForm.deviceId" placeholder="请输入绑定设备" show-search option-filter-prop="children" :filter-option="filterOption" allowClear>
+                        <a-select  v-model="addForm.deviceId" placeholder="请输入绑定设备" show-search option-filter-prop="children" :filter-option="false" @search="filterOption" allowClear>
                             
                             <div slot="dropdownRender" slot-scope="menu">
                               <v-nodes :vnodes="menu" />
@@ -65,7 +65,7 @@
                              <a-select-option v-for="item in deviceList" :key="item.id" :disabled="item.facilityId != 0">
                                 {{item.deviceName}}
                             </a-select-option>
-                          </a-select>
+                        </a-select>
                     </a-form-model-item>
                 </a-col>
                 <a-col :md="8">
@@ -181,6 +181,7 @@ export default {
       deviceParams:{
         pageNum:1,
         pageSize:10,
+        deviceName:''
       },
       rules:{
         facilityName:[
@@ -373,10 +374,14 @@ export default {
       this.deviceParams.pageNum = pageNumber;
       this.getDeviceList();
     },
-    filterOption(input, option) {
-      return (
-        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      );
+    filterOption(value) {
+
+      this.deviceParams.deviceName = value;
+      this.deviceParams.pageNum = 1;
+      this.getDeviceList();
+      // return (
+      //   option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      // );
     },
   }
 }

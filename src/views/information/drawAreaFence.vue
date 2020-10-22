@@ -2,7 +2,7 @@
   <div v-if="drawVisible" class="drawPop">
     <a-row type="flex">
       <a-col flex="auto" ref="right_map">
-        <baidu-map class="fence_view fence_view_1" :center="center" :scroll-wheel-zoom="true" ak="PYswOGSEIdfO5RcGfgetWd5cbhonKUpz"  :zoom="zoom" @ready="handler"  @mousemove="syncPolyline"
+        <baidu-map class="fence_view fence_view_1" :center="center" :scroll-wheel-zoom="true" :ak="$store.getters.ak"  :zoom="zoom" @ready="handler"  @mousemove="syncPolyline"
   @click="paintPolyline"
   @rightclick="newPolyline">
           <template v-if="fieldType==56">
@@ -56,7 +56,7 @@ import mapPolyline from 'vue-baidu-map/components/overlays/Polyline.vue'
 import mapLocalSearch from 'vue-baidu-map/components/search/LocalSearch.vue'
 import mapOverlay from 'vue-baidu-map/components/overlays/Overlay.vue'
 import mapLabel from 'vue-baidu-map/components/overlays/Label.vue'
-import {AddElectronic} from '@/network/api'
+import {AddElectronic,Geocoding} from '@/network/api'
 
 export default {
   data() {
@@ -202,14 +202,7 @@ export default {
 
     this.allPath.push({lat:e.point.lat,lng:e.point.lng});
      
-     var geoc = new this.BMap.Geocoder();  
-
-      geoc.getLocation(e.point,function(rs){
-        var addComp = rs.addressComponents;
-        console.log(addComp)
-        that.areaList.push(addComp.street)
-        console.log(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
-      })
+      this.geocoding(e.point)
 
       // this.map.addOverlay(label)
       if (!this.polyline.editing) {
@@ -218,6 +211,35 @@ export default {
       const {paths} = this.polyline
       !paths.length && paths.push([])
       paths[paths.length - 1].push(e.point)
+    },
+    geocoding(location){
+
+      let params = {
+        ak:this.$store.getters.ak,
+        location:location.lat + ',' + location.lng
+      };
+      Geocoding(params).then(res=>{
+          if(res.data.code == 0){
+            let data = JSON.parse(res.data.data)
+            console.log(data)
+            console.log(data.result.pois[0])
+            if(this.fieldType==56){
+              this.areaList.push(data.result.addressComponent.street)
+            }else{
+              if(data.result.pois.length>0){
+               if(data.result.pois[0].name){
+                    this.areaList.push(data.result.pois[0].name)
+                  }
+                }else{
+                  this.areaList.push(data.result.addressComponent.street)
+                }
+            };
+            
+           
+            
+            
+          }
+      })
     },
     
     repaint(){

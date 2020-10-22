@@ -35,7 +35,7 @@
         <div class=" layout_card_content layout_card_content_p">
         <div class="table-operator">
             <div class="left_button">
-                <a-button type="primary" icon="plus" @click="addEletronic(0)">
+                <a-button type="primary" icon="plus" @click="addEletronic(0)" v-if="isAdd">
                     新增
                   </a-button>
             </div>
@@ -72,10 +72,13 @@
           <a-table :columns="columns" bordered :data-source="tableData" @change="changeTable" size="middle" :rowKey='record' :pagination="pagination" :scroll="{x:1200,y:height}" :loading="loading">
                   <a slot="address" slot-scope="text,record" @click="drawDence(record)">经纬度点击地图查看</a>
                   <span slot="action" slot-scope="text,record">
-                      <a @click="addEletronic(1,record)">编辑</a>
-                      <a-divider type="vertical" />
-                      <span class="yellow" @click="cancellation(record)" v-if="record.disabled == 0">注销</span>
-                      <a @click="cancellation(record)" v-else>启用</a>
+                    <template v-if="isEdit">
+                       <a @click="addEletronic(1,record)">编辑</a>
+                        <a-divider type="vertical" />
+                        <span class="yellow" @click="cancellation(record)" v-if="record.disabled == 0">注销</span>
+                        <a @click="cancellation(record)" v-else>恢复</a>
+                    </template>
+                     
                   </span>
           </a-table>
 
@@ -95,6 +98,7 @@ import {AreaList,Fencelist,BaseList,EditElectronic} from '@/network/api'
 import modalElectronic from './modalElectronic.vue'
 import {buildAreaTree} from '@/utils/utils.js'
 import drawFence from './drawFence.vue'
+
 
 
 
@@ -190,7 +194,9 @@ export default {
         showQuickJumper:true,
         showTotal:total => `共 ${total} 条`
       },
-      fieldTypeData:[]
+      fieldTypeData:[],
+      isAdd:false,
+      isEdit:false
     }
   },
   components:{
@@ -210,9 +216,22 @@ export default {
       this.height = document.documentElement.clientHeight - 295
     },
     init(){
+      this.permissionControl();
       this.getData();
       this.getAreaList();//获取地区
       this.getElectronicType();//获取管辖区类型
+    },
+    permissionControl(){
+     
+      let permission =  JSON.parse(this.$getStorage('permission'));
+      
+      permission.forEach(cur=>{
+        if(cur.menuPermission == 'sys:ef:add'){
+          this.isAdd = true;
+        }else if(cur.menuPermission == 'sys:ef:edit'){
+          this.isEdit = true;
+        }
+      })
     },
     getData(){
         this.loading = true;
@@ -280,7 +299,8 @@ export default {
       this.getData()
     },
     changeTable(pagination){
-      this.pagination.current = pagination.current
+      this.pagination.current = pagination.current;
+       this.formParmas.pageNum = pagination.current;
       this.getData()
     },
     sleectArea(selectedKeys){

@@ -1,5 +1,5 @@
 <template>
-  <div class="desion_box">
+  <div class="desion_box" v-if="current == 1">
      <a-row type="flex" justify="space-between">
         <a-col flex="280px" class="desion_left">
             <h3 class="desion_left_t">控件库</h3>
@@ -198,23 +198,23 @@
                   </a-radio-group>
                 </div>
 
-                <div class="desion_right_c" v-if="list2[currentIdex].controlFormType == 8">
+                <!-- <div class="desion_right_c" v-if="list2[currentIdex].controlFormType == 8">
                   <h4>关联工地管辖区</h4>
                  
                   <a-radio-group name="radioGroup" v-model="list2[currentIdex].associateDept">
-                    <a-radio :value="1">
+                    <a-radio :value="0">
                       不关联
                     </a-radio>
-                    <a-radio :value="2">
+                    <a-radio :value="1">
                       关联-不跨区域
                     </a-radio>
-                    <a-radio :value="3">
+                    <a-radio :value="2">
                       关联-跨区
                     </a-radio>
                   </a-radio-group>
-                </div>
+                </div> -->
 
-                <div class="desion_right_c" v-if="list2[currentIdex].controlFormType == 9">
+                <!-- <div class="desion_right_c" v-if="list2[currentIdex].controlFormType == 9">
                   <h4>数据选择项</h4>
                   <div>
                     <a-row type="flex" align="middle">
@@ -238,9 +238,9 @@
                     
                   </div>
                   
-                </div>
+                </div> -->
 
-                <div class="desion_right_c" v-if="list2[currentIdex].controlFormType == 10">
+                <!-- <div class="desion_right_c" v-if="list2[currentIdex].controlFormType == 10">
                   <h4>关联车辆调用企业</h4>
                   <a-radio-group name="radioGroup" v-model="list2[currentIdex].associateDept">
                     <a-radio :value="1">
@@ -251,7 +251,7 @@
                     </a-radio>
                   </a-radio-group>
                   
-                </div>
+                </div> -->
 
                 <div class="desion_right_c" v-if="list2[currentIdex].controlFormType == 9  || list2[currentIdex].controlFormType == 10">
                   <h4>车辆类型选项</h4>
@@ -276,7 +276,7 @@
                 </div>
 
 
-                <div class="desion_right_c" v-if="list2[currentIdex].controlFormType == 9 || list2[currentIdex].controlFormType == 10">
+                <!-- <div class="desion_right_c" v-if="list2[currentIdex].controlFormType == 9 || list2[currentIdex].controlFormType == 10">
                   <h4>数据禁选范围</h4>
                   <div>
                     <a-checkbox-group v-model="list2[currentIdex].vehicleProhibitSelect">
@@ -318,9 +318,9 @@
                     
                   </div>
                   
-                </div>
+                </div> -->
 
-                 <div class="desion_right_c" v-if="list2[currentIdex].controlFormType == 12">
+                 <!-- <div class="desion_right_c" v-if="list2[currentIdex].controlFormType == 12">
                   <h4>关联道路名单</h4>
                   <a-radio-group name="radioGroup" v-model="list2[currentIdex].associateRoadName">
                     <a-radio :value="1">
@@ -331,14 +331,14 @@
                     </a-radio>
                   </a-radio-group>
                   
-                </div>
+                </div> -->
 
                 <div class="desion_right_c" v-if="list2[currentIdex].controlFormType == 11 || list2[currentIdex].controlFormType == 12">
                   <h4>线路默认限速值</h4>
                   <a-input-number v-model="list2[currentIdex].defaultLimitSpeed" />
                 </div>
 
-                <div class="desion_right_c" v-if="list2[currentIdex].controlFormType == 11 || list2[currentIdex].controlFormType == 12">
+                <!-- <div class="desion_right_c" v-if="list2[currentIdex].controlFormType == 11 || list2[currentIdex].controlFormType == 12">
                   <h4>关联线路途经管辖区</h4>
                   <a-radio-group name="radioGroup" v-model="list2[currentIdex].routePassArea">
                     <a-radio :value="1">
@@ -349,7 +349,7 @@
                     </a-radio>
                   </a-radio-group>
                   
-                </div>
+                </div> -->
 
                 <div class="desion_right_c" 
                 v-if="list2[currentIdex].controlFormType == 14 || list2[currentIdex].controlFormType == 15 || list2[currentIdex].controlFormType == 16 || list2[currentIdex].controlFormType == 17 || list2[currentIdex].controlFormType == 18 || list2[currentIdex].controlFormType == 19 || list2[currentIdex].controlFormType == 20 || list2[currentIdex].controlFormType == 21">
@@ -410,7 +410,7 @@
 
 <script>
 import draggable from "vuedraggable";
-import {BaseList,GetId} from '@/network/api'
+import {BaseList,GetId,GetFormInfo} from '@/network/api'
 export default {
   name: "clone",
   display: "Clone",
@@ -424,16 +424,16 @@ export default {
       wrapperCol: { span: 18 },
       list1: [
         { id:'',workflowId:'',formIcon:'iconAa',controlType:1,controlFormType:1,nextFormId:'',controlOriginName:'证件编号',controlName: "证件编号",controlRemindContent:'系统生成',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
-        { id:'',workflowId:'',formIcon:'iconicon_youxiaoqi2x',controlType:2,controlFormType:2,nextFormId:'',controlOriginName:'申报有效期范围',controlName: "申报有效期范围",controlRemindContent:'年-月-日',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
-        { id:'',workflowId:'',formIcon:'iconshijian',controlType:3,controlFormType:3,nextFormId:'',controlOriginName:'准行时段',controlName: "准行时段",controlRemindContent:'时-分',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:1,permitTime:'00:00:00~06:00:00',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
-        { id:'',workflowId:'',formIcon:'iconshijian',controlType:4,controlFormType:4,nextFormId:'',controlOriginName:'禁行日期',controlName: "禁行日期",controlRemindContent:'年-月-日',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconicon_youxiaoqi2x',controlType:2,controlFormType:2,nextFormId:'',controlOriginName:'申报有效期范围',controlName: "申报有效期范围",controlRemindContent:'年-月-日',preview:0,printed:'',maxExpired:60,controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconshijian',controlType:3,controlFormType:3,nextFormId:'',controlOriginName:'准行时段',controlName: "准行时段",controlRemindContent:'时-分',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:0,permitTime:'00:00:00~06:00:00',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconshijian',controlType:4,controlFormType:4,nextFormId:'',controlOriginName:'禁行日期',controlName: "禁行日期",controlRemindContent:'年-月-日',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:0,permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
         { id:'',workflowId:'',formIcon:'iconxuanzhong',controlType:5,controlFormType:5,nextFormId:'',controlOriginName:'项目原因',controlName: "项目原因",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
         { id:'',workflowId:'',formIcon:'iconxuanzhong',controlType:6,controlFormType:6,nextFormId:'',controlOriginName:'申报企业',controlName: "申报企业",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
         { id:'',workflowId:'',formIcon:'iconxuanzhong',controlType:7,controlFormType:7,nextFormId:'',controlOriginName:'申报工地',controlName: "申报工地",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:0,associateRoadName:''},
-        { id:'',workflowId:'',formIcon:'iconxuanzhong',controlType:8,controlFormType:8,nextFormId:'',controlOriginName:'申报土场',controlName: "申报土场",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconxuanzhong',controlType:8,controlFormType:8,nextFormId:'',controlOriginName:'申报土场',controlName: "申报土场",controlRemindContent:'请输入',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:0,associateRoadName:''},
         
         { id:'',workflowId:'',formIcon:'iconzhengque',controlType:9,controlFormType:9,nextFormId:'',controlOriginName:'申报车辆',controlName: "申报车辆",controlRemindContent:'请选择',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:0,vehicleTypeSelect:[],vehicleProhibitSelect:[],defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:'',associateRoadName:''},
-        { id:'',workflowId:'',formIcon:'iconzhengque',controlType:10,controlFormType:10,nextFormId:'',controlOriginName:'借调车辆',controlName: "借调车辆",controlRemindContent:'请选择',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:0,associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconzhengque',controlType:10,controlFormType:10,nextFormId:'',controlOriginName:'借调车辆',controlName: "借调车辆",controlRemindContent:'请选择',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:[],vehicleProhibitSelect:[],defaultLimitSpeed:'',routePassArea:'',uploadNum:'',associateDept:0,associateRoadName:''},
 
         { id:'',workflowId:'',formIcon:'iconweizhi',controlType:11,controlFormType:11,nextFormId:'',controlOriginName:'线路规划',controlName: "线路规划",controlRemindContent:'请绘制',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:0,uploadNum:'',associateDept:'',associateRoadName:''},
         { id:'',workflowId:'',formIcon:'iconweizhi',controlType:12,controlFormType:12,nextFormId:'',controlOriginName:'线路绘制',controlName: "线路绘制",controlRemindContent:'请绘制',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:0,uploadNum:'',associateDept:'',associateRoadName:0},
@@ -442,7 +442,7 @@ export default {
 
         { id:'',workflowId:'',formIcon:'iconlianjie',controlType:14,controlFormType:14,nextFormId:'',controlOriginName:'出土申报表',controlName: "出土申报表",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
         { id:'',workflowId:'',formIcon:'iconlianjie',controlType:15,controlFormType:15,nextFormId:'',controlOriginName:'需求申报表',controlName: "需求申报表",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
-        { id:'',workflowId:'',formIcon:'iconlianjie',controlType:16,controlFormType:16,nextFormId:'',controlOriginName:'建筑垃圾运输证',controlName: "建筑垃圾运输证",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:1,uploadNum:'',associateDept:'',associateRoadName:''},
+        { id:'',workflowId:'',formIcon:'iconlianjie',controlType:16,controlFormType:16,nextFormId:'',controlOriginName:'建筑垃圾运输证',controlName: "建筑垃圾运输证",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:1,uploadNum:1,associateDept:'',associateRoadName:''},
         { id:'',workflowId:'',formIcon:'iconlianjie',controlType:17,controlFormType:17,nextFormId:'',controlOriginName:'接纳证明',controlName: "接纳证明",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
         { id:'',workflowId:'',formIcon:'iconlianjie',controlType:18,controlFormType:18,nextFormId:'',controlOriginName:'保洁责任书',controlName: "保洁责任书",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
         { id:'',workflowId:'',formIcon:'iconlianjie',controlType:19,controlFormType:19,nextFormId:'',controlOriginName:'承运协议',controlName: "承运协议",controlRemindContent:'请上传',preview:0,printed:'',maxExpired:'',controlCode:'',permitMore:'',permitTime:'',limitTime:'',fieldIds:'',fieldNames:'',associateField:'',vehicleTypeSelect:'',dataSelect:'',vehicleTypeSelect:'',vehicleProhibitSelect:'',defaultLimitSpeed:'',routePassArea:'',uploadNum:1,associateDept:'',associateRoadName:''},
@@ -460,28 +460,47 @@ export default {
     };
   },
   props:{
-    workflowId:String
+    workflowId:String,
+    current:Number
   },
   created(){
-    this.list1.forEach(cur=>{
+     this.list1.forEach(cur=>{
             this.$set(cur,'isSelect',false) 
       });
-      this.init();
-      
   },
   mounted(){
-    this.$nextTick(()=>{
-      this.getWorkId();
-    })
   },
   methods: {
-    init(){
-      this.getType()
+    init(isEdit){
+      this.getType();
+      this.getWorkId();
+    },
+    initEdit(id){
+      this.currentIdex = 0;
+      this.getFormInfo(id);
     },
     getWorkId(){
       this.list1.forEach(cur=>{
         cur.workflowId = this.workflowId
       })
+    },
+    getFormInfo(id){
+            let params={
+                workflowId:id
+            }
+            GetFormInfo(params).then(res=>{
+              if(res.data.code == 0){
+                this.list2 = res.data.data;
+                this.list2.forEach((cur,index)=>{
+                  if(cur.controlFormType==9 ||cur.controlFormType==10){
+                    cur.vehicleTypeSelect = cur.vehicleTypeSelect?cur.vehicleTypeSelect.split(','):[];
+                    cur.vehicleProhibitSelect = cur.vehicleProhibitSelect?cur.vehicleProhibitSelect.split(','):[];
+                  }
+                  cur.workflowId = this.workflowId
+                  this.getId(index)
+                });
+              };
+            });
     },
     allow(evt){
         // console.log(evt.draggedContext.index)
@@ -590,6 +609,7 @@ export default {
     },
     changeRequired(e){
       this.list2[this.currentIdex].required = e.target.checked ? 1 :0
+      alert(this.list2[this.currentIdex].required)
     },
     getId(index){
             GetId().then(res=>{

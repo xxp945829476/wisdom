@@ -2,10 +2,10 @@
    <div class="layout_card_content">
         <div class="table-operator">
            <div class="left_button">
-                <a-button type="primary" icon="plus" @click="addUser(0)">
+                <a-button type="primary" icon="plus" @click="addUser(0)" v-if="isAdd">
                   新增
                 </a-button>
-                <a-button @click="delUserBatch">
+                <a-button @click="delUserBatch" v-if="isDelete">
                   批量删除
                 </a-button>
            </div>
@@ -35,9 +35,11 @@
                     <span v-else>禁用</span>
                 </span>
                 <span slot="action" slot-scope="text,record">
-                    <a @click="addUser(1,record)">编辑</a>
-                    <a-divider type="vertical" />
-                    <span @click="delUser(record)" class="yellow">删除</span>
+                    <template v-if="isEdit">
+                      <a @click="addUser(1,record)">编辑</a>
+                      <a-divider type="vertical" />
+                    </template>
+                    <span @click="delUser(record)" class="yellow" v-if="isDelete">删除</span>
                 </span>
         </a-table>
 
@@ -114,7 +116,10 @@ export default {
         pageSizeOptions: ["10", "20", "50", "100"],//每页中显示的数据
         showQuickJumper:true,
         showTotal:total => `共 ${total} 条`
-      }
+      },
+      isAdd:false,
+      isEdit:false,
+      isDelete:false
     }
   },
   components:{
@@ -130,7 +135,22 @@ export default {
   },
   methods:{
     init(){
+      this.permissionControl();
       this.getData();
+    },
+    permissionControl(){
+     
+      let permission =  JSON.parse(this.$getStorage('permission'));
+      
+      permission.forEach(cur=>{
+        if(cur.menuPermission == 'sys:user:add'){
+          this.isAdd = true;
+        }else if(cur.menuPermission == 'sys:user:edit'){
+          this.isEdit = true;
+        }else if(cur.menuPermission == 'sys:user:del'){
+          this.isDelete = true;
+        }
+      })
     },
     getData(){
         this.loading = true;
@@ -237,7 +257,8 @@ export default {
       this.$refs.add_user.addUser(val,record)
     },
     changeTable(pagination){
-      this.pagination.current = pagination.current
+      this.pagination.current = pagination.current;
+      this.formParmas.pageNum = pagination.current;
       this.getData()
     }
   }

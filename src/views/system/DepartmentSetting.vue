@@ -27,7 +27,7 @@
                         </a-col>
 
                         <a-col :md="11" class="right_operator_btn">
-                            <a-button type="primary" icon="plus" @click="addDepart(0)" class="but_margin_right">
+                            <a-button type="primary" icon="plus" @click="addDepart(0)" class="but_margin_right" v-if="isAdd">
                             新增
                             </a-button>
                         </a-col>
@@ -40,11 +40,11 @@
                                 <template slot="custom" slot-scope="item">
                                     <span>{{ item.deptName }}</span>
                                     <span class="tree_btn">
-                                        <a @click.stop="addDepart(1,item)">编辑</a>
+                                        <a @click.stop="addDepart(1,item)" v-if="isEdit">编辑</a>
                                         <a-divider type="vertical" />
                                         <!-- <a @click.stop="sureDeleteDepart(item.id)">删除</a>
                                         <a-divider type="vertical" /> -->
-                                        <a @click.stop="addDepart(2,item)">添加下级</a>
+                                        <a @click.stop="addDepart(2,item)" v-if="isAdd">添加下级</a>
                                     </span>
                                 
                                 </template>
@@ -144,7 +144,9 @@ export default {
       },
       selectedKeys:[],
       deptId:'',
-      roleList:[]
+      roleList:[],
+      isAdd:false,
+      isEdit:false
     }
   },
   components:{
@@ -158,8 +160,22 @@ export default {
   },
   methods:{
     init(){
+      this.permissionControl();
       this.getData();
       this.getRoleList();
+    },
+    permissionControl(){
+     
+      let permission =  JSON.parse(this.$getStorage('permission'));
+      
+      console.log(permission)
+      permission.forEach(cur=>{
+        if(cur.menuPermission == 'sys:dept:add'){
+          this.isAdd = true;
+        }else if(cur.menuPermission == 'sys:dept:edit'){
+          this.isEdit = true;
+        }
+      })
     },
     getData(val){
         //val 1 搜索

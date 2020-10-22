@@ -2,6 +2,7 @@
 
 const app = {
   state: {
+    ak:'PYswOGSEIdfO5RcGfgetWd5cbhonKUpz',
     subNavList:[],
     navigationMode:'horizontal'
   },

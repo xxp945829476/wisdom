@@ -18,9 +18,9 @@
                      <a-button type="primary"  @click="save">
                         <a-icon type="save"/>保存
                     </a-button>
-                    <a-button class="bh_btn_right">
+                    <!-- <a-button class="bh_btn_right">
                         发布
-                    </a-button>
+                    </a-button> -->
                 </a-col>
             </a-row>
         </div>
@@ -78,13 +78,13 @@
             </div>
 
             <!-- 表单设计 -->
-            <div v-if="current == 1">
-                <formDesign ref="formDesign" @getFromDesign="getFromDesign" :workflowId='addForm.id'></formDesign>
+            <div>
+                <formDesign ref="formDesign" :current='current' @getFromDesign="getFromDesign" :workflowId='addForm.id' :list2="addForm.formList"></formDesign>
             </div>
 
             <!-- 流程设计 -->
-            <div v-if="current == 2">
-                <ProcessDesign></ProcessDesign>
+            <div>
+                <ProcessDesign ref="processDesign" :workflowId='addForm.id' :current='current' @getValue="getValue" @getProcessDesign="getProcess"></ProcessDesign>
             </div>
 
         </div>
@@ -101,7 +101,7 @@
 import formDesign from './formDesign.vue'
 import ProcessDesign from './ProcessDesign.vue'
 import modalSponsor from './modalSponsor.vue'
-import {GetId,GetUseBaseInfo,GetDeptBaseInfo} from '@/network/api'
+import {GetId,AddWorkflow,GetFormInfo,GetBaseInfoWorkflow} from '@/network/api'
 
 export default {
     data() {
@@ -125,8 +125,13 @@ export default {
                 sponsorNames:'',
                 workflowOpinionRequire:'',
                 workflowOpinion:'',
-                require:false
+                require:false,
+                formList:[],
+                nodeList:[],
+                progressContent:''
             },
+            oldId:'',
+            isEdit:1,
             
         }
     },
@@ -153,18 +158,115 @@ export default {
             });
         },
         
-        editTemplate(){
+        
+        editTemplate(val,items){
+            console.log(items)
             this.templateShow = true;
+            this.current = 0;
+            this.isEdit = val;
+            if(val==1){
+                this.addForm = {
+                    id:'',
+                    workflowName:'',
+                    sponsorUserIds:'',
+                    sponsorDeptIds:'',
+                    sponsorDeptTypes:'',
+                    workflowType:[],
+                    sponsorNames:'',
+                    workflowOpinionRequire:'',
+                    workflowOpinion:'',
+                    require:false,
+                    formList:[],
+                    nodeList:[],
+                    progressContent:''
+                };
+               
+                
+            }else{
+                this.oldId = items.id;
+                this.getBaseInfoWorkflow();
+                
+            }
+
              this.getId();
+
+            
+            
+        },
+        
+        getBaseInfoWorkflow(){
+            
+            let params={
+                workflowId:this.oldId
+            }
+            GetBaseInfoWorkflow(params).then(res=>{
+                if(res.data.code==0){
+                    let data = res.data.data;
+                    this.addForm.workflowName=data.workflowName;
+                    this.addForm.sponsorDeptIds=data.sponsorDeptIds;
+                    this.addForm.sponsorNames=data.sponsorNames;
+                    this.addForm.workflowType=data.workflowType?data.workflowType.split(','):[];
+                    this.addForm.workflowOpinionRequire=data.workflowOpinionRequire;
+                    this.addForm.require=data.workflowOpinionRequire==1?true:false;
+                    this.addForm.workflowOpinion=data.workflowOpinion;
+                    this.addForm.progressContent=data.progressContent;
+                    this.$refs.formDesign.initEdit(this.oldId)
+                    this.$refs.processDesign.initProcess(data.progressContent)
+                }
+            });
         },
         onChange(current) {
-            this.current = current;
+           
+            if(current != 0){
+                this.$refs.ruleForm.validate(valid => {
+                if (valid) {
+                        this.current = current;
+                        if(current==1){
+                                this.$refs.formDesign.init(this.isEdit)
+                            }else if(current==2){
+                                this.$refs.processDesign.init(this.addForm.sponsorDeptIds,this.addForm.sponsorNames,this.isEdit,this.oldId,this.addForm.progressContent)
+                            }
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            }else{
+                this.current = current;
+            }
+            
+            
         },
         save(){
            this.$refs.formDesign.getFromDesign()
+           this.$refs.processDesign.getProcessDesign()
+           console.log(this.addForm)
+
+      
+           this.addForm.workflowType = this.addForm.workflowType.length>0 ? this.addForm.workflowType.join(',') : '';
+           this.SaveOK(this.addForm)
+        },  
+        SaveOK(){
+           AddWorkflow(this.addForm).then(res=>{
+                if(res.data.code == 0){
+                    this.templateShow = false;
+                    this.$emit('close')
+                    this.$message.success('保存成功')
+                }else{
+                    this.$message.warning('保存成功')
+                };
+            }); 
         },
         getFromDesign(arr){
-            console.log(arr) 
+            
+            
+            this.addForm.formList = JSON.parse(JSON.stringify(arr));
+            this.addForm.formList.forEach(cur=>{
+                if(cur.controlFormType==9||cur.controlFormType==10){
+                    cur.vehicleTypeSelect = cur.vehicleTypeSelect.length>0?cur.vehicleTypeSelect.join(',') : '';
+                    cur.vehicleProhibitSelect = cur.vehicleProhibitSelect.length>0?cur.vehicleProhibitSelect.join(',') : ''
+                };
+            })
         },
         changeOpinion(e){
             this.addForm.workflowOpinionRequire = e.target.checked ? 1 : 0;
@@ -179,7 +281,78 @@ export default {
              console.log(name)
             this.addForm.sponsorDeptIds = depArr.length>0 ? depArr.join(',') : ''
             this.addForm.sponsorUserIds = useArr.length>0 ? useArr.join(',') : ''
-            this.addForm.sponsorNames = name.length>0 ? name.join(',') : '';
+            this.addForm.sponsorNames = name.length>0 ? name.join(',') : ''
+        },
+        getProcess(arr){
+           
+            arr.forEach((element,index)=>{
+
+                if(index==0&&arr.length>1){
+                    if(arr[index+1].progressType==6){
+                        element.progressDetailList[0].nodeType = 2;
+                    }else{
+                        element.progressDetailList[0].nodeType = 1;
+                    };
+
+                    let nextNodeArr = [];
+                    arr[index+1].progressDetailList.forEach(cur=>{
+                        nextNodeArr.push(cur.id)
+                    })
+                    element.progressDetailList[0].nextNode = nextNodeArr.join(',')
+                }//起点
+
+                if(index>0&&index<arr.length-1){
+                    element.progressDetailList.forEach(cur=>{
+                        if(arr[index-1].progressType!=6&&arr[index+1].progressType!=6){
+                            cur.nodeType = 1
+                        }else if(arr[index-1].progressType==6&&arr[index+1].progressType!=6){
+                            cur.nodeType = 3
+                        }else if(arr[index-1].progressType!=6&&arr[index+1].progressType==6){
+                             cur.nodeType = 2
+                        }else if(arr[index-1].progressType==6&&arr[index+1].progressType==6){
+                             cur.nodeType = 4
+                        };
+
+                        let upArr = [];
+                        arr[index-1].progressDetailList.forEach(cur=>{
+                            upArr.push(cur.id)
+                        });
+                        cur.preNode = upArr.join(',');
+
+                         let downArr = [];
+                        arr[index+1].progressDetailList.forEach(cur=>{
+                            downArr.push(cur.id)
+                        });
+                        cur.nextNode = downArr.join(',')
+                    });
+                    
+                };//中间
+
+                if(index==arr.length-1&&arr.length>1){
+                    if(arr[index-1].progressType==6){
+                        element.progressDetailList[0].nodeType = 3;
+                    }else{
+                        element.progressDetailList[0].nodeType = 1;
+                    };
+                    let preNodeArr = [];
+                     arr[index-1].progressDetailList.forEach(cur=>{
+                        preNodeArr.push(cur.id)
+                    })
+                    element.progressDetailList[0].preNode = preNodeArr.join(',')
+                }//终点
+            });
+
+     
+            let newArr = [];
+            arr.forEach(cur=>{
+                newArr.push(...cur.progressDetailList)
+            })
+            newArr.forEach((ele,index)=>{
+                ele.sort = index;
+                ele.workflowId = this.addForm.id;
+            })
+            this.addForm.nodeList = newArr;
+            this.addForm.progressContent = JSON.stringify(arr)
         }
   }
 }

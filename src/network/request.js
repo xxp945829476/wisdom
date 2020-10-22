@@ -63,7 +63,7 @@ request.interceptors.response.use(
                     message.error('网络请求不存在')
                     break
                 case 500:
-                    message.error('内部服务器错误')
+                    // message.error('')
                     break
                 case 501:
                     message.error('服务器不支持该请求中使用的方法')

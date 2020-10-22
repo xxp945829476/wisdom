@@ -34,7 +34,7 @@
         <div class=" layout_card_content layout_card_content_p">
         <div class="table-operator">
             <div class="left_button">
-                <a-button type="primary" icon="plus" @click="addSite(0)">
+                <a-button type="primary" icon="plus" @click="addSite(0)" v-if="isAdd">
                     新增
                   </a-button>
                   <!-- <a-button>
@@ -151,7 +151,7 @@
                     {{text}}
                   </a>
                   <span slot="monitor" slot-scope="text,record">
-                    <a>监控</a>
+                    <a @click="monitorMap(record)">监控</a>
                   </span>
 
                   <span slot="ef" slot-scope="text,record">
@@ -175,18 +175,21 @@
                     <a-badge v-else status="error" text="已过期"></a-badge>
                   </span>
                   <span slot="action" slot-scope="text,record">
-                      <a @click="addSite(1,record)">编辑</a>
-                      <a-divider type="vertical" />
-                  
-                      <span class="yellow" @click="cancellation(record)" v-if="record.activition == 0">注销</span>
-                      <a @click="cancellation(record)" v-else>启用</a>
-                      
-            
-            
-                      <template v-if="record.permitStatus == 0 && record.activition == 0" >
+                    <template v-if="isEdit">
+                       <a @click="addSite(1,record)">编辑</a>
                         <a-divider type="vertical" />
-                        <a @click="viewDetails(record,2)">审核</a>
-                      </template>
+                    
+                        <span class="yellow" @click="cancellation(record)" v-if="record.activition == 0">注销</span>
+                        <a @click="cancellation(record)" v-else>恢复</a>
+                        
+              
+              
+                        <template v-if="record.permitStatus == 0 && record.activition == 0" >
+                          <a-divider type="vertical" />
+                          <a @click="viewDetails(record,2)">审核</a>
+                        </template>
+                    </template>
+                     
                         
                 
                    
@@ -371,6 +374,8 @@ export default {
         showQuickJumper:true,
         showTotal:total => `共 ${total} 条`
       },
+      isAdd:false,
+      isEdit:false
     }
   },
   components:{
@@ -390,9 +395,22 @@ export default {
       this.height = document.documentElement.clientHeight - 295
     },
     init(){
+      this.permissionControl();
       this.getTree();
       this.getData();
       this.getType();
+    },
+    permissionControl(){
+     
+      let permission =  JSON.parse(this.$getStorage('permission'));
+      
+      permission.forEach(cur=>{
+        if(cur.menuPermission == 'sys:field:add'){
+          this.isAdd = true;
+        }else if(cur.menuPermission == 'sys:field:edit'){
+          this.isEdit = true;
+        }
+      })
     },
     compareTime(start,end){
       let time = parseInt(new Date().getTime() / 1000);
@@ -477,7 +495,8 @@ export default {
       this.$refs.view_details.viewDetails(record,val)
     },
     changeTable(pagination){
-      this.pagination.current = pagination.current
+      this.pagination.current = pagination.current;
+      this.formParmas.pageNum = pagination.current;
       this.getData()
     },
     selectArea(selectedKeys,e){
@@ -519,6 +538,10 @@ export default {
     updateData(){
       this.getData();
       this.getTree();
+    },
+    monitorMap(record){
+      window.open('/MonitoringDisplay');
+      this.$setStorage('positionData',JSON.stringify(record.electronicFence));
     }
   }
 }

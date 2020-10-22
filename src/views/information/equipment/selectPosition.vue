@@ -2,7 +2,7 @@
   <div v-if="drawVisible" class="drawPop">
   
 
-        <baidu-map class="fence_view fence_view_1" :center="center" :scroll-wheel-zoom="true" ak="PYswOGSEIdfO5RcGfgetWd5cbhonKUpz"  :zoom="zoom" @ready="handler" @click="location">
+        <baidu-map class="fence_view fence_view_1" :center="center" :scroll-wheel-zoom="true" :ak="$store.getters.ak"  :zoom="zoom" @ready="handler" @click="location">
            <mapPolygon :path="path" v-for="(path,index) of polyline.paths" :fill-opacity= "0.3" :fill-color="fillColor" :stroke-weight="2" :stroke-color="fillColor" :key="index"></mapPolygon>
            <mapLocalSearch :keyword="keyword" :auto-viewport="true" @searchcomplete="searchcomplete"></mapLocalSearch>
            <mapOverlay>
@@ -26,7 +26,7 @@ import mapLocalSearch from 'vue-baidu-map/components/search/LocalSearch.vue'
 import mapOverlay from 'vue-baidu-map/components/overlays/Overlay.vue'
 import mapLabel from 'vue-baidu-map/components/overlays/Label.vue'
 import mapMarker from 'vue-baidu-map/components/overlays/Marker.vue'
-import {AddElectronic} from '@/network/api'
+import {AddElectronic,Geocoding} from '@/network/api'
 
 export default {
   data() {
@@ -156,12 +156,30 @@ export default {
         console.log(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
         that.address = addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber
         that.drawVisible = false;
-        that.$emit('getPosition',that.address,JSON.stringify(e.point))
-      });
-      
+        
        
+      });
 
-    }
+      this.geocoding(e.point);
+      
+
+    },
+    geocoding(location){
+
+      let params = {
+        ak:this.$store.getters.ak,
+        location:location.lat + ',' + location.lng
+      };
+      Geocoding(params).then(res=>{
+          if(res.data.code == 0){
+            let data = JSON.parse(res.data.data)
+            this.address = data.result.formatted_address
+             this.$emit('getPosition',this.address,JSON.stringify(location))
+             
+          }
+      })
+    },
+
 
   }
 }

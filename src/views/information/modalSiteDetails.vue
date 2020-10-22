@@ -196,6 +196,8 @@ export default {
 
       this.$nextTick(()=>{
         this.addForm = JSON.parse(JSON.stringify(record));
+        record.cityName = record.cityName?record.cityName : '';
+        record.regionName = record.regionName?record.regionName : '';
         this.addForm["jurisdiction"] = record.provinceName + '/' + record.cityName + '/' + record.regionName;
         this.addForm.fieldStartTime = this.$moment.unix(record.fieldStartTime).format('YYYY-MM-DD');
         this.addForm.fieldExpireTime = this.$moment.unix(record.fieldExpireTime).format('YYYY-MM-DD');

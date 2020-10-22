@@ -56,23 +56,52 @@
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="设备名称-主" prop="deviceMaster">
-                            <a-select v-model="addForm.deviceMaster" 
+                            <!-- <a-select v-model="addForm.deviceMaster" 
                              placeholder="请选择设备名称-主"
+                              :disabled="isEdit==1"
+                             @change="changeDeviceMaster"
                            :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}">
                               <template v-for="item in devicelist">
-                                <a-select-option :value="item.id" :key="item.id" v-if="item.deviceMasterSlave == 22">
+                                <a-select-option :value="item.id" :key="item.id" v-if="item.deviceMasterSlave == 22" >
                                         {{item.deviceName}}
                                 </a-select-option>
                               </template>  
                               
+                            </a-select> -->
+
+                            <a-select  v-model="addForm.deviceMaster" placeholder="请选择设备名称-主" 
+                            show-search option-filter-prop="children"
+                            :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}"
+                            @change="changeDeviceMaster"
+                            :disabled="isEdit==1" 
+                            :filter-option="false" @search="filterOption" allowClear>
+                            
+                            <div slot="dropdownRender" slot-scope="menu">
+                                <v-nodes :vnodes="menu" />
+                                <a-divider style="margin: 4px 0;" />
+                                <div
+                                    style="padding: 4px 8px; cursor: pointer;"
+                                    @mousedown="e => e.preventDefault()"
+                                >
+                                <a-pagination size="small" :total="total"  @change="changeMasterPage" :pageSize='deviceParams.pageSize' :show-total="total => `共 ${total} 条`"/>
+                                </div>
+                                </div>
+                                <a-spin :spinning="fetching" slot="notFoundContent" size="small" />
+                                <template v-for="item in devicelist">
+                                    <a-select-option  :key="item.id" v-if="item.deviceMasterSlave == 22" :disabled="item.vehicleId!=0">
+                                        {{item.deviceName}}
+                                    </a-select-option>
+                                </template>
                             </a-select>
+
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="设备名称-从" prop="deviceSlave">
                             <a-select v-model="addForm.deviceSlave" 
                              placeholder="请选择设备名称-从"
-                           :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
+                             :disabled="isEdit==1"
+                           :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" @change="changeSeviceSlave" allowClear>
                               <template v-for="item in devicelist">
                                 <a-select-option :value="item.id" :key="item.id" v-if="item.deviceMasterSlave == 23">
                                         {{item.deviceName}}
@@ -111,7 +140,14 @@
                     </a-col>
                     <a-col :md="8">
                         <a-form-model-item label="车主姓名" prop="ownerName">
-                            <a-input v-model="addForm.ownerName" placeholder="请输入车主姓名"/>
+                            <a-select v-model="addForm.ownerName"
+                             placeholder="请选择车辆品牌"
+                             :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
+                              <a-select-option v-for="item in driverlist" :key="item.id">
+                                  {{item.driverName}}
+                              </a-select-option>
+                            </a-select>
+                           
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
@@ -337,13 +373,14 @@
 </template>
 
 <script>
-import {BaseList,AddVehicle,EditVehicle,DepartmentList,Devicelist,uploadOne} from '@/network/api'
+import {BaseList,AddVehicle,EditVehicle,DepartmentList,Devicelist,uploadOne,driverList} from '@/network/api'
 import pathUrl from "@/network/requestUrl";
 import debounce from 'lodash/debounce'
 
 export default {
   data() {
     return {
+      driverlist:[],
       title:"新增车辆",
       isVolume:'0',
       dialog:true,
@@ -382,7 +419,9 @@ export default {
          vehicleColor:'',
          vehicleLicenceColor:undefined,
          vehicleAbbr:'',
-         deviceSource:1
+         deviceSource:1,
+         masterDeviceNo:'',
+         slaveDeviceNo:'',
       },
       labelCol: { span: 5 },
       wrapperCol: { span: 16 },
@@ -421,7 +460,21 @@ export default {
           { required: true, message: '请输入货箱体积', trigger: 'blur' },
         ],
       },
+      deviceParams:{
+        pageNum:1,
+        pageSize:20,
+        deviceMasterSlave:'',
+        deviceName:'',
+      },
+      total:0,
+      fetching:false,
     }
+  },
+  components:{
+      VNodes: {
+      functional: true,
+      render: (h, ctx) => ctx.props.vnodes,
+    },
   },
   created(){
       this.save = debounce(this.save,500)//保存防止重复点击
@@ -443,6 +496,8 @@ export default {
               this.addForm.vehicleTransportPermitPhoto = '';
               this.addForm.vehicleContainerPhoto = '';
               this.addForm.vehicleOtherPhoto = '';
+              this.addForm.masterDeviceNo = '';
+              this.addForm.slaveDeviceNo = '';
           }else{
               this.title = '编辑车辆';
              this.addForm.id = record.id;
@@ -452,7 +507,7 @@ export default {
               this.addForm.vehicleLicenceColor = record.vehicleLicenceColor;
               this.addForm.vehicleColor = record.vehicleColor;
               this.addForm.volume = record.volume;
-              this.addForm.ownerName = record.ownerName;
+              this.addForm.ownerName = record.ownerName == 0 ? undefined : record.ownerName;
               this.addForm.ownerTel = record.ownerTel;
               this.addForm.vehicleStarBeacon = record.vehicleStarBeacon == 0 ? undefined : record.vehicleStarBeacon;
               this.addForm.vehicleBrand = record.vehicleBrand == 0 ? undefined : record.vehicleBrand;
@@ -474,10 +529,13 @@ export default {
               this.addForm.vehicleContainerPhoto = record.vehicleContainerPhoto;
               this.addForm.vehicleOtherPhoto = record.vehicleOtherPhoto;
               this.addForm.vehicleAbbr = record.vehicleAbbr;
+              this.addForm.masterDeviceNo = '';
+              this.addForm.slaveDeviceNo = '';
           }
           document.querySelector('.ant-modal-body').scrollTop = 0;
       })
       this.getDepart();
+      this.getDriverList();
       this.getDepart(82);
       this.getDevice();
       this.getType(51,1);
@@ -511,14 +569,37 @@ export default {
         });
     },
     getDevice(){
-         let params = {
-            pageNum:1,
-            pageSize:999,
-            deviceMasterSlave:'',
-         } 
-         Devicelist(params).then(res=>{
+        this.fetching = true;
+         Devicelist(this.deviceParams).then(res=>{
             if(res.data.code == 0){
+                this.fetching = false;
                 this.devicelist = res.data.data.records;
+                this.total = res.data.data.total;
+            }else{
+                this.$message.warning('加载失败')
+            };
+            
+        });
+    },
+    changeMasterPage(page){
+        this.deviceParams.pageNum = page;
+        this.getDevice();
+    },
+    filterOption(val) {
+      this.deviceParams.pageNum = 1;
+      this.deviceParams.deviceName = val;
+      this.getDevice();
+    },
+    getDriverList(){
+         let params = {
+             deptId: '',
+             driverName: '',
+             pageNum:1,
+             pageSize:999,
+         } 
+         driverList(params).then(res=>{
+            if(res.data.code == 0){
+                this.driverlist = res.data.data.records;
             }else{
                 this.$message.warning('加载失败')
             };
@@ -652,7 +733,7 @@ export default {
           if(this.isEdit == 0){
              this.onSubmit(params);
           }else{
-
+              params.ownerName =  params.ownerName ?  params.ownerName : 0;
             params.deviceSlave =  params.deviceSlave ?  params.deviceSlave : 0;
             params.vehicleStarBeacon =  params.vehicleStarBeacon ?  params.vehicleStarBeacon : 0;
             params.vehicleBrand =  params.vehicleBrand ?  params.vehicleBrand : 0;
@@ -695,6 +776,22 @@ export default {
           };
       });
     },
+    changeDeviceMaster(val,option){
+        console.log(option)
+        this.addForm.masterDeviceNo = this.slectNo(val);
+    },
+    slectNo(val){
+        let simNo = '';
+        this.devicelist.forEach(cur=>{
+            if(cur.id == val){
+                simNo = cur.simNo
+            }
+        })
+        return simNo
+    },
+    changeSeviceSlave(val){
+         this.addForm.slaveDeviceNo = this.slectNo(val);
+    }
   }
 }
 </script>

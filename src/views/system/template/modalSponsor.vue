@@ -13,7 +13,7 @@
                             </a-checkbox-group> 
                        
                     </a-tab-pane>
-                    <a-tab-pane key="2" tab="选择用户">
+                    <!-- <a-tab-pane key="2" tab="选择用户">
                         <a-checkbox-group v-model="checkUseList">
                                 <div v-for="item in userList" :key="item.id" class="base_dep">
                                     <a-checkbox :value="item.id" >
@@ -21,7 +21,7 @@
                                     </a-checkbox>
                                 </div>
                             </a-checkbox-group> 
-                    </a-tab-pane>
+                    </a-tab-pane> -->
                 </a-tabs>
                 
               

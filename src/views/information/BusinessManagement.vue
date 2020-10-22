@@ -3,10 +3,10 @@
 
        <div class="table-operator">
            <div class="left_button">
-               <a-button type="primary" icon="plus" @click="addBusiness(0)">
+               <a-button type="primary" icon="plus" @click="addBusiness(0)" v-if="isAdd">
                   新增
                 </a-button>
-                <a-button @click="exportDep">
+                <a-button @click="exportDep" v-if="isExport">
                   导出
                 </a-button>
            </div>
@@ -39,7 +39,7 @@
        </div>
         
 
-        <a-table :columns="columns" bordered :data-source="tableData" :rowKey='record' size="middle" :pagination="pagination" :loading="loading" :scroll="{x:1800,y:height}">
+        <a-table :columns="columns" bordered :data-source="tableData" @change="changeTable" :rowKey='record' size="middle" :pagination="pagination" :loading="loading" :scroll="{x:1800,y:height}">
                 <a slot="deptName" slot-scope="text,record" @click="viewDetails(record)">
                     {{record.deptName}}
                 </a>
@@ -51,10 +51,13 @@
                     <a-badge v-else status="error" text="无效"></a-badge>
                 </span>
                 <span slot="action" slot-scope="text,record">
-                    <a @click="addBusiness(1,record)">编辑</a>
+                    <a @click="addBusiness(1,record)" v-if="isEdit">编辑</a>
                     <a-divider type="vertical" />
-                    <a @click="cancellation(record)" v-if="record.activition == 1">启用</a>
-                    <span class="yellow" @click="cancellation(record)" v-else>注销</span>
+                    <template v-if="isEdit">
+                      <a @click="cancellation(record)" v-if="record.activition == 1">恢复</a>
+                      <span class="yellow" @click="cancellation(record)" v-else>注销</span>
+                    </template>
+                    
                 </span>
         </a-table>
 
@@ -201,7 +204,10 @@ export default {
         pageSizeOptions: ["10", "20", "50", "100"],//每页中显示的数据
         showQuickJumper:true,
         showTotal:total => `共 ${total} 条`
-      }
+      },
+      isAdd:false,
+      isEdit:false,
+      isExport:false
     }
   },
   components:{
@@ -221,8 +227,24 @@ export default {
       this.height = document.documentElement.clientHeight - 295
     },
     init(){
+      this.permissionControl()
       this.getData();
       this.getDepType();
+    },
+    permissionControl(){
+     
+      let permission =  JSON.parse(this.$getStorage('permission'));
+      
+      console.log(permission)
+      permission.forEach(cur=>{
+        if(cur.menuPermission == 'sys:dept:add'){
+          this.isAdd = true;
+        }else if(cur.menuPermission == 'sys:dept:edit'){
+          this.isEdit = true;
+        }else if(cur.menuPermission == 'sys:dept:export'){
+          this.isExport = true;
+        }
+      })
     },
     getData(){
          this.loading = true;
@@ -310,6 +332,11 @@ export default {
           }
          
       });
+    },
+    changeTable(pagination){
+      this.pagination.current = pagination.current;
+      this.formParmas.pageNum = pagination.current;
+      this.getData()
     }
   }
 }

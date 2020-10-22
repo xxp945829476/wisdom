@@ -2,7 +2,7 @@
    <div class="layout_card_content">
         <div class="table-operator">
            <div class="left_button">
-                <a-button type="primary" icon="plus" @click="addTemplate">
+                <a-button type="primary" icon="plus" @click="addTemplate" v-if="isAdd">
                   新增证件模板
                 </a-button>
            </div>
@@ -27,21 +27,54 @@
        </div>
 
         <a-table :columns="columns" bordered size="middle" :rowKey='record' :data-source="tableData" @change="changeTable" :row-selection="{ onChange: onSelectChange }" :pagination="pagination" :scroll="{x:800,y:height}" :loading="loading">
-                <span slot="disabled" slot-scope="text">
-                    <span v-if="text==0">激活</span>
-                    <span v-else>禁用</span>
+                <span slot="activition" slot-scope="text,record">
+                    <span v-if="text==0">有效</span>
+                    <span v-else>无效</span>
+                     <a-divider type="vertical" />
+                    <span v-if="record.workflowStatus==0">未停用</span>
+                    <span v-else>已停用</span>
+                </span>
+                <span  slot="approvalFormPhoto" slot-scope="text,record">
+                    <a v-if="text" @click="download(record.approvalFormPhotoName,text)">{{record.approvalFormPhotoName}}</a>
+                    <a v-if="!text && record.activition == 0 " >
+                       <a-popover v-model="record.visible" trigger="click">
+                         <span slot="content" >
+                           <div>
+                             <a-upload
+                              name="file"
+                              :before-upload="upload"
+                              :showUploadList="false"
+                              :data="record"
+                            >
+                            <a-button> <a-icon type="upload" /> 上传 </a-button>
+                            </a-upload>
+                           </div>
+                         </span>
+                            
+                           <span @click="popover(record.id)">
+                             上传
+                           </span>
+                              
+                        </a-popover>
+                     
+                    </a>
+                    <span v-if="record.activition != 0 && !text">待上传</span>
                 </span>
                 <span slot="action" slot-scope="text,record">
-                    <a @click="addUser(1,record)">注销</a>
-                    <a-divider type="vertical" />
-                    <span @click="delUser(record)" class="yellow">启用</span>
+                    <template v-if="isEdit">
+                       <span class="yellow" @click="cancellation(record)" v-if="record.activition == 0">注销</span>
+                        <a @click="cancellation(record)" v-else>恢复</a>
+                        <a-divider type="vertical" />
+                        <span class="yellow" @click="enable(record)" v-if="record.workflowStatus == 0">停用</span>
+                        <a @click="enable(record)" v-else>启用</a>
+                    </template>
+                   
                 </span>
         </a-table>
 
-        <modalUser ref="add_user" @triggerData="getData"></modalUser>
 
         <!-- 新增证件模板 -->
-         <a-modal v-model="templateVisible" title="新增证件模板" :maskClosable="false" :keyboard="false" width="70%" v-dialogDrag="dialog">
+         <a-modal v-model="templateVisible" title="新增证件模板" :maskClosable="false" :keyboard="false" width="800px" v-dialogDrag="dialog">
            <div>
                <a-radio-group name="radioGroup" v-model="templateSelect">
                 <a-radio :value="1">
@@ -52,15 +85,29 @@
                 </a-radio>
               </a-radio-group>
            </div>
+           <a-spin :spinning="spinning">
+           <a-row :gutter="15" v-if="templateSelect==2">
+              <a-col :md="8" v-for="item in copyList" :key="item.id" @click="editTemplate(2,item)">
+                <a-row type="flex" class="copy_template" align="middle">
+                  <a-col class="copy_template_icon">
+                    <i class="iconbiaodanmoban iconfont"></i>
+                  </a-col>
+                  <a-col flex="auto" class="ellipsis">
+                    {{item.workflowName}}
+                  </a-col>
+                </a-row>
+              </a-col>
+            </a-row>
+           </a-spin>
             <template slot="footer">
-              <a-button key="submit" type="primary" @click="editTemplate">
+              <a-button key="submit" type="primary" @click="editTemplate(1)">
                   自定义模板
               </a-button>
             </template>
          </a-modal>
 
          <!-- 绘制模板 -->
-         <editTemplate ref="edit_template"></editTemplate>
+         <editTemplate ref="edit_template" @close='close'></editTemplate>
    </div>
 </template>
 
@@ -68,8 +115,8 @@
 
 import modalUser from './modalUser.vue'
 import editTemplate from './template/template.vue'
-
-import {UserList,DelUser,DelUserBatch} from '@/network/api'
+import pathUrl from "@/network/requestUrl"
+import {ListAllWorkflow,DelUser,DelUserBatch,EditWorkflow ,uploadOne,Download} from '@/network/api'
 
 
 
@@ -81,46 +128,40 @@ export default {
       },align:'center'},
       {
         title: '证件模板',
+        dataIndex: 'workflowName',
+        key: 'workflowName',
+        align:'center',
+        ellipsis:true,
+      },
+      {
+        title: '创建人',
         dataIndex: 'account',
         key: 'account',
         align:'center',
         ellipsis:true,
       },
       {
-        title: '创建人',
-        dataIndex: 'deptName',
-        key: 'deptName',
-        align:'center',
-        ellipsis:true,
-      },
-      {
         title: '状态',
-        dataIndex: 'disabled',
-        key: 'disabled',
+        dataIndex: 'activition',
+        key: 'activition',
         align:'center',
         ellipsis:true,
-        scopedSlots: { customRender: 'disabled' },
+        scopedSlots: { customRender: 'activition' },
       },
       {
         title: '创建时间',
-        dataIndex: 'disabled0',
-        key: 'disabled0',
-        align:'center',
-        ellipsis:true,
-      },
-       {
-        title: '发布时间',
-        dataIndex: 'disabled1',
-        key: 'disabled1',
+        dataIndex: 'createTime',
+        key: 'createTime',
         align:'center',
         ellipsis:true,
       },
       {
         title: '运输资格审批表',
-        dataIndex: 'disabled2',
-        key: 'disabled2',
+        dataIndex: 'approvalFormPhoto',
+        key: 'approvalFormPhoto',
         align:'center',
         ellipsis:true,
+        scopedSlots: { customRender: 'approvalFormPhoto' },
       },
       {
         title: '操作',
@@ -128,10 +169,13 @@ export default {
         width:'200px',
         align:'center',
         scopedSlots: { customRender: 'action' },
+        fixed: 'right',
       },
     ];
       
     return {
+      spinning:false,
+      pathUrl,
       dialog:true,
       templateSelect:1,
       templateVisible:false,
@@ -159,7 +203,11 @@ export default {
         pageSizeOptions: ["10", "20", "50", "100"],//每页中显示的数据
         showQuickJumper:true,
         showTotal:total => `共 ${total} 条`
-      }
+      },
+      id:'',
+      copyList:'',
+      isAdd:'',
+      isEdit:'',
     }
   },
   components:{
@@ -167,6 +215,7 @@ export default {
     editTemplate
   },
   created(){
+    
     this.init()
   },
   mounted(){
@@ -176,15 +225,50 @@ export default {
   },
   methods:{
     init(){
+      this.permissionControl();
       this.getData();
+    },
+    permissionControl(){
+     
+      let permission =  JSON.parse(this.$getStorage('permission'));
+      
+      console.log(permission)
+      permission.forEach(cur=>{
+        if(cur.menuPermission == 'sys:workflow:add'){
+          this.isAdd = true;
+        }else if(cur.menuPermission == 'sys:workflow:edit'){
+          this.isEdit = true;
+        }
+      })
     },
     getData(){
         this.loading = true;
-        UserList(this.formParmas).then(res=>{
+        ListAllWorkflow(this.formParmas).then(res=>{
             this.loading = false;
             if(res.data.code == 0){
                 this.tableData = res.data.data.records;
+                 this.tableData.forEach(cur=>{
+                    this.$set(cur,'visible',false)
+                    cur.createTime = this.$moment.unix(cur.createTime).format('YYYY-MM-DD HH:mm:ss') 
+                });
                 this.pagination.total = res.data.data.total;
+            }else{
+                this.$message.warning('加载失败')
+            };
+            
+        });
+    },
+    getDataCopy(){
+        let  formParmas = {
+        account:'',
+        pageNum: 1,
+        pageSize: 9999,
+      };
+      this.spinning = true;
+        ListAllWorkflow(formParmas).then(res=>{
+           this.spinning = false;
+            if(res.data.code == 0){
+                this.copyList = res.data.data.records;
             }else{
                 this.$message.warning('加载失败')
             };
@@ -281,13 +365,106 @@ export default {
     },
     addTemplate(){
       this.templateVisible = true;
+      this.getDataCopy()
     },
     changeTable(pagination){
-      this.pagination.current = pagination.current
+      this.pagination.current = pagination.current;
+      this.formParmas.pageNum = pagination.current;
       this.getData()
     },
-    editTemplate(){
-      this.$refs.edit_template.editTemplate()
+    editTemplate(val,items){
+      this.$refs.edit_template.editTemplate(val,items)
+    },
+    cancellation(obj){
+      //注销
+
+       let params = {
+        id:obj.id,
+        activition:obj.activition == 0 ? 1 : 0
+       };
+
+        EditWorkflow(params).then(res=>{
+
+            if(res.data.code == 0){
+              this.getData();
+              this.$message.success('操作成功');
+            }else{
+              this.$message.warning('操作失败')
+            };
+        })
+    },
+    enable(obj){
+       let params = {
+        id:obj.id,
+        workflowStatus:obj.workflowStatus == 0 ? 1 : 0
+       };
+
+        EditWorkflow(params).then(res=>{
+
+            if(res.data.code == 0){
+              this.getData();
+              this.$message.success('操作成功');
+            }else{
+              this.$message.warning('操作失败')
+            };
+        })
+    },
+    upload(file, fileList){
+
+       let param = new FormData()
+        param.append('file',file);
+        param.append('approvalFormPhotoName',file.name);
+        console.log(fileList)
+        uploadOne(param).then(res=>{
+            if(res.data.code == 0){
+                this.uploadOk(res.data.data.path,file.name)
+            };
+        })
+        return false
+    },
+    uploadOk(val,name){
+
+       let params = {
+        id:this.id,
+        approvalFormPhoto: val,
+        approvalFormPhotoName:name
+       };
+
+        EditWorkflow(params).then(res=>{
+
+            if(res.data.code == 0){
+              this.getData();
+              this.$message.success('上传成功');
+            }else{
+              this.$message.warning('上传失败')
+            };
+        })
+    },
+    popover(id){
+      this.id = id;
+    },
+    download(name,val){
+        Download({
+            "fileName": name,
+            "path" : val
+        }).then(res=>{
+   
+        
+          const csvData = new Blob([res.data]);
+          let a = document.createElement('a');
+                document.body.appendChild(a);
+                a.style = 'display: none';
+                const url = window.URL.createObjectURL(csvData);
+                a.href = url;
+                a.download = name;
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+        })
+    },
+    close(){
+      this.templateVisible = false;
+      this.getData();
     }
   }
 }

@@ -3,7 +3,7 @@
 
         <div class="table-operator">
            <div class="left_button">
-               <a-button type="primary" icon="plus" @click="addRole(0)">
+               <a-button type="primary" icon="plus" @click="addRole(0)" v-if="isAdd">
                   新增
                 </a-button>
            </div>
@@ -31,9 +31,12 @@
         </div> -->
         <a-table :columns="columns" bordered :data-source="tableData" :rowKey='record' :pagination="pagination" @change="changeTable" :scroll="{y:height}" size="middle" :loading="loading">
                 <span slot="action" slot-scope="text,record">
+                  <template v-if="isRoleAdd">
                     <a @click="empower(record)">授权</a>
                     <a-divider type="vertical" />
-                    <a @click="addRole(1,record)">编辑</a>
+                  </template>
+                    
+                    <a @click="addRole(1,record)" v-if="isEdit">编辑</a>
                     <!-- <a-divider type="vertical" />
                     <a>删除</a> -->
                 </span>
@@ -110,7 +113,11 @@ export default {
         pageSizeOptions: ["10", "20", "50", "100"],//每页中显示的数据
         showQuickJumper:true,
         showTotal:total => `共 ${total} 条`
-      }
+      },
+      isRoleAdd:false,
+      isRoleEdit:false,
+      isEdit:false,
+      isAdd:false,
     }
   },
   components:{
@@ -127,7 +134,24 @@ export default {
   },
   methods:{
     init(){
+      this.permissionControl();
       this.getData();
+    },
+    permissionControl(){
+     
+      let permission =  JSON.parse(this.$getStorage('permission'));
+
+      permission.forEach(cur=>{
+        if(cur.menuPermission == 'sys:roleMenu:add'){
+          this.isRoleAdd = true;
+        }else if(cur.menuPermission == 'sys:roleMenu:edit'){
+          this.isRoleEdit = true;
+        }else if(cur.menuPermission == 'sys:role:add'){
+          this.isAdd = true;
+        }else if(cur.menuPermission == 'sys:role:edit'){
+          this.isEdit = true;
+        }
+      })
     },
     getData(){
         this.loading = true;
@@ -170,6 +194,7 @@ export default {
     },
     changeTable(pagination){
       this.pagination.current = pagination.current
+      this.formParmas.pageNum = pagination.current;
       this.getData()
     }
   }
