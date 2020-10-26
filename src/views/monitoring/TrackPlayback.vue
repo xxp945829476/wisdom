@@ -2,7 +2,7 @@
   <div>
     <a-row type="flex">
       <a-col :flex="leftWidth" class="left_content" ref="left_content">
-        <a-form-model :model="form" layout="inline" class="left_search" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form-model :model="formParmas" layout="inline" class="left_search" :label-col="labelCol" :wrapper-col="wrapperCol">
           <a-form-model-item>
             <a-input-search
               v-model="formParmas.vehicleNo"
@@ -25,7 +25,7 @@
         </div>
 
         <div class="sel_date">
-          <a-form-model :model="form" :label-col="labelCol_1" :wrapper-col="wrapperCol_1">
+          <a-form-model :model="formParmas" :label-col="labelCol_1" :wrapper-col="wrapperCol_1">
             <a-form-model-item label="日期" v-if="queryValue==1">
              <a-date-picker v-model="formParmas.day" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD"/>
             </a-form-model-item>
@@ -45,42 +45,42 @@
 
         <a-spin :spinning="spinning"> 
         <ul class="play_back_box">
-          <li v-if="firstList" :class="{'play_back_li':isLi==-1}" @click="subsection('',-1)">
+          <li v-if="firstList" :class="{'play_back_li':isLi==-1}" @click="subsection(firstList.gt,lastList.gt,-1)">
             <div class="play_back_list_start">
               <img src="@/assets/images/icon11.png"/>
               <span>
-                <em>{{firstList.rt}}</em>
+                <em>{{firstList.gt}}</em>
                 <p>{{firstList.ps}}</p>
               </span>
             </div>
             <div class="play_back_list_start">
               <img src="@/assets/images/icon10.png"/>
               <span>
-                <em>{{lastList.rt}}</em>
+                <em>{{lastList.gt}}</em>
                 <p>{{lastList.ps}}</p>
               </span>
             </div>
-            <div class="mileage">里程：{{(firstList.lc-lastList.lc)/1000}}km&nbsp;&nbsp;&nbsp;时间：{{diffTime(firstList.rt,lastList.rt)}}</div>
+            <div class="mileage">里程：{{statisticsLcTotal(allList,firstList.gt,lastList.gt)}}km&nbsp;&nbsp;&nbsp;时间：{{diffTime(firstList.gt,lastList.gt)}}</div>
             <div class="play_back_tips">总计</div>
           </li>
 
          
-          <li v-for="(item,index) in partitions" :key="'a'+index" @click="subsection(item,index)" :class="{'play_back_li':isLi==index}">
+          <li v-for="(item,index) in partitions" :key="'a'+index" @click="subsection(item.start.gt,item.end.gt,index)" :class="{'play_back_li':isLi==index}">
             <div class="play_back_list_start">
               <img src="@/assets/images/icon11.png"/>
               <span>
-                <em>{{item.start.rt}}</em>
+                <em>{{item.start.gt}}</em>
                 <p>{{item.start.ps}}</p>
               </span>
             </div>
             <div class="play_back_list_start">
               <img src="@/assets/images/icon10.png"/>
               <span>
-                <em>{{item.end.rt}}</em>
+                <em>{{item.end.gt}}</em>
                 <p>{{item.end.ps}}</p>
               </span>
             </div>
-            <div class="mileage">里程：{{(item.end.lc-item.start.lc)/1000}}km&nbsp;&nbsp;&nbsp;时间：{{diffTime(item.start.gt,item.end.gt)}}</div>
+            <div class="mileage">里程：{{statisticsLc(item)}}km&nbsp;&nbsp;&nbsp;时间：{{diffTime(item.start.gt,item.end.gt)}}</div>
             <div class="play_back_tips play_back_section">分段{{index+1}}</div>
           </li>
          
@@ -160,7 +160,7 @@
               <i class="iconzuixiaohua1 iconfont enlarge_icon" @click="enlarge" v-else></i>
           </a-row>
           <div class="status_list_content">
-            <a-table :columns="columns" :rowKey='record' :data-source="tableData" :scroll="{ x: 1200,y:height}" :pagination="false" size="middle" :loading='loading'>
+            <a-table :columns="columns" :rowKey='record' :data-source="tableData" :scroll="{ x: 1200,y:height}" :pagination="pagination" @change="changeTable" size="small" :loading='loading'>
               <template slot="hx" slot-scope="text">
                   <span v-if="text==0||text==360">北</span>
                   <span v-if="text>0&&text<90">西北</span>
@@ -187,11 +187,19 @@
               </template>
             </a-table>
           </div>
+
+          
           
         </div>
         <div class="drag_status_list_nav" ref="drag"></div>
 
+        
+
       </a-col>
+    
+         
+     
+     
     </a-row>
   </div>
 </template>
@@ -215,8 +223,8 @@ export default {
     return <a href="javascript:;">{index}</a>;
   },align:'center'},
   { title: '位置',width: 200, dataIndex: 'ps', key: 'ps' ,ellipsis:true,align:'center',},
-  { title: '定位时间',width: 150,dataIndex: 'gt', key: 'gt',ellipsis:true,align:'center',},
-  { title: '接收时间',width: 150,dataIndex: 'rt', key: 'rt',ellipsis:true,align:'center',},
+  { title: '定位时间',width: 150,dataIndex: 'rt', key: 'rt',ellipsis:true,align:'center',},
+  { title: '接收时间',width: 150,dataIndex: 'gt', key: 'gt',ellipsis:true,align:'center',},
   { title: '传输方式',dataIndex: 'way', key: 'way',ellipsis:true,align:'center',scopedSlots: { customRender: 'way' }},
   { title: '车辆状态',dataIndex: 'vehicleStatus', key: 'vehicleStatus',ellipsis:true,align:'center',scopedSlots: { customRender: 'vehicleStatus' }},
  { title: 'acc开关',dataIndex: 's1', key: 's1',ellipsis:true,align:'center',scopedSlots: { customRender: 'accSwitch' }},
@@ -286,6 +294,17 @@ export default {
       allList:[],
       firstList:'',
       lastList:'',
+      pagination:{
+        total:0,
+        size:'small',
+        showSizeChanger: true,
+        showLessItems:false,
+        current:1,
+        pageSize:20,
+        pageSizeOptions: ["10", "20", "50", "100"],//每页中显示的数据
+        showQuickJumper:true,
+        showTotal:total => `共 ${total} 条`
+      },
     }
   },
   components:{
@@ -302,12 +321,12 @@ export default {
     this.$nextTick(()=>{
       let h1 = this.$refs.right_map.$el.offsetHeight;
       let h2 = this.$refs.bm_view.$el.offsetHeight;
-      this.height = h1 - h2 - 92;//计算列表最大高度
+      this.height = h1 - h2 - 138;//计算列表最大高度
       this.dragLine()//上下拖动列表
     });
 
     this.$once('hook:beforeDestroy', () => {
-      document.querySelector('.ant-table-body').removeEventListener('scroll',this.scrollLoad,false)
+      // document.querySelector('.ant-table-body').removeEventListener('scroll',this.scrollLoad,false)
     })
   },
   methods:{
@@ -332,7 +351,7 @@ export default {
             iT > maxT && (iT = maxT);
             oLine.style.top = oTop.style.height = iT + "px";
             oBottom.style.height = maxHeight - iT + "px"
-            that.height = oBox.offsetHeight - oTop.offsetHeight - 92;
+            that.height = oBox.offsetHeight - oTop.offsetHeight - 138;
           }
 
           document.onmouseup = function() {
@@ -345,7 +364,7 @@ export default {
         }
         
 
-         document.querySelector('.ant-table-body').addEventListener('scroll',this.scrollLoad);
+        //  document.querySelector('.ant-table-body').addEventListener('scroll',this.scrollLoad);
         
        
     },
@@ -378,6 +397,20 @@ export default {
       }
       
     },
+    changeTable(pagination){
+      console.log(pagination)
+       this.pagination.current = pagination.current;
+       this.pagination.pageSize = pagination.pageSize;
+       this.tableData = [];
+        this.tableData = JSON.parse(JSON.stringify(this.allList)).slice((pagination.current-1)*pagination.pageSize,pagination.current*pagination.pageSize);
+        console.log(this.tableData)
+        this.tableData.forEach(cur=>{
+          cur.lc = cur.lc/1000;
+          cur.sp = cur.sp/10;
+          cur.s1 = this.binary(cur.s1);
+          this.geocoding(cur)
+        });
+    },
     enlarge(){
       this.isEnlarge = !this.isEnlarge;
       if(this.isEnlarge){
@@ -385,12 +418,12 @@ export default {
         this.$refs.status_list.style.height = '100%'
         console.log(this.$refs.right_map.$el.offsetHeight)
         console.log(this.$refs.status_list.style.height)
-        this.height = this.$refs.right_map.$el.offsetHeight - 92;
+        this.height = this.$refs.right_map.$el.offsetHeight - 138;
         this.$refs.drag.style.top = 0;
       }else{
         this.$refs.bm_view.$el.style.height = 'calc(50vh + 40px)';
         this.$refs.status_list.style.height = 'auto';
-        this.height = this.$refs.right_map.$el.offsetHeight - this.$refs.bm_view.$el.offsetHeight - 92;
+        this.height = this.$refs.right_map.$el.offsetHeight - this.$refs.bm_view.$el.offsetHeight - 138;
          this.$refs.drag.style.top = 'calc(50vh + 39px)';
       }
     },
@@ -420,31 +453,55 @@ export default {
       // this.end = new BMap.Point(120.34439,31.503154) 
 
     },
-    getData(){
+    getData(val){
       this.loading = true
       this.spinning = true;
+      this.pagination.current = 1;
       QueryTrackDetail(this.formParmas).then(res=>{
          this.loading = false;
          this.spinning = false;
           if(res.data.code == 0){
+
            this.allList = res.data.data;
-           this.tableData = res.data.data.splice(0,this.currentPageSize);
-           this.partitions = res.data.partitions;
-           this.firstList = res.data.first;
-           this.lastList = res.data.last;
-           if(res.data.partitions){
-             this.partitions.forEach(cur=>{
-   
-               this.curStopList.push(new this.BMap.Point(cur.end.mlng,cur.end.mlat))
-             })
+          
+           if(val != 1){
+             this.partitions = res.data.partitions;
+              this.firstList = res.data.first;
+              this.lastList = res.data.last;
+              
+      
+
+              if(res.data.partitions){
+                this.partitions.forEach(cur=>{
+      
+                  this.curStopList.push(new this.BMap.Point(cur.end.mlng,cur.end.mlat))
+                  this.geocoding(cur.start)
+                  this.geocoding(cur.end)
+                })
+              };
            };
+           
          
            if(res.data.data){
               res.data.data.forEach(cur=>{
               this.pathArr.push(
                 new this.BMap.Point(cur.mlng,cur.mlat)
-              )
+              );
+              
             });
+
+             this.pagination.total = res.data.data.length - 1;
+               this.tableData = JSON.parse(JSON.stringify(res.data.data)).slice(0,50);
+               console.log(this.tableData)
+               this.tableData.forEach(cur=>{
+                 cur.lc = cur.lc/1000;
+                  cur.sp = cur.sp/10;
+                 cur.s1 = this.binary(cur.s1);
+                 this.geocoding(cur)
+               });
+
+                this.geocoding(this.firstList)
+           this.geocoding(this.lastList)
 
             this.path = this.pathArr;
 
@@ -474,12 +531,7 @@ export default {
              
 
 
-               this.tableData.forEach(cur=>{
-                 cur.lc = cur.lc/1000;
-                  cur.sp = cur.sp/10;
-                 cur.s1 = this.binary(cur.s1);
-                 this.geocoding(cur)
-               });
+               
               
            }else{
              this.pathArr = [];
@@ -497,16 +549,32 @@ export default {
       })
     },
     geocoding(location){
-        let params = {
-          ak:this.$store.getters.ak,
-          location:location.lat/1000000 + ',' + location.lng/1000000
-        };
-        Geocoding(params).then(res=>{
-           if(res.data.code == 0){
-             let data = JSON.parse(res.data.data);
-             location.ps = data.result.formatted_address
-          }
-        });
+
+       var geoc = new this.BMap.Geocoder();  
+      let point = {
+        lat:location.mlat,
+        lng:location.mlng
+      };
+
+      geoc.getLocation(new this.BMap.Point(location.mlng,location.mlat),function(rs){
+
+   
+        let addComp = rs.address;
+       location.ps = addComp
+
+        
+        // console.log(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+      })
+        // let params = {
+        //   ak:this.$store.getters.ak,
+        //   location:location.lat/1000000 + ',' + location.lng/1000000
+        // };
+        // Geocoding(params).then(res=>{
+        //    if(res.data.code == 0){
+        //      let data = JSON.parse(res.data.data);
+        //      location.ps = data.result.formatted_address
+        //   }
+        // });
     },
      binary(n){
             let output=[], temp;
@@ -522,9 +590,10 @@ export default {
       const date1=this.$moment(s);
       const date2=this.$moment(e);
       const date3=date2.diff(date1,'minute');
-      const h=Math.floor(date3/60);
-      console.log(h)
-      return h +'h' +' ' + date3 + 'min'
+      const h = Math.floor(date3/60);
+      const m = date3 - h*60;
+
+      return h +'h' +' ' + m + 'min'
     },
     onSearch(){
       this.pathArr = [];
@@ -629,54 +698,18 @@ export default {
       }
       
     },
-    subsection(item,i){
-      console.log(item)
+    subsection(start,end,i){
+      console.log(end)
+      this.formParmas.begintime = start;
+      this.formParmas.endtime = end;
+      this.pagination.current = 1;
       this.tableData = [];
-      this.currentPageSize = 20;
+      this.spotStop = false;
       this.isLi = i;
-       this.map.clearOverlays()
-       this.stopDown = false;
-       this.spotStop = false;
        this.curStopList = [];
-       this.$nextTick(()=>{
-          if(item){
-              this.allList = item.process;
-              console.log(this.currentPageSize)
-              this.tableData = JSON.parse(JSON.stringify(item.process)).splice(0,this.currentPageSize);
-              console.log(this.tableData)
-              this.pathArr = [];
-            item.process.forEach(cur=>{
-              this.pathArr.push(
-                new this.BMap.Point(cur.mlng,cur.mlat)
-              );
-            });
-
-            this.tableData.forEach(cur=>{
-                      cur.lc = cur.lc/1000;
-                        cur.sp = cur.sp/10;
-                      cur.s1 = this.binary(cur.s1);
-                    });
-
-            this.path = this.pathArr;
-
-            this.start = this.pathArr[0]
-
-            this.end = this.pathArr[this.pathArr.length - 1]
-
-            this.map.addOverlay(new this.BMap.Polyline(this.path,  {
-                      enableEditing: false,//是否启用线编辑，默认为false
-                      enableClicking: false,//是否响应点击事件，默认为true
-                      // icons:[icons],
-                      strokeWeight:'8',//折线的宽度，以像素为单位
-                      strokeOpacity: 1,//折线的透明度，取值范围0 - 1
-                      strokeColor:"#49cc7d" //折线颜色
-                    }));
-
-            }else{
-              this.getData()
-            }
-       })
-       
+       this.pathArr = [];
+      this.map.clearOverlays()
+      this.getData(1)
       
       
     },
@@ -713,6 +746,38 @@ export default {
             link.remove();
           }
       })
+    },
+    statisticsLc(item){
+      let sd = 0;
+      let totalSd = 0;
+      const date1=this.$moment(item.start.gt);
+      const date2=this.$moment(item.end.gt);
+      const date3=date2.diff(date1,'minute');
+      const h=date3/60;
+      console.log(h)
+
+    
+      item.process.forEach(cur=>{
+          totalSd = totalSd + cur.sp/10;
+      })
+      sd = totalSd/item.process.length
+       return (h * sd).toFixed(1)
+    },
+    statisticsLcTotal(allList,s,e){
+      let sd = 0;
+      let totalSd = 0;
+      const date1=this.$moment(s);
+      const date2=this.$moment(e);
+      const date3=date2.diff(date1,'minute');
+      const h=date3/60;
+      console.log(h)
+
+      console.log(allList)
+      allList.forEach(cur=>{
+          totalSd = totalSd + cur.sp/10;
+      })
+      sd = totalSd/allList.length
+       return (h * sd).toFixed(1)
     }
   }
 }

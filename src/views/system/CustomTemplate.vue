@@ -197,7 +197,7 @@ export default {
         total:0,
         size:'middle',
         showSizeChanger: true,
-        showLessItems:true,
+        showLessItems:false,
         current:1,
         pageSize:20,
         pageSizeOptions: ["10", "20", "50", "100"],//每页中显示的数据
@@ -370,6 +370,8 @@ export default {
     changeTable(pagination){
       this.pagination.current = pagination.current;
       this.formParmas.pageNum = pagination.current;
+      this.formParmas.pageSize = pagination.pageSize;
+      this.pagination.pageSize = pagination.pageSize;
       this.getData()
     },
     editTemplate(val,items){

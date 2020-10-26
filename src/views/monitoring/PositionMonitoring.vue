@@ -16,7 +16,7 @@
         <div>
           <h2 class="all_car" @click="screenTree(6)">请选择车辆类型：</h2>
           <div class="index_type">
-            <a-radio-group v-model="form.vehicleType">
+            <a-radio-group v-model="form.vehicleType" @change="changeType">
             <a-radio v-for="item in typeList" :key="item.id" :value="item.id">
               {{item.name}}
             </a-radio>
@@ -38,7 +38,7 @@
             <a-col :span="6"  @click="screenTree(2)" :class="{select_car:deviceStatusValue==2}">
               <img src="@/assets/images/yc.png"/>
               <span>异常</span>
-              <em class="num_zx">{{onLine}}</em>
+              <em class="num_zx">0</em>
             </a-col>
             <a-col :span="6"  @click="screenTree(3)" :class="{select_car:deviceStatusValue==3}">
               <img src="@/assets/images/lx.png"/>
@@ -93,12 +93,12 @@
               <a-col flex="100px" @click="filterData(0)" :class="{'cur_statue':curStatue==0}">行驶（{{downMove}}）</a-col>
               <a-col flex="100px" @click="filterData(1)" :class="{'cur_statue':curStatue==1}">停车（{{downStop}}）</a-col>
               <a-col flex="100px" @click="filterData(3)" :class="{'cur_statue':curStatue==3}">离线（{{downOffline}}）</a-col>
-              <a-col flex="100px" @click="filterData(2)" :class="{'cur_statue':curStatue==2}">在线（{{downOnline}}）</a-col>
+              <a-col flex="100px" @click="filterData(2)" :class="{'cur_statue':curStatue==2}">异常（0）</a-col>
               <i class="iconzuidahua1 iconfont enlarge_icon" @click="enlarge" v-if="!isEnlarge"></i>
               <i class="iconzuixiaohua1 iconfont enlarge_icon" @click="enlarge" v-else></i>
           </a-row>
           <div class="status_list_content">
-            <a-table :columns="columns" :rowKey='record' :data-source="tableData" :scroll="{ x: 1300,y:height}" :pagination="false" size="middle" :loading='loading'>
+            <a-table :columns="columns" :rowKey='record' :data-source="tableData" :pagination="pagination" @change="changeTable" :scroll="{ x: 1300,y:height}" size="small" :loading='loading'>
               <template slot="vehicleNewOld" slot-scope="text">
                   <span v-if="text==1">新</span>
                   <span v-else-if="text==2">旧</span>
@@ -326,7 +326,7 @@ export default {
       },
       formParmas:{
         pageNum:1,
-        pageSize:10,
+        pageSize:20,
         vehicleId:'',
         vehicleNos:[],
         vehicleStatus :'',
@@ -390,6 +390,17 @@ export default {
       total:0,
       preList:[],
       typeList:[],
+      pagination:{
+        total:0,
+        size:'small',
+        showSizeChanger: true,
+        showLessItems:false,
+        current:1,
+        pageSize:20,
+        pageSizeOptions: ["10", "20", "50", "100"],//每页中显示的数据
+        showQuickJumper:true,
+        showTotal:total => `共 ${total} 条`
+      },
     }
   },
   components:{
@@ -408,7 +419,7 @@ export default {
     this.$nextTick(()=>{
       let h1 = this.$refs.right_map.$el.offsetHeight;
       let h2 = this.$refs.bm_view.$el.offsetHeight;
-      this.height = h1 - h2 - 92;//计算列表最大高度
+      this.height = h1 - h2 - 138;//计算列表最大高度
       this.dragLine()//上下拖动列表
       this.initVideo(h1)
     });
@@ -417,7 +428,7 @@ export default {
     this.$once('hook:beforeDestroy', () => {
       this.websocketclose();
       clearTimeout(this.sendTime);
-      document.querySelector('.ant-table-body').removeEventListener('scroll',this.scrollLoad,false)
+      // document.querySelector('.ant-table-body').removeEventListener('scroll',this.scrollLoad,false)
     })
     
   },
@@ -465,7 +476,7 @@ export default {
              this.tableData = this.tableData.concat(res.data.data.records);
              console.log(this.tableData)
              this.tableData.forEach(cur=>{
-               this.geocoding(cur)
+              //  this.geocoding(cur)
              })
            }else{
              this.stopDown = true;
@@ -476,6 +487,7 @@ export default {
            this.downOnline = res.data.online;
            this.downOffline = res.data.offline;
            this.total = res.data.data.total;
+           this.pagination.total = res.data.data.total;
 
            this.tableData.forEach(cur=>{
              cur.lc = cur.lc/1000;
@@ -496,6 +508,13 @@ export default {
          }
          console.log(this.tableData)
       });
+    },
+    changeTable(pagination){
+       this.pagination.current = pagination.current;
+       this.pagination.pageSize = pagination.pageSize;
+       this.formParmas.pageSize = pagination.pageSize;
+        this.formParmas.pageNum = pagination.current;
+        this.getData()
     },
      getType(){
          let params = {
@@ -533,6 +552,8 @@ export default {
       this.curStatue = val
      
       this.tableData = [];
+      this.formParmas.pageNum = 1;
+      this.pagination.current = 1;
       this.getData();
     },
     getDetailsData(content){
@@ -694,6 +715,7 @@ export default {
             {lng: cur.mlng, lat: cur.mlat,content:cur.vi}
           )
         });
+    
         if(this.preList.length>0){
           this.centerList.forEach((cur,index)=>{
             this.$set(cur,'rotation',this.getAngle(this.preList[index],this.centerList[index]))
@@ -719,7 +741,7 @@ export default {
           if(this.carNumber.length>0){
             this.websocketsend(this.carNumber.join(','))
           }
-        }, 5000);
+        }, 40000);
       };
       
     },
@@ -891,7 +913,7 @@ export default {
             iT > maxT && (iT = maxT);
             oLine.style.top = oTop.style.height = iT + "px";
             oBottom.style.height = maxHeight - iT + "px"
-            that.height = oBox.offsetHeight - oTop.offsetHeight - 92;
+            that.height = oBox.offsetHeight - oTop.offsetHeight - 138;
           }
 
           document.onmouseup = function() {
@@ -904,7 +926,7 @@ export default {
         }
 
         
-        document.querySelector('.ant-table-body').addEventListener('scroll',this.scrollLoad);
+        // document.querySelector('.ant-table-body').addEventListener('scroll',this.scrollLoad);
     },
     scrollLoad(){
       // console.log(document.querySelector('.ant-table-body').scrollTop)
@@ -992,19 +1014,16 @@ export default {
       if(this.isEnlarge){
         this.$refs.bm_view.$el.style.height = 0;
         this.$refs.status_list.style.height = '100%'
-        this.height = this.$refs.right_map.$el.offsetHeight - 92;
+        this.height = this.$refs.right_map.$el.offsetHeight - 138;
         this.$refs.drag.style.top = 0;
-        this.formParmas.pageNum = 1;
-        this.formParmas.pageSize = 20;
+
        
         this.getData();
       }else{
         this.$refs.bm_view.$el.style.height = 'calc(50vh + 40px)';
         this.$refs.status_list.style.height = 'auto';
-        this.height = this.$refs.right_map.$el.offsetHeight - this.$refs.bm_view.$el.offsetHeight - 92;
+        this.height = this.$refs.right_map.$el.offsetHeight - this.$refs.bm_view.$el.offsetHeight - 138;
          this.$refs.drag.style.top = 'calc(50vh + 39px)';
-         this.formParmas.pageNum = 1;
-        this.formParmas.pageSize = 10;
         this.getData();
       }
     },
@@ -1088,6 +1107,9 @@ export default {
         },
         certificateRecord(id){
           this.$refs.view_certificates.view(id)
+        },
+        changeType(val){
+          this.getVehicleList()
         }
         
   }

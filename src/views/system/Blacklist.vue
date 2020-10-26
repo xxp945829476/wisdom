@@ -195,11 +195,11 @@ export default {
       let permission =  JSON.parse(this.$getStorage('permission'));
       
       permission.forEach(cur=>{
-        if(cur.menuPermission == 'sys:user:add'){
+        if(cur.menuPermission == 'sys:blacklist:add'){
           this.isAdd = true;
-        }else if(cur.menuPermission == 'sys:user:edit'){
+        }else if(cur.menuPermission == 'sys:blacklist:edit'){
           this.isEdit = true;
-        }else if(cur.menuPermission == 'sys:user:del'){
+        }else if(cur.menuPermission == 'sys:blacklist:del'){
           this.isDelete = true;
         }
       })
@@ -310,6 +310,8 @@ export default {
     changeTable(pagination){
       this.pagination.current = pagination.current;
       this.formParmas.pageNum = pagination.current;
+      this.formParmas.pageSize = pagination.pageSize;
+      this.pagination.pageSize = pagination.pageSize;
       this.getData()
     },
     save(){

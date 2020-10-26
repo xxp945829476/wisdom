@@ -2,8 +2,8 @@
     <div class="login_box">
         <div class="login_container">
             <div class="pt_logo">
-                <img src="../assets/images/logo.png" class="login_logo">
-                <span>鼎州智慧渣土管控平台</span>
+                <!-- <img src="../assets/images/logo.png" class="login_logo"> -->
+                <span>智慧渣土管控平台</span>
             </div>
             <div class="login_main">
                 <div class="login_left">

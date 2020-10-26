@@ -497,6 +497,8 @@ export default {
     changeTable(pagination){
       this.pagination.current = pagination.current;
       this.formParmas.pageNum = pagination.current;
+      this.formParmas.pageSize = pagination.pageSize;
+      this.pagination.pageSize = pagination.pageSize;
       this.getData()
     },
     selectArea(selectedKeys,e){
