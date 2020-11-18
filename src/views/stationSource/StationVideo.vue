@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import {GetVideoFileInfo} from "@/network/api"
 const columns = [
   {
     title: 'Name',

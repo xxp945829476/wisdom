@@ -95,3 +95,4 @@ export function getBobimg(data) {
   let url = window.URL.createObjectURL(blob);
   return url
 }
+

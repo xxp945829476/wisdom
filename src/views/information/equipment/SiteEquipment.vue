@@ -241,7 +241,6 @@ export default {
       advanced:false,
       tableData:[],
       typeList:[],
-      operaterList:[],//运营商
       columns,
       pagination:{
         total:0,
@@ -287,7 +286,6 @@ export default {
       this.permissionControl();
       this.getData();
       this.getType(17,2);
-      this.getType(24,3);
     },
     permissionControl(){
      
@@ -341,8 +339,6 @@ export default {
           if(res.data.code == 0){
               if(val == 2){
                   this.typeList = res.data.data
-              }else if(val == 3){
-                  this.operaterList = res.data.data
               }
           };
         });

@@ -76,7 +76,7 @@
         <baidu-map class="bm-view"  @resize="resize" ref="bm_view" :scroll-wheel-zoom="true" :ak="$store.getters.ak" :center="center" :zoom="zoom" @ready="handler">
           <navigation></navigation>
           <mapMarker :position="item" v-for="(item,index) in centerList" :key="index" :rotation="item.rotation" :icon="{url: iconUrl, size: {width: 55, height: 24}}" @click="showCarDetails(item)">
-            <mapLabel :content="item.content" :labelStyle="tipStyle" :offset="{width: 0, height: -20}"></mapLabel>
+            <mapLabel :content="item.content" :labelStyle="tipStyle" :offset="{width: 0, height: -35}"></mapLabel>
           </mapMarker>
           <mapOverlay>
             <!-- 收缩左侧树按钮 -->
@@ -93,7 +93,7 @@
               <a-col flex="100px" @click="filterData(0)" :class="{'cur_statue':curStatue==0}">行驶（{{downMove}}）</a-col>
               <a-col flex="100px" @click="filterData(1)" :class="{'cur_statue':curStatue==1}">停车（{{downStop}}）</a-col>
               <a-col flex="100px" @click="filterData(3)" :class="{'cur_statue':curStatue==3}">离线（{{downOffline}}）</a-col>
-              <a-col flex="100px" @click="filterData(2)" :class="{'cur_statue':curStatue==2}">异常（0）</a-col>
+              <a-col flex="100px" @click="filterData(4)" :class="{'cur_statue':curStatue==2}">异常（0）</a-col>
               <i class="iconzuidahua1 iconfont enlarge_icon" @click="enlarge" v-if="!isEnlarge"></i>
               <i class="iconzuixiaohua1 iconfont enlarge_icon" @click="enlarge" v-else></i>
           </a-row>
@@ -118,9 +118,9 @@
                   <span v-if="text>270&&text<360">东</span>
               </template>
 
-               <template slot="isExistVideo" slot-scope="text">
+               <!-- <template slot="isExistVideo" slot-scope="text">
                   <span>否</span>
-              </template>
+              </template> -->
 
               <template slot="deviceCalibration" slot-scope="text">
                   <span v-if="text == 0">是</span>
@@ -140,6 +140,38 @@
                   <span v-if="record.pk==0">行驶</span>
                   <span v-else>停车</span>
               </template>
+
+              <template slot="statusJob" slot-scope="text,record">
+                  
+                  <span v-if="(record.s3 >> 20) & 1 > 0">半载</span>
+                  <span v-else-if="(record.s2 >> 19) & 1 > 0">重载</span>
+                  <span v-else>空载</span>
+                  &nbsp;
+                  <span v-if="record.tp[0] == '00'">无效</span>
+                  <span v-else-if="record.tp[0] == '01'">关闭</span>
+                  <span v-else-if="record.tp[0] == '02'">打开</span>
+                  <span v-else-if="record.tp[0] == '03'">异常</span>
+                  <span v-else-if="record.tp[0] == '04'">开启未完全</span>
+                  <span v-else-if="record.tp[0] == '05'">关闭未完全</span>
+                  &nbsp;
+                  <span v-if="record.tp[1] == '00'">无效</span>
+                  <span v-else-if="record.tp[1] == '01'">平放</span>
+                  <span v-else-if="record.tp[1] == '02'">举升</span>
+                  <span v-else-if="record.tp[1] == '03'">异常</span>
+              </template>
+
+              <template slot="controlStatus" slot-scope="text,record">
+                  <span v-if='("0x" + record.tp[21] + "" + record.tp[20]  + ""+ record.tp[19]  + ""+ record.tp[18]) >> 0 == 0'>未锁车</span>
+                  <span v-else-if='("0x" + record.tp[21] + "" + record.tp[20]  + ""+ record.tp[19]  + ""+ record.tp[18]) >> 0 == 1'>锁车</span>
+                  &nbsp;
+                  <span v-if='("0x" + record.tp[25] + "" + record.tp[24]  + ""+ record.tp[23]  + ""+ record.tp[22]) >> 0 == 0'>未限速</span>
+                  <span v-else-if='("0x" + record.tp[25] + "" + record.tp[24]  + ""+ record.tp[23]  + ""+ record.tp[22]) >> 0 == 1'>限速</span>
+                  &nbsp;
+                  <span v-if='("0x" + record.tp[29] + "" + record.tp[28]  + ""+ record.tp[27]  + ""+ record.tp[26]) >> 0 == 0'>未限举</span>
+                  <span v-else-if='("0x" + record.tp[29] + "" + record.tp[28]  + ""+ record.tp[27]  + ""+ record.tp[26]) >> 0 == 1'>限举</span>
+              </template>
+
+              
             </a-table>
           </div>
           
@@ -180,38 +212,70 @@
         <a-descriptions-item label="有效证件">
          ---
         </a-descriptions-item>
-        <a-descriptions-item label="所属公司" span="2">
+        <a-descriptions-item label="所属公司">
          {{detailsData.deptName}}
         </a-descriptions-item>
         <!-- <a-descriptions-item label="通讯时间">
          冀GM5136
         </a-descriptions-item> -->
-        <a-descriptions-item label="定位时间" span="2">
+        <a-descriptions-item label="定位时间">
           {{detailsData.gt}}
+        </a-descriptions-item>
+         <a-descriptions-item label="定位地址">
+         {{detailsData.ps}}
         </a-descriptions-item>
         <a-descriptions-item label="车辆速度">
            {{detailsData.sp}}km/h
         </a-descriptions-item>
-        <a-descriptions-item label="定位地址" span="3">
-         {{detailsData.ps}}
-        </a-descriptions-item>
+       
         <a-descriptions-item label="偏离路线">
           ---
         </a-descriptions-item>
         <a-descriptions-item label="货箱状态">
-          ---
+          <span v-if="(detailsData.s3 >> 20) & 1 > 0">半载</span>
+          <span v-else-if="(detailsData.s2 >> 19) & 1 > 0">重载</span>
+          <span v-else>空载</span>
+
+          <em v-if="detailsData.tp" class="details_em">
+            
+        
+          <span v-if="detailsData.tp[0] == '00'">无效</span>
+          <span v-else-if="detailsData.tp[0] == '01'">关闭</span>
+          <span v-else-if="detailsData.tp[0] == '02'">打开</span>
+          <span v-else-if="detailsData.tp[0] == '03'">异常</span>
+          <span v-else-if="detailsData.tp[0] == '04'">开启未完全</span>
+          <span v-else-if="detailsData.tp[0] == '05'">关闭未完全</span>
+          </em>
+            <em v-if="detailsData.tp" class="details_em">
+          <span v-if="detailsData.tp[1] == '00'">无效</span>
+          <span v-else-if="detailsData.tp[1] == '01'">平放</span>
+          <span v-else-if="detailsData.tp[1] == '02'">举升</span>
+          <span v-else-if="detailsData.tp[1] == '03'">异常</span>
+            </em>
         </a-descriptions-item>
         <a-descriptions-item label="围栏状态">
           ---
         </a-descriptions-item>
         <a-descriptions-item label="证件状态">
-          ---  <a @click="certificateRecord(detailsData.vehicleId)">证件记录</a>
+          <!-- ---  <a @click="certificateRecord(detailsData.vehicleId)">证件记录</a> -->
         </a-descriptions-item>
-        <a-descriptions-item label="平台管控状态">
-          --- <!-- <a>管控记录</a> -->
-        </a-descriptions-item>
+        <!-- <a-descriptions-item label="平台管控状态">
+          --- <a>管控记录</a>
+        </a-descriptions-item> -->
         <a-descriptions-item label="终端管控状态">
-          ---
+          <template v-if="detailsData.tp">
+             <span v-if='("0x" + detailsData.tp[21] + "" + detailsData.tp[20]  + ""+ detailsData.tp[19]  + ""+ detailsData.tp[18]) >> 0 == 0'>未锁车</span>
+            <span v-else-if='("0x" + detailsData.tp[21] + "" + detailsData.tp[20]  + ""+ detailsData.tp[19]  + ""+ detailsData.tp[18]) >> 0 == 1'>锁车</span>
+            <em class="details_em">
+            <span v-if='("0x" + detailsData.tp[25] + "" + detailsData.tp[24]  + ""+ detailsData.tp[23]  + ""+ detailsData.tp[22]) >> 0 == 0'>未限速</span>
+            <span v-else-if='("0x" + detailsData.tp[25] + "" + detailsData.tp[24]  + ""+ detailsData.tp[23]  + ""+ detailsData.tp[22]) >> 0 == 1'>限速</span>
+            </em>
+             <em class="details_em">
+            <span v-if='("0x" + detailsData.tp[29] + "" + detailsData.tp[28]  + ""+ detailsData.tp[27]  + ""+ detailsData.tp[26]) >> 0 == 0'>未限举</span>
+            <span v-else-if='("0x" + detailsData.tp[29] + "" + detailsData.tp[28]  + ""+ detailsData.tp[27]  + ""+ detailsData.tp[26]) >> 0 == 1'>限举</span>
+             </em>
+          </template>
+           
         </a-descriptions-item>
       </a-descriptions>
       
@@ -242,9 +306,6 @@
 </template>
 
 <script>
-
-
-
 
 
 
@@ -287,22 +348,25 @@ export default {
   { title: '速度', width: 100,dataIndex: 'sp', key: 'sp',ellipsis:true, align:'center',},
   { title: '方向', width: 100,dataIndex: 'hx', key: 'hx' ,ellipsis:true,align:'center',scopedSlots: { customRender: 'hx' }},
   { title: 'GPS时间',width:180, dataIndex: 'gt', key: 'gt',ellipsis:true,align:'center', },
-  { title: '纬度',width: 100, dataIndex: 'lat', key: 'lat',ellipsis:true,align:'center', },
-  { title: '经度', width: 100,dataIndex: 'lng', key: 'lng',ellipsis:true, align:'center',},
+  { title: '纬度',width: 100, dataIndex: 'mlat', key: 'mlat',ellipsis:true,align:'center', },
+  { title: '经度', width: 100,dataIndex: 'mlng', key: 'mlng',ellipsis:true, align:'center',},
   { title: '地址',width: 200, dataIndex: 'ps', key: 'ps' ,ellipsis:true,align:'center',},
-  // { title: '作业状态', width: 100,dataIndex: 'address', key: '16',ellipsis:true,align:'center',},
+  { title: '作业状态', width: 150,dataIndex: 'statusJob', key: 'statusJob',ellipsis:true,align:'center',scopedSlots: { customRender: 'statusJob' }},
   // { title: '设备手机号',width: 120, dataIndex: 'address', key: '17' },
-  { title: '是否存在视频',width: 120, dataIndex: 'isExistVideo', key: 'isExistVideo' ,ellipsis:true,align:'center',scopedSlots: { customRender: 'isExistVideo' }},
+  // { title: '是否存在视频',width: 120, dataIndex: 'isExistVideo', key: 'isExistVideo' ,ellipsis:true,align:'center',scopedSlots: { customRender: 'isExistVideo' }},
   { title: '设备类型', width: 100,dataIndex: 'deviceTypeName', key: 'deviceTypeName',ellipsis:true, align:'center',},
   { title: '报警类型',width: 100, dataIndex: 'alarmType', key: 'alarmType',ellipsis:true,align:'center',scopedSlots: { customRender: 'alarmType' } },
   { title: 'acc开关', width: 100,dataIndex: 's1', key: 's1',ellipsis:true,align:'center',scopedSlots: { customRender: 'accSwitch' }},
-  { title: '管控状态', width: 100,dataIndex: 'controlStatus', key: 'controlStatus',ellipsis:true,align:'center', },
+  { title: '管控状态', width: 160,dataIndex: 'controlStatus', key: 'controlStatus',ellipsis:true,align:'center', scopedSlots: { customRender: 'controlStatus' }},
   { title: '是否标定',width: 100, dataIndex: 'deviceCalibration', key: 'deviceCalibration' ,ellipsis:true,align:'center',scopedSlots: { customRender: 'deviceCalibration' }},
   
 ];
 
 
     return {
+      outTime:1,
+      operatedTime:'',
+      count:0,
       curStatue:6,
       videoMultiple:[
         {num:1,icon:'iconweibiaoti-1'},
@@ -401,6 +465,8 @@ export default {
         showQuickJumper:true,
         showTotal:total => `共 ${total} 条`
       },
+      h1:'',
+      detailsiD:'',
     }
   },
   components:{
@@ -412,22 +478,29 @@ export default {
     modalCertificates
   },
   created(){
-    this.init();
 
+    this.init();
+     
+   
   },
   mounted(){
     this.$nextTick(()=>{
       let h1 = this.$refs.right_map.$el.offsetHeight;
       let h2 = this.$refs.bm_view.$el.offsetHeight;
       this.height = h1 - h2 - 138;//计算列表最大高度
+      this.h1 = h1;
       this.dragLine()//上下拖动列表
-      this.initVideo(h1)
+      setTimeout(()=>{
+        this.initVideo(h1)
+      },200)
+      
     });
 
 
     this.$once('hook:beforeDestroy', () => {
       this.websocketclose();
       clearTimeout(this.sendTime);
+      clearInterval(this.operatedTime);
       // document.querySelector('.ant-table-body').removeEventListener('scroll',this.scrollLoad,false)
     })
     
@@ -440,8 +513,8 @@ export default {
        
         
       this.websocketclose();
-      this.getVehicleList();
-      this.initWebSocket();
+      this.uuid()
+      
       this.getType()
     },
     tracking(obj,val){
@@ -473,11 +546,9 @@ export default {
          if(res.data.code == 0){
            if(res.data.data.records.length>0){
              this.stopDown = false;
-             this.tableData = this.tableData.concat(res.data.data.records);
+             this.tableData = res.data.data.records;
              console.log(this.tableData)
-             this.tableData.forEach(cur=>{
-              //  this.geocoding(cur)
-             })
+            
            }else{
              this.stopDown = true;
            };
@@ -500,9 +571,16 @@ export default {
              if(cur.ps){
                 cur.ps = cur.ps.replace(reg, "");
              }
-             cur.sp = cur.sp/10
+             cur.sp = cur.sp/10;
+             let list=[];
+             for(let i=0;i<cur.tp.length-1;i+=2){
+              list.push((cur.tp.substring(i,i+2)))
+             };
+             cur.tp = list;
             cur.s1 = this.binary(cur.s1)
            })
+
+           console.log(this.tableData)
          }else{
            this.$message.warning(res.data.message)
          }
@@ -556,12 +634,12 @@ export default {
       this.pagination.current = 1;
       this.getData();
     },
-    getDetailsData(content){
+    getDetailsData(){
       let params = {
          pageNum:1,
          pageSize:10,
          vehicleId:'',
-         vehicleNos:[content],
+         vehicleNos:[this.detailsiD],
          vehicleStatus :'',
          vehicleType:'',
       };
@@ -577,11 +655,21 @@ export default {
              if(this.detailsData.ps){
                  this.detailsData.ps = this.detailsData.ps.replace(reg, "");
              };
-            
-            cur.sp = cur.sp/10
-             
-             
            
+               this.detailsData.sp =  this.detailsData.sp/10
+
+               
+                 let list=[];
+             for(let i=0;i<this.detailsData.tp.length-1;i+=2){
+              list.push((this.detailsData.tp.substring(i,i+2)))
+             };
+             this.detailsData.tp = list;
+             
+              
+            
+           
+             
+           console.log(this.detailsData)
          }else{
            this.$message.warning('加载失败')
          }
@@ -590,14 +678,17 @@ export default {
     record(key){
           return key.vehicleId
     },
-    initVideo(h1){
+    initVideo(){
       let params = {
           allowFullscreen: "true",
           allowScriptAccess: "always",
           bgcolor: "#FFFFFF"
         };
-      ttxVideoAll.init("cmsv6flash", h1, h1, params);
-      setTimeout(this.initFlash, 50);
+      ttxVideoAll.init("cmsv6flash", this.h1, this.h1, params);
+
+       setTimeout(this.initFlash, 200);
+
+     
       
     },
     getVehicleList(){
@@ -634,7 +725,7 @@ export default {
                           }else if(this.deviceStatusValue==1){
                             return ele.deviceStatus.pk > 0&&ele.deviceStatus.ol == 1
                           }else if(this.deviceStatusValue==2){
-                            return ele.deviceStatus.ol == 1
+                            return ele.deviceStatus.ol == 2
                           }else if(this.deviceStatusValue==3){
                             return ele.deviceStatus.ol != 1
                           }else{
@@ -680,8 +771,21 @@ export default {
               };
           });
     },
-    initWebSocket(){ //初始化weosocket
-        const wsuri = "ws://192.168.20.120:8001/api/websocket/0";
+    uuid() {
+      var s = [];
+      var hexDigits = "0123456789abcdef";
+      for (var i = 0; i < 36; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+      }
+      s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+      s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+      s[8] = s[13] = s[18] = s[23] = "-";
+
+      var uuid = s.join("");
+      this.initWebSocket(uuid);
+    },
+    initWebSocket(uuid){ //初始化weosocket
+        const wsuri = webUrl + "/api/websocket/" + uuid;
         this.websock = new WebSocket(wsuri);
         this.websock.onmessage = this.websocketonmessage;
         this.websock.onopen = this.websocketonopen;
@@ -696,7 +800,9 @@ export default {
       // this.initWebSocket();
     },
     websocketonmessage(e){ //数据接收
+    console.log(this.carNumber)
       if(isJSON(e.data)){
+        console.log(e.data)
         const redata = JSON.parse(e.data);
         console.log(redata.position)
         let position = JSON.parse(redata.position)
@@ -721,8 +827,9 @@ export default {
             this.$set(cur,'rotation',this.getAngle(this.preList[index],this.centerList[index]))
           })
         }
-        
 
+        
+        
          console.log(this.centerList)
         
         this.zoom = 15
@@ -738,16 +845,22 @@ export default {
         
 
         this.sendTime = setTimeout(() => {
+          
+          if(this.vehicleDetailsShow){
+            this.getDetailsData()
+          };
           if(this.carNumber.length>0){
+            this.getData();
             this.websocketsend(this.carNumber.join(','))
           }
-        }, 40000);
+        }, 32000);
       };
       
     },
     websocketsend(Data){//数据发送
     this.preList = this.centerList;
      this.centerList = [];
+     
       this.websock.send(Data);
     },
     websocketclose(e){  //关闭
@@ -756,22 +869,22 @@ export default {
     },
     handler ({BMap, map}) {
       let that = this;
-      that.center.lng = 116.404;
-      that.center.lat = 39.915;
-      var geolocation = new BMap.Geolocation();
-        geolocation.getCurrentPosition(function(r){
-          if(this.getStatus() == BMAP_STATUS_SUCCESS){
-            var mk = new BMap.Marker(r.point);
+      that.center.lng = 120.640643;
+      that.center.lat = 31.155029;
+      // var geolocation = new BMap.Geolocation();
+      //   geolocation.getCurrentPosition(function(r){
+      //     if(this.getStatus() == BMAP_STATUS_SUCCESS){
+      //       var mk = new BMap.Marker(r.point);
 
-           that.center.lng = r.point.lng;
-           that.center.lat = r.point.lat;
-      } else {
-            // alert('failed'+this.getStatus());
-          }        
-      },{enableHighAccuracy: true})
+      //      that.center.lng = r.point.lng;
+      //      that.center.lat = r.point.lat;
+      // } else {
+      //       // alert('failed'+this.getStatus());
+      //   }        
+      // },{enableHighAccuracy: true})
       this.map = map
       this.BMap = BMap
-      this.zoom = 15
+      this.zoom = 12
      
     },
     bd_encrypt(gcjLat, gcjLon){
@@ -855,11 +968,14 @@ export default {
                     ret = -ret+180;
                 }
             }else{
+              
                 // console.log('j1>j2')
                 if(w1-w2 < 0){
+                  
                     // console.log('w1<w2')
                     ret = 180+ret;
                 }else{
+               
                     // console.log('w1>w2')
                     ret = -ret;
                 }
@@ -871,7 +987,8 @@ export default {
       console.log(obj.content)
       this.isTracking = false;
        this.vehicleDetailsShow = true;
-       this.getDetailsData(obj.content)
+       this.detailsiD = obj.content;
+       this.getDetailsData()
     },
     toggleLeftTree(){
       if(this.leftWidth == 0){
@@ -946,10 +1063,12 @@ export default {
       
     },
     initFlash(){
-
+        console.log(typeof swfobject)
        if (typeof swfobject == "undefined" || typeof swfobject == undefined || swfobject.getObjectById("cmsv6flash") == null ||
             typeof swfobject.getObjectById("cmsv6flash").setWindowNum == "undefined" ) {
-            setTimeout(this.initFlash, 50);
+              this.isInitFinished = false;
+            setTimeout(this.initVideo(this.h1), 50);
+
            
       } else {
             //设置视频插件的语言('playerType=flash'时生效)
@@ -959,14 +1078,50 @@ export default {
             //再配置当前的窗口数目
             swfobject.getObjectById("cmsv6flash").setWindowNum(this.maxChnCount);
             //设置视频插件的服务器
-            swfobject.getObjectById("cmsv6flash").setServerInfo("221.231.140.166",6605);
+            swfobject.getObjectById("cmsv6flash").setServerInfo(playVideoUrl,6605);
+             this.$message.success({ content: '初始视屏插件成功', duration: 2 });
+            this.getVehicleList();
             this.isInitFinished = true;
     }
     },
     previewVideo(devIdNo){
       this.devIdno = devIdNo;
       this.getJsession();
-        
+      this.count = 0;
+      clearInterval(this.operatedTime);
+      this.operatedNot()
+      this.operatedTime = setInterval(this.go, 1000);
+    },
+    go(){
+      console.log(this.count)
+       this.count++;
+       if(this.count == this.outTime * 60 - 10){
+         this.$message.warning('您长时间未操作，视屏即将自动关闭')
+       };
+       if (this.count == this.outTime * 60) {
+            clearInterval(this.operatedTime);
+            this.closeVideo()
+      }
+    },
+    operatedNot(count) {
+      //监测页面长时间未操作
+        //监听鼠标
+        let x;
+        let y;
+        let that = this;
+        document.onmousemove = function(event) {
+            /* Act on the event */
+            var x1 = event.clientX;
+            var y1 = event.clientY;
+            if (x != x1 || y != y1) {
+                that.count = 0;
+            }
+            x = x1;
+            y = y1;
+        };
+        document.onkeydown = function(event) {
+            that.count = 0;
+        };
     },
     getJsession(){
 
@@ -983,7 +1138,7 @@ export default {
            })
     },
     previewVideoOK(){
-      this.videoVisible = true;
+     
          //视频插件初始化完成
             if (this.isInitFinished) {
                 //再一次设置flash窗口数量
@@ -994,14 +1149,13 @@ export default {
                 //     setTimeout(closeVideo, 1000);
                 // }
                 var vehiName = this.abbr == "" ? this.devIdno : this.abbr;
-                for (var i = 0; i < 4; ++i) {
+                for (var i = 0; i < this.maxChnCount; ++i) {
                     swfobject.getObjectById('cmsv6flash').setBufferTime(i, 4);
                     swfobject.getObjectById('cmsv6flash').setVideoInfo(i, vehiName + " - CH" + (i + 1));
         
                     swfobject.getObjectById('cmsv6flash').startVideo(i, this.jsession, this.devIdno, i, 1, true);
                 }
-            } else {
-                setTimeout(this.previewVideoOK, 500);
+                this.videoVisible = true;
             }
     },
     loadFlashWindowNum(num) {
@@ -1103,7 +1257,7 @@ export default {
           this.$router.push({path:'/trackPlayback',query:{id:val}})
         },
         control(){
-          this.$router.push({path:'/cardApproval'})
+          this.$router.push({path:'/remoteControl'})
         },
         certificateRecord(id){
           this.$refs.view_certificates.view(id)

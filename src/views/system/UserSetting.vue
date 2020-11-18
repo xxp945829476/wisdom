@@ -198,7 +198,7 @@ export default {
             
         });
     },
-    onSelectChange(selectedRowKeys){
+    onSelectChange(selectedRowKeys,selectedRows){
       this.delList = selectedRowKeys;
     },
     delUserBatch(){

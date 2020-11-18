@@ -3,7 +3,7 @@
         <div class="login_container">
             <div class="pt_logo">
                 <!-- <img src="../assets/images/logo.png" class="login_logo"> -->
-                <span>智慧渣土管控平台</span>
+                <span>建筑垃圾运输处置管理系统</span>
             </div>
             <div class="login_main">
                 <div class="login_left">

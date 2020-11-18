@@ -173,6 +173,7 @@
             return this;
         },
         setServerInfo: function (serverIp, serverPort) {
+            
             this.options.serverIp = serverIp;
             this.options.serverPort = serverPort;
         },
@@ -402,11 +403,16 @@
             if (location.protocol == 'https:') {
                 splicingSymbol = "/";
                 webPort = ":" + location.port
-            }
+            };
 
+            if(!serverInfo.serverIp){
+                serverInfo.serverIp = playVideoUrl;
+                serverInfo.serverPort = '6605';
+            };
             var action = location.protocol + '//' + serverInfo.serverIp + webPort + splicingSymbol + serverInfo.serverPort;
             action += '/3/1?MediaType=1&Type=0' + '&AVType=' + type + '&DevIDNO=' + devIdno + '&Channel=' + channel
             var httpRequest = new XMLHttpRequest();
+
             httpRequest.open('GET', action, true);
             httpRequest.send();
             httpRequest.onreadystatechange = function () {
@@ -434,7 +440,7 @@
                         var url = that.getUrl(jsession, devIdno, channel, stream, mediaServer, type);
                         if (type === 1) {
                             that.startVod(index, url, type)
-                        }
+                        };
                         if (type === 2) {
                             that.startListenByUrl(url, type)
                         }
@@ -448,7 +454,8 @@
             if (lstSvrIp != null && lstSvrIp.length > 0) {
                 var host = window.location.host.split(':');
                 if (host.length >= 1) {
-                    var addr = '221.231.140.166';
+ 
+                    var addr = playVideoUrl;
                     if (addr == 'localhost') {
                         return "127.0.0.1";
                     }

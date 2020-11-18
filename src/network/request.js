@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import router from '../router';
 import axios from "axios";
-import Qs from "qs";
 import url from "./requestUrl";
 import {message} from "ant-design-vue";
 
@@ -50,10 +49,7 @@ request.interceptors.response.use(
                 case 401:
                     // 返回401 清除token信息并跳转到登陆页面
                     router.replace({
-                        path: '/login',
-                        query: {
-                            redirect: router.currentRoute.fullPath
-                        }
+                        path: '/login'
                     })
                     break
                 case 403:

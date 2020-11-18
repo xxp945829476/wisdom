@@ -72,6 +72,9 @@
                   <a slot="facilityName" slot-scope="text,record" @click="viewDetails(record,1)">
                     {{text}}
                   </a>
+                  <span slot="monitor" slot-scope="text,record">
+                    <a @click="monitorMap(record)">监控</a>
+                  </span>
                   <span slot="action" slot-scope="text,record">
                       <a @click="addFacilities(1,record)" v-if="isEdit">编辑</a>
                   </span>
@@ -131,6 +134,15 @@ export default {
         align:'center',
         ellipsis:true,
         width:200
+      },
+      {
+        title: '监控',
+        dataIndex: 'monitor',
+        key: 'monitor',
+        align:'center',
+        ellipsis:true,
+        width:110,
+        scopedSlots: { customRender: 'monitor' },
       },
       {
         title: '负责人',
@@ -407,7 +419,11 @@ export default {
     },
     
     
-
+    monitorMap(record){
+      console.log(record.id)
+      window.open('/MonitoringDisplay?id='+record.id);
+      // this.$setStorage('positionData',JSON.stringify(record.electronicFence));
+    },
     
     updateData(){
       this.getData();

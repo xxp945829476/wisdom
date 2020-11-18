@@ -5,6 +5,10 @@
                 <a-button type="primary" icon="plus" @click="addUser(0)" v-if="isAdd">
                   加入黑名单
                 </a-button>
+
+                <a-button @click="isSue">
+                  下发名单
+                </a-button>
            </div>
             
 
@@ -59,6 +63,19 @@
             <a-form-model-item label="车牌号" prop="vehicleNo">
                 <a-input v-model="backParmas.vehicleNo" placeholder="请输入车牌号"/>
             </a-form-model-item>
+
+            <a-form-model-item label="有效期" prop="day">
+               <a-range-picker
+               :allowClear="false"
+                :show-time="{ format: 'HH:mm:ss' }"
+               format="YYYY-MM-DD HH:mm:ss"
+               valueFormat="YYYY-MM-DD HH:mm:ss"
+               @change="onChange"
+               v-model="backParmas.day"
+                :placeholder="['开始时间', '结束时间']"
+         
+              />
+            </a-form-model-item>
           </a-form-model>
           </a-spin>
           <template slot="footer">
@@ -70,12 +87,14 @@
             </a-button>
         </template>
         </a-modal>
+
+        <modalSelectSite ref="issue_name"></modalSelectSite>
    </div>
 </template>
 
 <script>
 
-
+import modalSelectSite from './modalSelectSite.vue'
 import {BaseList,SiteList,BlackList,DelBlacklist,AddBlacklist,EditBlacklist} from '@/network/api'
 
 
@@ -131,12 +150,18 @@ export default {
         vehicleNo:[
           { required: true, message: '请输入车牌号', trigger: 'blur' },
         ],
+        day:[
+          { required: true, message: '请选择有效期', trigger: 'change' },
+        ]
       },
       backParmas:{
         blacklistType:undefined,
         vehicleNo:'',
         fieldId:undefined,
+        startTime:'',
+        endTime:'',
         id:'',
+        day:[]
       },
       fieldList:[],
       typeList:[],
@@ -173,7 +198,7 @@ export default {
     }
   },
   components:{
-    
+    modalSelectSite
   },
   created(){
     this.init()
@@ -303,6 +328,9 @@ export default {
           this.backParmas.vehicleNo = record.vehicleNo;
           this.backParmas.fieldId = record.fieldId;
           this.backParmas.id = record.id;
+          this.backParmas.startTime = record.startTime;
+          this.backParmas.endTime = record.endTime;
+          this.backParmas.day = [record.startTime,record.endTime]
         }
       })
       this.getSiteList();
@@ -356,6 +384,13 @@ export default {
             this.$message.warning('保存失败')
           };
       });
+    },
+    isSue(){
+      this.$refs.issue_name.isSue()
+    },
+    onChange(value) {
+      this.backParmas.startTime = value[0];
+      this.backParmas.endTime = value[1]
     },
   }
 }

@@ -5,6 +5,7 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 function resolve(dir){
   return path.join(__dirname,'..',dir)
 }
@@ -73,7 +74,7 @@ module.exports = {
           '@c': path.resolve(__dirname, './src/components'),
           '@p': path.resolve(__dirname, './src/views'),
         } // 别名配置 引用的地方减少路径的复杂度
-      }
+      },
     })
 
     if (IS_PROD) {
@@ -93,11 +94,11 @@ module.exports = {
         })
       )
     }
-
-    
+       
          
     
     config.plugins = [...config.plugins, ...plugins]
+
     
   },
   productionSourceMap: false, // 生产环境是否生成 sourceMap 文件
@@ -125,7 +126,7 @@ module.exports = {
     hotOnly: true, // 热更新
     proxy: {
       '/api': {
-        target:'http://192.168.20.120:8001', // 目标代理接口地址
+        target:'http://192.168.20.130:8001', // 目标代理接口地址
         secure: false,
         changeOrigin: true, // 开启代理，在本地创建一个虚拟服务端
         ws: true, // 是否启用websockets

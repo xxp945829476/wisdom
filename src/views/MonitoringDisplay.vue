@@ -2,12 +2,12 @@
     <div class="big_screen" ref="big_screen">
         <div class="monitor_display_nav">
             <ul>
-                <li :class="{curColor:navCurrent==1}" :style="{backgroundImage:'url('+ navImgSel +')'}">冲洗设备</li>
-                <li :class="{curColor:navCurrent==2}" :style="{backgroundImage:'url('+ navImg +')'}">黑车识别</li>
+                <li :class="{curColor:navCurrent==1}" :style="{backgroundImage:'url('+ navImgSel +')'}">黑车识别</li>
+                <!-- <li :class="{curColor:navCurrent==2}" :style="{backgroundImage:'url('+ navImg +')'}">黑车识别</li> -->
             </ul>
-            <div class="monitor_display_t">鼎洲智慧监管</div>
+            <div class="monitor_display_t">建筑垃圾运输处置监管</div>
             <div class="monitor_display_time">
-                <span>2020-09-18  14:50:23</span>
+                <span>{{today}}</span>
                 <img src="../assets/images/quanp.png" @click="fullScreen">
             </div>
             
@@ -16,25 +16,27 @@
 
         <div class="monitor_display_content">
             <div class="monitor_display_left">
-                <h2>冲洗监控<img src="../assets/images/icon01.png"></h2>
+                <h2>道闸监控<span v-if="onlineStatus==1">(在线)</span><span v-else>(离线)</span><img src="../assets/images/icon01.png"></h2>
                 <div class="congx" @click="playLiver">
-                    <img src="../assets/images/congx.jpg" alt="">
+                     <a-spin :spinning="spinning">  
+                    <img src="../assets/images/dzsp.jpg" alt="">
+                     </a-spin>
                 </div>
-                <h2 class="congxzk">冲洗状况<img src="../assets/images/icon01.png"></h2>
+                <h2 class="congxzk congxzk_1">道闸状况<img src="../assets/images/icon01.png"></h2>
                 <div class="congxzk_content">
                     <div class="congxzk_content_th">
                         <span>通行车辆</span>
                         <span>通行时间</span>
-                        <span>自动冲洗状态</span>
-                        <span>冲洗结果</span>
+                        <span>车辆类型</span>
+                        <span>是否通行</span>
                     </div>
                     <div class="congxzk_content_list">
-                        <div class="congxzk_content_tr">
+                        <!-- <div class="congxzk_content_tr">
                             <span>鲁Q023GS</span>
                             <span>02:35:02</span>
-                            <span>不冲洗通行</span>
-                            <span>冲洗不干净</span>
-                        </div>
+                            <span>黑车</span>
+                            <span>否</span>
+                        </div> -->
                         
                     </div>
                    
@@ -45,19 +47,19 @@
                 <ul class="car_num_box">
                     <li>
                         <span>今日作业车辆</span>
-                        <p><em>1</em>辆</p>
+                        <p><em>{{todayTotal}}</em>辆</p>
                     </li>
                     <li>
-                        <span>今日作业车次</span>
-                        <p><em>1</em>次</p>
+                        <span>今日黑车车辆</span>
+                        <p><em>{{todayBlackTotal}}</em>次</p>
                     </li>
                     <li>
                         <span>昨日作业车辆</span>
-                        <p><em>1</em>辆</p>
+                        <p><em>{{yesTotal}}</em>辆</p>
                     </li>
                     <li>
-                        <span>昨日作业车次</span>
-                        <p><em>1</em>次</p>
+                        <span>昨日黑车车辆</span>
+                        <p><em>{{yesBlackTotal}}</em>次</p>
                     </li>
                 </ul>
                 <div class="map_box">
@@ -79,14 +81,14 @@
                     <img class="set" src="../assets/images/set.png" @click="showSlider">
                 </h2>
                 <div class="range_car">
-                    <h3>1500米范围内共有 <em>2</em> 辆车</h3>
+                    <h3>{{sliderValue}}米范围内共有 <em>{{areaNum}}</em> 辆车</h3>
                     <ul>
-                        <li><span></span>鲁Q023GS</li>
-                        <li><span></span>鲁Q023GS</li>
+                        <li v-for="(item,index) in areaMarkersLists" :key="index+'a'"><span></span>{{item.name}}</li>
+
                         
                     </ul>
                 </div>
-                <h2 class="congxzk">今日作业车辆<img src="../assets/images/icon01.png">
+                <h2 class="congxzk">通行车辆<img src="../assets/images/icon01.png">
                 </h2>
                 <div class="task_car">
                     <div class="task_car_echarts">
@@ -101,17 +103,18 @@
                     </div>
                     <ul>
                         <li><span></span>黑车</li>
-                        <li><span></span>套牌车</li>
+                        <li><span></span>其他车</li>
+                        <!-- <li><span></span>套牌车</li>
                         <li><span></span>绕行</li>
                         <li><span></span>未冲洗</li>
                         <li><span></span>冲洗时间不足</li>
-                        <li><span></span>冲洗不干净</li>
+                        <li><span></span>冲洗不干净</li> -->
                     </ul>
                 </div>
-                <h2 class="congxzk">冲洗状况<img src="../assets/images/icon01.png">
+                <h2 class="congxzk">通行详情<img src="../assets/images/icon01.png">
                 </h2>
                 <div class="wash_status">
-                    <h4>鲁Q023GS</h4>
+                    <!-- <h4>鲁Q023GS</h4>
                     <dl>
                         <dt>
                             <img src="../assets/images/load.png"/>
@@ -126,20 +129,27 @@
                             <p><span>所属企业：</span>运输公司</p>
                             <p><span>车辆型号：</span>大车</p>
                         </dd>
-                    </dl>
+                    </dl> -->
                 </div>
             </div>
         </div>
-        <!-- <videoPlayer :options="playerOptions"></videoPlayer> -->
-        <!-- <LivePlayer videoUrl="rtmp://live.hkstv.hk.lxdns.com/live/hks" fluent autoplay live stretch></LivePlayer> -->
-        <!-- <LivePlayer videoUrl="rtmp://192.168.20.130:1935/live/zejun00" autoplay live></LivePlayer> -->
 
-        <div class="livePlayer_box" v-if="livePlayerShow">
+
+        <div class="livePlayer_box" v-show="livePlayerShow">
             <div class="livePlayer">
+                <div class="livePlayer_t">实时视频</div>
                 <div class="livePlayer_1">
-                    <LivePlayer videoUrl="rtmp://58.220.129.147:1935/live/gy6" autoplay live class="livePlayer_list" aspect='fullscreen'></LivePlayer>
+                   <div id="cmsv6flash" class="ttx-video-h5">
+                        <div data-index="0" class="ttx-video-h5-item video-basis-2 ttx-video-h5-item-check" id="TtxH5Video-0">
+                        </div><div data-index="1" class="ttx-video-h5-item video-basis-2" id="TtxH5Video-1"></div>
+                        <div data-index="2" class="ttx-video-h5-item video-basis-2" id="TtxH5Video-2"></div>
+                        <div data-index="3" class="ttx-video-h5-item video-basis-2" id="TtxH5Video-3"></div>
+                    </div>
                 </div>
-                <div class="close_livePlayer" @click="livePlayerShow=false">关闭</div>
+                <div class="close_livePlayer" @click="closed">关闭</div>
+                <div class="set_big_video">
+                    <i class="iconfont" v-for="item in videoMultiple" :key="item.num" :class="item.icon" @click="splitScreen(item.num)"></i>
+                </div>
             </div>
         </div>
 
@@ -147,20 +157,21 @@
             <div class="slider_box">
                 <h2 class="congxzk"><img src="../assets/images/icon01.png">查询范围设置</h2>
                 <div class="slider_area">
-                    <a-slider id="test" v-model="sliderValue" :min="200" :max="2000"/>
+                    <a-slider id="test" :default-value="sliderValue" @change="changeSlider" :min="200" :max="5000"/>
                     <ul>
                         <li>200m</li>
-                        <li>1100m</li>
-                        <li>2000m</li>
+                        <li>2600m</li>
+                        <li>5000m</li>
                     </ul>
                 </div>
 
                 <div class="slider_btn_box">
-                    <div class="slider_btn" @click="sliderShow=false">取消</div>
-                    <div class="slider_btn">确定</div>
+                    <div class="slider_btn" @click="cancelSlider">取消</div>
+                    <div class="slider_btn" @click="sureSlider">确定</div>
                 </div>
             </div>
         </div>
+        
     </div>
     
 </template>
@@ -169,51 +180,33 @@
 
 import echarts from 'echarts/lib/echarts'
 import 'echarts/lib/chart/pie'
+import 'echarts/lib/chart/bar'
 import {launchFullscreen,exitfullscreen} from '@/utils/utils.js'
-// import BaiduMap from 'vue-baidu-map-v3/components/map/Map.vue'
-// import mapMarkerClusterer from 'vue-baidu-map-v3/components/extra/MarkerClusterer.vue'
-// import mapMarker from 'vue-baidu-map-v3/components/overlays/Marker.vue'
-// import mapCircle from 'vue-baidu-map-v3/components/overlays/Circle.vue'
+import BMapLibArea from '@/utils/GeoUtils_min.js'
+import debounce from 'lodash/debounce'
+import {FacilityList,IndexVehicleList,OnlineOffline,GetJsession,GetDeviceOlStatus} from "@/network/api"
 
-// import "video.js/dist/video-js.css";
 
-// import { videoPlayer } from "vue-video-player";
 
-// import "videojs-flash";
-
-import LivePlayer from '@liveqing/liveplayer'
 
 export default {
     data() {
         return {
+            onlineStatus:'',
+             videoMultiple:[
+                {num:1,icon:'iconweibiaoti-1'},
+                {num:2,icon:'icon2bei'},
+                {num:4,icon:'icon4bei'},
+                {num:6,icon:'icon6bei'},
+                {num:9,icon:'icon9bei'},
+                {num:16,icon:'icon16bei'},
+                {num:36,icon:'icon36bei'},
+            ],
             sliderShow:false,
-            sliderValue:1000,
+            sliderValue:1500,
             livePlayerShow:false,
             siteUrl:require('@/assets/images/jkgd.png'),
-            playerOptions : {
-                playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
-                autoplay: false, //如果true,浏览器准备好时开始回放。
-                muted: false, // 默认情况下将会消除任何音频。
-                loop: false, // 导致视频一结束就重新开始。
-                preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-                language: 'zh-CN',
-                aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-                fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-                sources: [{
-                    type: "rtmp/flv",//这里的种类支持很多种：基本视频格式、直播、流媒体等，具体可以参看git网址项目
-                    src: "rtmp://192.168.20.130:1935/live/zejun001" //url地址
-                }],
-                techOrder: ["flash"],
-                poster: "", //你的封面地址
-                // width: document.documentElement.clientWidth, //播放器宽度
-                notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
-                controlBar: {
-                    timeDivider: true,
-                    durationDisplay: true,
-                    remainingTimeDisplay: false,
-                    fullscreenToggle: true  //全屏按钮
-                }
-            },
+            
             navImg:require('@/assets/images/big_nosel.png'),
             navImgSel:require('@/assets/images/big_sel.png'),
             carImg:require('@/assets/images/pos.png'),
@@ -1538,9 +1531,7 @@ export default {
 }]
             },
             markerList:[
-                {lat:31.552983,lng:120.361126},
-                {lat:31.534273,lng:120.319157},
-                {lat:31.507184,lng:120.359401}
+ 
             ],
             circlePath: {
                     center: {
@@ -1548,33 +1539,57 @@ export default {
                     lat: 0
                     },
                     radius: 1000
-            }
+            },
+            formParmas:{
+                pageNum:1,
+                pageSize:999,
+                vehicleId:'',
+                vehicleNos:[],
+                vehicleStatus :'',
+                vehicleType:'',
+            },
+            areaNum:0,
+            markers:[],
+            areaMarkersLists:[],
+            todayTotal:0,
+            yesTotal:0,
+            todayBlackTotal:0,
+            yesBlackTotal:0,
+            positionData:[],
+            siteName:'',
+            maxChnCount:9,
+            abbr:'',
+            devIdno:'',
+            today:'',
+            setTime:'',
+            spinning:false
         }
     },
     mounted(){
 
         this.myChart1 = echarts.init(this.$refs.echarts_bar_l);
+        
         this.myChart1.setOption({
-            title: {
-                text: '南丁格尔玫瑰图',
-                subtext: '纯属虚构',
-                left: 'center'
-            },
+            // title: {
+            //     text: '南丁格尔玫瑰图',
+            //     subtext: '纯属虚构',
+            //     left: 'center'
+            // },
             series: [
                 {
-                    name: '面积模式',
+                    // name: '面积模式',
                     type: 'pie',
                     label: {
                         position: 'inner'
                     },
-                    roseType: 'area',
-                    radius: ['30%', '100%'],
+                    // roseType: 'area',
+                    radius: ['20%', '70%'],
                     data: [
                         {value: 1, name: '1',itemStyle: { color: '#ff5a00' }},
-                        {value: 2, name: '2',itemStyle: { color: '#ffc500' }},
-                        {value: 3, name: '3',itemStyle: { color: '#1dd58f' }},
-                        {value: 3, name: '3',itemStyle: { color: '#00beff' }},
-                        {value: 5, name: '5',itemStyle: { color: '#7bbed5' }},
+                        // {value: 2, name: '2',itemStyle: { color: '#ffc500' }},
+                        // {value: 3, name: '3',itemStyle: { color: '#1dd58f' }},
+                        // {value: 3, name: '3',itemStyle: { color: '#00beff' }},
+                        // {value: 5, name: '5',itemStyle: { color: '#7bbed5' }},
                         {value: 4, name: '4',itemStyle: { color: '#6d45ee' }},
                     ]
                 }
@@ -1583,34 +1598,51 @@ export default {
 
         this.myChart2 = echarts.init(this.$refs.echarts_bar_r);
         this.myChart2.setOption({
-            title: {
-                text: '南丁格尔玫瑰图',
-                subtext: '纯属虚构',
-                left: 'center'
-            },
+            // title: {
+            //     text: '南丁格尔玫瑰图',
+            //     subtext: '纯属虚构',
+            //     left: 'center'
+            // },
             series: [
                 {
-                    name: '面积模式',
+                    // name: '面积模式',
                     type: 'pie',
                     label: {
                         position: 'inner'
                     },
-                    roseType: 'area',
-                    radius: ['30%', '100%'],
+                    // roseType: 'area',
+                    radius: ['20%', '70%'],
                     data: [
                         {value: 1, name: '1',itemStyle: { color: '#ff5a00' }},
-                        {value: 2, name: '2',itemStyle: { color: '#ffc500' }},
-                        {value: 3, name: '3',itemStyle: { color: '#1dd58f' }},
-                        {value: 3, name: '3',itemStyle: { color: '#00beff' }},
-                        {value: 5, name: '5',itemStyle: { color: '#7bbed5' }},
+                        // {value: 2, name: '2',itemStyle: { color: '#ffc500' }},
+                        // {value: 3, name: '3',itemStyle: { color: '#1dd58f' }},
+                        // {value: 3, name: '3',itemStyle: { color: '#00beff' }},
+                        // {value: 5, name: '5',itemStyle: { color: '#7bbed5' }},
                         {value: 4, name: '4',itemStyle: { color: '#6d45ee' }},
                     ]
                 }
             ]
         });
 
-        this.mapReady()
+       this.$nextTick(()=>{
+           setTimeout(()=>{
+                this.initVideo()
+            },200);
+
+           this.getHeight();
+           
+           window.addEventListener('resize',debounce(this.getHeight, 300))//防抖
+       
+       });
+
+      
         
+        
+        
+        this.$once('hook:beforeDestroy', () => {
+            clearInterval(this.setTime)
+          
+        });
      
     },
     components:{
@@ -1618,17 +1650,134 @@ export default {
         // mapMarkerClusterer,
         // mapMarker,
         // mapCircle,
-        LivePlayer
     },
     created(){
-        console.log(JSON.parse(this.$getStorage('positionData')))
+  
+        this.init()
     },
   
     methods:{
+        getHeight(){
+            let h1 = document.querySelector('.monitor_display_left').offsetHeight - 290;
+            let h2 = getComputedStyle(document.querySelector('.congxzk_1')).marginTop;
+            document.querySelector('.congxzk_content_list').style.height = h1 - parseInt(h2) + 'px'
+        },
+        init(){
+            
+            this.setTime = setInterval(()=>{
+                this.today = this.$moment().format("YYYY-MM-DD hh:mm:ss");
+            },1000)
+
+            let day = this.$moment().format("YYYY-MM-DD");
+            let todayBegintime = day + ' ' + '00:00:00'
+            let todayEndtime = day + ' ' + '23:59:59'
+            let yesBegintime = this.$moment()
+            .subtract(1, "days")
+            .format("YYYY-MM-DD 00:00:00");
+            let yesEndtime = this.$moment()
+            .subtract(1, "days")
+            .format("YYYY-MM-DD 23:59:59");
+           
+            this.getOnlineData(todayBegintime,todayEndtime,1)
+            this.getOnlineData(yesBegintime,yesEndtime,2)
+            this.getSiteData(this.$route.query.id);
+        },
+        getSiteData(siteId){
+            let params = {
+                pageNum:1,
+                pageSize:20,
+                id:siteId,
+                areaId:'',
+                facilityName:'',
+                deviceName:'',
+                fieldId:'',
+            }
+   
+            FacilityList(params).then(res=>{
+                this.loading = false;
+                if(res.data.code == 0){
+                    let data = res.data.data.records;
+                    this.positionData = data[0];
+                    this.siteName = this.positionData.fieldName;
+                     this.getData();
+                     this.getDeviceOlStatus();
+                }else{
+                    this.$message.warning('加载失败')
+                };
+                
+            });
+        },
+        getDeviceOlStatus(){
+            let params = {
+                deviceNo: this.positionData.simNo,
+            }
+   
+            GetDeviceOlStatus(params).then(res=>{
+             
+                if(res.data.code == 0){
+                    this.onlineStatus = res.data.data.onlines[0].online
+                }else{
+                    this.$message.warning('加载失败')
+                };
+                
+            });
+        },
+        getData(){
+           
+            IndexVehicleList(this.formParmas).then(res=>{
+                  if(res.data.code == 0){
+                      res.data.data.records.forEach(cur=>{
+                          this.markerList.push({
+                              lat:cur.mlat,
+                              lng:cur.mlng,
+                              content:cur.vehicleNo
+                          })
+                      })
+                      this.$nextTick(()=>{
+                          this.mapReady()
+                      })
+                       
+                  }else{
+
+                  }
+               
+            });
+        },
+        getOnlineData(b,e,val){
+            let params = {
+                begintime:b,
+                endtime:e,
+                pageNum:1,
+                pageSize:9999,
+                geoaddress:1,
+                toMap:2,
+                handle:3,
+                armType:17,
+                vehicleNo:[]
+            };
+            OnlineOffline(params).then(res=>{
+  
+                if(res.data.code == 0){
+                    if(val==1){
+                        this.todayTotal = res.data.total;
+                    }else{
+                         this.yesTotal = res.data.total;
+                    }
+                    
+                    
+                }else{
+                    this.$message.warning(res.data.message)
+                };
+                
+            }).catch(error=>{
+            this.tableData = []
+            this.loading = false;
+            })
+        },
         mapReady(){
             let that = this;
             var map = new BMap.Map('bm-view');
-            const position = JSON.parse(this.$getStorage('positionData'));
+            const position = this.positionData;
                 let lngAry = position.lng.split(',');
                 let latAry = position.lat.split(',');
 
@@ -1668,15 +1817,31 @@ export default {
                     icon: myIcon
                 });
                 map.addOverlay(marker1);//圆形中心
-                var markers = []
+
+                let circle = new BMap.Circle(point, this.sliderValue, {
+                    strokeWeight: 1,
+                    strokeOpacity: 0.1,
+                    fillColor:'#16486d'
+                });
+
+                map.addOverlay(circle);//添加圆形区域
+
+                this.markers = []
+                this.areaMarkersLists = [];
+                 
                 var myCarOverlayList = [];
                 this.markerList.forEach(cur=>{
-                    markers.push(new BMap.Marker(new BMap.Point(cur.lng,cur.lat),{
-                        icon:  new BMap.Icon(that.carImg, new BMap.Size(24, 24))
-                    }));
-
-                  
-                        var opts = {
+                     
+                    if(BMapLibArea.GeoUtils.isPointInCircle(new BMap.Point(cur.lng,cur.lat),circle)){
+                          this.markers.push(new BMap.Marker(new BMap.Point(cur.lng,cur.lat),{
+                            icon:  new BMap.Icon(that.carImg, new BMap.Size(24, 24))
+                          }));
+                          
+                         this.areaMarkersLists.push({
+                             name:cur.content
+                         });
+              
+                         var opts = {
                         position : new BMap.Point(cur.lng,cur.lat),    // 指定文本标注所在的地理位置
                         offset   : new BMap.Size(5, -50)    //设置文本偏移量
                     }
@@ -1690,24 +1855,21 @@ export default {
                                     background:'transparent',
                                     border:'none'
                         });
-                        var content = '<div><span style="display:block;border:1px solid #00beff;padding:2px 10px;border-radius:20px;background:rgba(0,190,255,0.5)">苏A00000</span>'
+                        var content = '<div><span style="display:block;border:1px solid #00beff;padding:2px 10px;border-radius:20px;background:rgba(0,190,255,0.5)">'+cur.content+'</span>'
                         + '<div style="border-top:1px solid #00beff;border-left:1px solid #00beff;transform:skewX(-30deg);width:12px;height:15px"></div></div>'
                         label.setContent(content)
                         myCarOverlayList.push(label)
+                    };
+                  
+                       
    
                        
                 });
               
-                var markerClusterer = new BMapLib.MarkerClusterer(map, {markers:markers});
+                var markerClusterer = new BMapLib.MarkerClusterer(map, {markers:this.markers});
                 var markerClusterer1 = new BMapLib.MarkerClusterer(map, {markers:myCarOverlayList});//车辆聚合
 
-                let circle = new BMap.Circle(point, 1000, {
-                    strokeWeight: 1,
-                    strokeOpacity: 0.1,
-                    fillColor:'#0d2f48'
-                });
-
-                map.addOverlay(circle);//添加圆形区域
+                
 
                 function ComplexCustomOverlay(point, text){
                     this._point = point;
@@ -1761,50 +1923,32 @@ export default {
                 this._div.style.left = pixel.x - parseInt(this._arrow.style.left) + "px";
                 this._div.style.top  = pixel.y - 65 + "px";
                 }
-                let txt = "银湖海岸城"
+                // let txt = "银湖海岸城"
                     
-                let myCompOverlay = new ComplexCustomOverlay(point, "银湖海岸城");
+                let myCompOverlay = new ComplexCustomOverlay(point, this.siteName);
 
                 map.addOverlay(myCompOverlay);
 
+                 this.areaNum = this.markers.length;
+                 
+                
+
+        },
+        showInfo(point) {
+
+            //判断点是否在
+            if(BMapLibArea.GeoUtils.isPointInCircle(point,circle)){
+               
+               
+            }else{
+         
+               
+            }
         },
         handler ({BMap, map}) {
            
-            const position = JSON.parse(this.$getStorage('positionData'));
-            let lngAry = position.lng.split(',');
-            let latAry = position.lat.split(',');
-
-
-            var x = 0.0;
-
-        　　var y = 0.0;
-
-        　　for (let i = 0; i < lngAry.length; i++) {
-
-        　　　　x = x + parseFloat(lngAry[i]);
-
-
-        　　}
-
-            for (let i = 0; i < latAry.length; i++) {
-
-
-
-        　　　　y = y + parseFloat(latAry[i]);
-
-        　　}
-
-            x = x / lngAry.length;
-
-    　　    y = y / latAry.length;
-
-            this.center.lng = x
-            this.center.lat = y
-
-            console.log(this.center)
-
-            this.circlePath.center.lng = x
-             this.circlePath.center.lat = y
+            
+           
 
 
             this.map = map
@@ -1820,13 +1964,114 @@ export default {
             this.circlePath.radius = e.target.getRadius()
         },
         playLiver(){
-            this.livePlayerShow = true;
+            console.log(this.positionData)
+            this.devIdno = this.positionData.simNo;
+            this.getJsession();
         },
         showSlider(){
             this.sliderShow = true
         },
         fullScreen(){
             launchFullscreen(this.$refs.big_screen)
+        },
+        changeSlider(val){
+            this.sliderValue = val;
+        },
+        cancelSlider(){
+            this.sliderValue = 1500
+            this.sliderShow=false
+        },
+        sureSlider(val){
+            this.sliderShow=false;
+            this.mapReady();
+        },
+        initVideo(){
+            let params = {
+                allowFullscreen: "true",
+                allowScriptAccess: "always",
+                bgcolor: "#FFFFFF"
+                };
+            ttxVideoAll.init("cmsv6flash", 800, 498, params);
+
+            setTimeout(this.initFlash, 200);
+
+            
+            
+        },
+        initFlash(){
+            this.spinning = true
+            console.log(typeof swfobject)
+            if (typeof swfobject == "undefined" || typeof swfobject == undefined || swfobject.getObjectById("cmsv6flash") == null ||
+                    typeof swfobject.getObjectById("cmsv6flash").setWindowNum == "undefined" ) {
+                    this.isInitFinished = false;
+                    setTimeout(this.initVideo, 50);
+
+                
+            } else {
+                    //设置视频插件的语言('playerType=flash'时生效)
+                    swfobject.getObjectById("cmsv6flash").setLanguage("cn.xml");
+                    //先将全部窗口创建好
+                    swfobject.getObjectById("cmsv6flash").setWindowNum(36);
+                    //再配置当前的窗口数目
+                    swfobject.getObjectById("cmsv6flash").setWindowNum(this.maxChnCount);
+                    //设置视频插件的服务器
+                   
+                    swfobject.getObjectById("cmsv6flash").setServerInfo(playVideoUrl,6605);
+                     this.spinning = false
+                    this.isInitFinished = true;
+            }
+        },
+        splitScreen(num){
+          this.maxChnCount = num;
+          this.getJsession();
+        },
+        getJsession(){
+
+      let params = {
+            };
+           GetJsession(params).then(res=>{
+             if(res.data.code == 0){
+                this.jsession = res.data.data;
+                this.previewVideoOK();
+                // this.loadDeviceInfo()
+             }else{
+               this.closeVideo();
+             };
+           })
+    },
+    previewVideoOK(){
+     
+         //视频插件初始化完成
+            if (this.isInitFinished) {
+                //再一次设置flash窗口数量
+                
+                this.loadFlashWindowNum(this.maxChnCount);
+                // if (this.closeSecond != 0) {
+                //     $("#closeTip").show();
+                //     setTimeout(closeVideo, 1000);
+                // }
+                var vehiName = this.abbr == "" ? this.devIdno : this.abbr;
+                for (var i = 0; i < this.maxChnCount; ++i) {
+                    swfobject.getObjectById('cmsv6flash').setBufferTime(i, 4);
+                    swfobject.getObjectById('cmsv6flash').setVideoInfo(i, vehiName + " - CH" + (i + 1));
+        
+                    swfobject.getObjectById('cmsv6flash').startVideo(i, this.jsession, this.devIdno, i, 1, true);
+                }
+                this.livePlayerShow = true;
+            }
+        },
+        loadFlashWindowNum(num) {
+            swfobject.getObjectById('cmsv6flash').setWindowNum(num);
+        },
+        closeVideo(){
+            
+            for (let index = this.maxChnCount; index >= 0; index--) {
+                swfobject.getObjectById('cmsv6flash').stopVideo(index);//关闭视频
+            };
+        },
+        closed(){
+            this.livePlayerShow = false;
+            this.closeVideo()
         }
     }
 }
@@ -2037,7 +2282,7 @@ export default {
                         color: #fff;
                         font-size: 12px;
                         .task_car_echarts_map_l{
-                             height: 16vh;
+                             height: 18vh;
                         }
                     }
                     .task_car_echarts_r{
@@ -2046,7 +2291,7 @@ export default {
                         font-size: 12px;
                         text-align: center;
                         .task_car_echarts_map_r{
-                             height: 16vh;
+                             height: 18vh;
                         }
                     }
                 }
@@ -2185,7 +2430,7 @@ export default {
             width: 825px;
             margin: 15vh auto;
             height: 600px;
-            background:url(../assets/images/dpplay.png) left center no-repeat;
+            background:url(../assets/images/dpplay.jpg) left center no-repeat;
             background-size: 100% 100%;
             position: relative;
             padding: 73px 13px;
@@ -2204,6 +2449,13 @@ export default {
             position: relative;
             width: 100%;
             height: 497px;
+        }
+        .livePlayer_t{
+            position: absolute;
+            color: #fff;
+            font-size: 16px;
+            top: 7px;
+            left: 40px;
         }
         .livePlayer_list{
             width: 100%;
@@ -2254,6 +2506,15 @@ export default {
                     }
                 }
             }
+        }
+    }
+    .set_big_video{
+        color: #fff;
+        margin-top: 4px;
+        i{
+            display: inline-block;
+            margin-right: 10px;
+            cursor: pointer;
         }
     }
 </style>

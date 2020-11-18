@@ -5,7 +5,7 @@
         
         <a-row class="header_content">
             <a-col :md="4" class="logo" v-if="navigationMode=='horizontal'">
-                智慧渣土管理平台
+                建筑垃圾运输处置管理系统
             </a-col>
             <a-col :md="14">
                <Sider v-if="navigationMode=='horizontal'"></Sider>

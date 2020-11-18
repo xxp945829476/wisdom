@@ -20,6 +20,16 @@
                </a-button>
              </div>
            </mapOverlay>
+           <mapOverlay>
+             <div class="pio_search">
+               <a-input-search
+                :placeholder="keyword"
+                enter-button="搜索"
+                @search="searchArea"
+              />
+             </div>
+             
+           </mapOverlay>
            <mapLabel content="" v-for=" (item,index) in allPath" :key="'A' + index" :position="item" :labelStyle="labelStyle" :offset="{width: -7, height: -7}">{{index}}</mapLabel>
         </baidu-map>
       </a-col>
@@ -144,12 +154,15 @@ export default {
       }else{
         this.polyline.editing = true;
         this.areaList= [];
+        this.list.cityName = this.list.cityName?this.list.cityName : ''
+        this.list.regionName = this.list.regionName?this.list.regionName : ''
         this.keyword = this.list.provinceName + this.list.cityName +  this.list.regionName;
       };
       
       this.city = this.list.provinceName + this.list.cityName + this.list.regionName;
      
     },
+    onSearch(){},
      syncPolyline (e) {
       if (!this.polyline.editing) {
         return
@@ -279,6 +292,9 @@ export default {
       console.log(this.polyline.paths)
       this.$emit('getPosion',JSON.stringify(this.polyline.paths),this.areaList)
     },
+    searchArea(value){
+      this.keyword = value
+    }
 
   }
 }

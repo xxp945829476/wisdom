@@ -313,7 +313,8 @@ export default {
       deviceId:'',
       vehiclelist:[],
       isAdd:false,
-      isExport:false
+      isExport:false,
+      isEdit:false
     }
   },
   components:{

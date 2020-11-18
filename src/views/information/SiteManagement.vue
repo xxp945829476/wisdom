@@ -150,9 +150,7 @@
                   <a slot="fieldName" slot-scope="text,record" @click="viewDetails(record,1)">
                     {{text}}
                   </a>
-                  <span slot="monitor" slot-scope="text,record">
-                    <a @click="monitorMap(record)">监控</a>
-                  </span>
+                 
 
                   <span slot="ef" slot-scope="text,record">
                     <span v-if="record.electronicFence">有</span>
@@ -250,15 +248,6 @@ export default {
         align:'center',
         ellipsis:true,
         width:240
-      },
-      {
-        title: '监控',
-        dataIndex: 'monitor',
-        key: 'monitor',
-        align:'center',
-        ellipsis:true,
-        width:110,
-        scopedSlots: { customRender: 'monitor' },
       },
       {
         title: '设备状态（在线/总数）',
@@ -540,10 +529,6 @@ export default {
     updateData(){
       this.getData();
       this.getTree();
-    },
-    monitorMap(record){
-      window.open('/MonitoringDisplay');
-      this.$setStorage('positionData',JSON.stringify(record.electronicFence));
     }
   }
 }

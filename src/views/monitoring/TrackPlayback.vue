@@ -4,13 +4,48 @@
       <a-col :flex="leftWidth" class="left_content" ref="left_content">
         <a-form-model :model="formParmas" layout="inline" class="left_search" :label-col="labelCol" :wrapper-col="wrapperCol">
           <a-form-model-item>
-            <a-input-search
+            <!-- <a-input-search
               v-model="formParmas.vehicleNo"
               placeholder="请输入车牌号"
               enter-button="搜索"
               @search="onSearch"
-            />
+            /> -->
+            <a-row type="flex">
+              <a-col flex="auto"  justify="space-between">
+                  <a-select placeholder="请选择车辆" 
+                  show-search option-filter-prop="children"
+                  :value="formParmas.vehicleNo"
+                  @change="changeVehicle"
+                  :filter-option="false" @search="filterOption" allowClear>
+                  
+                  <div slot="dropdownRender" slot-scope="menu">
+                      <v-nodes :vnodes="menu" />
+                      <a-divider style="margin: 4px 0;" />
+                      <div
+                          style="padding: 4px 8px; cursor: pointer;"
+                          @mousedown="e => e.preventDefault()"
+                      >
+                      <a-pagination size="small" :total="total"  @change="changeVehiclePage" :pageSize='vehicleParmas.pageSize' :show-total="total => `共 ${total} 条`"/>
+                      </div>
+                      </div>
+                      <a-spin :spinning="fetching" slot="notFoundContent" size="small" />
+                      <template v-for="item in vehicleList">
+                          <a-select-option  :key="item.id">
+                              {{item.vehicleNo}}
+                          </a-select-option>
+                      </template>
+                  </a-select>
+              </a-col>
+              <a-col style="padding-left:10px">
+                 <a-button type="primary" @click="onSearch">
+                搜索
+              </a-button>
+              </a-col>
+            </a-row>
+            
+             
           </a-form-model-item>
+          
         </a-form-model>
 
         <div class="query_way">
@@ -154,13 +189,14 @@
 
         <div class="status_list" ref="status_list">
           <a-row type="flex" justify="start" class="status_list_nav" ref="status_list_nav">
-              <a-col flex="100px">全部</a-col>
-              <a-col flex="auto" class="export_locust"><a @click="exportLocust">导出轨迹</a></a-col>
+              <a-col flex="100px" @click="filterData(1)" :class="{'cur_statue':curStatue==1}">全部</a-col>
+              <a-col flex="100px" @click="filterData(2)" :class="{'cur_statue':curStatue==2}">停止点</a-col>
+              <a-col flex="auto" class="export_locust"><a @click="export2Excel">导出轨迹</a></a-col>
               <i class="iconzuidahua1 iconfont enlarge_icon" @click="enlarge" v-if="!isEnlarge"></i>
               <i class="iconzuixiaohua1 iconfont enlarge_icon" @click="enlarge" v-else></i>
           </a-row>
           <div class="status_list_content">
-            <a-table :columns="columns" :rowKey='record' :data-source="tableData" :scroll="{ x: 1200,y:height}" :pagination="pagination" @change="changeTable" size="small" :loading='loading'>
+            <a-table :columns="columns" :rowKey='record' :data-source="tableData" :scroll="{ x: 1200,y:height}" :pagination="pagination" @change="changeTable" size="small" :loading='loading' v-if="curStatue==1">
               <template slot="hx" slot-scope="text">
                   <span v-if="text==0||text==360">北</span>
                   <span v-if="text>0&&text<90">西北</span>
@@ -186,6 +222,18 @@
                   <span v-else>停车</span>
               </template>
             </a-table>
+
+            <a-table :columns="columns1" :rowKey='record' :data-source="tableStopData" :scroll="{ x: 1200,y:height}" :pagination="pagination1" @change="changeTable1" size="small" :loading='loading' v-else>
+              <template slot="end" slot-scope="text,record">
+                  <span >{{getEndTime(record)}}</span>
+              </template>
+              <template slot="lc" slot-scope="text,record">
+                  <span >{{record.lc/1000}}</span>
+              </template>
+              <template slot="pk" slot-scope="text,record">
+                  <span >{{format(text)}}</span>
+              </template>
+            </a-table>
           </div>
 
           
@@ -201,6 +249,11 @@
      
      
     </a-row>
+    <!-- 全屏 按钮-->
+      <div class="fullscreen_btn" @click="fullscreen">
+        <a-icon type="fullscreen"/>
+      </div>
+    
   </div>
 </template>
 
@@ -211,30 +264,45 @@ import mapDriving from 'vue-baidu-map/components/search/Driving.vue'
 import mapOverlay from 'vue-baidu-map/components/overlays/Overlay.vue'
 import {BmlLushu} from 'vue-baidu-map'
 import mapLabel from 'vue-baidu-map/components/overlays/Label.vue'
-
-import {QueryTrackDetail,ExportLocust,Geocoding} from "@/network/api"
+import {launchFullscreen,exitfullscreen} from '@/utils/utils.js'
+import {QueryTrackDetail,ExportLocust,Geocoding,Vehiclelist} from "@/network/api"
+import { export_json_to_excel } from '@/vendor/Export2Excel'
 
 
 export default {
   
   data() {
     const columns = [
-  { title: '序号', width: 80,customRender:(text, row, index)=>{
-    return <a href="javascript:;">{index}</a>;
-  },align:'center'},
-  { title: '位置',width: 200, dataIndex: 'ps', key: 'ps' ,ellipsis:true,align:'center',},
-  { title: '定位时间',width: 150,dataIndex: 'rt', key: 'rt',ellipsis:true,align:'center',},
-  { title: '接收时间',width: 150,dataIndex: 'gt', key: 'gt',ellipsis:true,align:'center',},
-  { title: '传输方式',dataIndex: 'way', key: 'way',ellipsis:true,align:'center',scopedSlots: { customRender: 'way' }},
-  { title: '车辆状态',dataIndex: 'vehicleStatus', key: 'vehicleStatus',ellipsis:true,align:'center',scopedSlots: { customRender: 'vehicleStatus' }},
- { title: 'acc开关',dataIndex: 's1', key: 's1',ellipsis:true,align:'center',scopedSlots: { customRender: 'accSwitch' }},
-  { title: '里程(km)',dataIndex: 'lc', key: 'lc',ellipsis:true,align:'center', },
-  { title: '速度(km/h)',dataIndex: 'sp', key: 'sp',ellipsis:true, align:'center',},
-  { title: '方向', dataIndex: 'hx', key: 'hx' ,ellipsis:true,align:'center',scopedSlots: { customRender: 'hx' }},
-  { title: '卫星颗数', dataIndex: 'sn', key: 'sn',ellipsis:true,align:'center',},
- 
-];
+      { title: '序号', width: 80,customRender:(text, row, index)=>{
+        return <a href="javascript:;">{index}</a>;
+      },align:'center'},
+      { title: '位置',width: 200, dataIndex: 'ps', key: 'ps' ,ellipsis:true,align:'center',},
+      { title: '定位时间',width: 150,dataIndex: 'gt', key: 'gt',ellipsis:true,align:'center',},
+      { title: '接收时间',width: 150,dataIndex: 'rt', key: 'rt',ellipsis:true,align:'center',},
+      { title: '传输方式',dataIndex: 'way', key: 'way',ellipsis:true,align:'center',scopedSlots: { customRender: 'way' }},
+      { title: '车辆状态',dataIndex: 'vehicleStatus', key: 'vehicleStatus',ellipsis:true,align:'center',scopedSlots: { customRender: 'vehicleStatus' }},
+    { title: 'acc开关',dataIndex: 's1', key: 's1',ellipsis:true,align:'center',scopedSlots: { customRender: 'accSwitch' }},
+      { title: '里程(km)',dataIndex: 'lc', key: 'lc',ellipsis:true,align:'center', },
+      { title: '速度(km/h)',dataIndex: 'sp', key: 'sp',ellipsis:true, align:'center',},
+      { title: '方向', dataIndex: 'hx', key: 'hx' ,ellipsis:true,align:'center',scopedSlots: { customRender: 'hx' }},
+      { title: '卫星颗数', dataIndex: 'sn', key: 'sn',ellipsis:true,align:'center',},
+    
+    ];
+    const columns1 = [
+      { title: '序号', width: 80,customRender:(text, row, index)=>{
+        return <a href="javascript:;">{index}</a>;
+      },align:'center'},
+      { title: '停车开始时间',dataIndex: 'gt', key: 'gt' ,ellipsis:true,align:'center',},
+      { title: '停车结束时间',dataIndex: 'end', key: 'end',ellipsis:true,align:'center',scopedSlots: { customRender: 'end' }},
+      { title: '当时里程',dataIndex: 'lc', key: 'lc',ellipsis:true,align:'center',scopedSlots: { customRender: 'lc' }},
+      { title: '停车时长',dataIndex: 'pk', key: 'pk',ellipsis:true,align:'center',scopedSlots: { customRender: 'pk' }},
+      { title: '位置',dataIndex: 'ps', key: 'ps',ellipsis:true,align:'center',scopedSlots: { customRender: 'vehicleStatus' }},
+    ];
     return {
+      vehicleList:[],
+      fetching:false,
+      columns1,
+      curStatue:1,
       spinning:false,
       isShow:false,
       speed:8000,
@@ -305,6 +373,33 @@ export default {
         showQuickJumper:true,
         showTotal:total => `共 ${total} 条`
       },
+      tableStopData:[],
+      pagination1:{
+        total:0,
+        size:'small',
+        showSizeChanger: true,
+        showLessItems:false,
+        current:1,
+        pageSize:20,
+        pageSizeOptions: ["10", "20", "50", "100"],//每页中显示的数据
+        showQuickJumper:true,
+        showTotal:total => `共 ${total} 条`
+      },
+      deptName:'',
+      areaName:'',
+      tableStopAllData:[],
+      vehicleParmas: {
+        simNo :'',
+        vehicleNo:'',
+        pageNum:1,
+        pageSize:20,
+        distributor:'',
+        permitStatus:'',
+        deptId:'',
+        realAreaId:'',
+        devIdNo:'',
+      },
+      total:0,
     }
   },
   components:{
@@ -312,7 +407,11 @@ export default {
     BmlLushu,
     mapDriving,
     mapOverlay,
-    mapLabel
+    mapLabel,
+    VNodes: {
+      functional: true,
+      render: (h, ctx) => ctx.props.vnodes,
+    },
   },
   created(){
     this.init()
@@ -330,6 +429,38 @@ export default {
     })
   },
   methods:{
+    getVehicleData(){
+        this.fetching = true;
+        Vehiclelist(this.vehicleParmas).then(res=>{
+             this.fetching = false;
+            if(res.data.code == 0){
+                let data = res.data.data.records;
+                this.vehicleList = data;
+                this.total = res.data.data.total;
+            }else{
+                this.$message.warning('加载失败')
+            };
+            
+        });
+    },
+    changeVehiclePage(page){
+        this.vehicleParmas.pageNum = page;
+        this.getVehicleData();
+    },
+    filterOption(val) {
+      this.vehicleParmas.pageNum = 1;
+      this.vehicleParmas.vehicleNo = val;
+      this.getVehicleData();
+    },
+    changeVehicle(val){
+      console.log(val)
+      this.vehicleList.forEach(cur=>{
+        if(val==cur.id){
+          this.formParmas.vehicleNo = cur.vehicleNo;
+          // this.vehicleParmas.devIdNo = cur.simNo;
+        };
+      })
+    },
     dragLine(){
       // 上下拖动列表
       let that = this;
@@ -397,6 +528,15 @@ export default {
       }
       
     },
+    getEndTime(obj){
+      let time = this.$moment(obj.gt).valueOf() + obj.pk*1000;
+      return this.$moment(time).format("YYYY-MM-DD hh:mm:ss")
+    },
+    changeTable1(pagination){
+      this.pagination1.current = pagination.current;
+      this.pagination1.pageSize = pagination.pageSize;
+      this.tableStopData = JSON.parse(JSON.stringify(this.tableStopAllData)).slice((pagination.current-1)*pagination.pageSize,pagination.current*pagination.pageSize);
+    },
     changeTable(pagination){
       console.log(pagination)
        this.pagination.current = pagination.current;
@@ -440,15 +580,20 @@ export default {
         
         this.formParmas.vehicleNo = this.$route.query.id
         this.getData();
+        
       };
+      this.getVehicleData()
     },
     handler ({BMap, map}) {
      
-      this.center.lng = 116.404
-      this.center.lat = 39.915
-      this.zoom = 15
+
+      this.center.lng = 120.640643;
+      this.center.lat = 31.155029;
+      this.zoom = 12
       this.BMap = BMap
       this.map = map
+
+      
       // this.start = new BMap.Point(120.480708,31.615982),
       // this.end = new BMap.Point(120.34439,31.503154) 
 
@@ -460,50 +605,28 @@ export default {
       QueryTrackDetail(this.formParmas).then(res=>{
          this.loading = false;
          this.spinning = false;
-          if(res.data.code == 0){
 
-           this.allList = res.data.data;
-          
-           if(val != 1){
-             this.partitions = res.data.partitions;
-              this.firstList = res.data.first;
-              this.lastList = res.data.last;
-              
-      
 
-              if(res.data.partitions){
-                this.partitions.forEach(cur=>{
-      
-                  this.curStopList.push(new this.BMap.Point(cur.end.mlng,cur.end.mlat))
-                  this.geocoding(cur.start)
-                  this.geocoding(cur.end)
-                })
-              };
-           };
-           
-         
-           if(res.data.data){
-              res.data.data.forEach(cur=>{
-              this.pathArr.push(
-                new this.BMap.Point(cur.mlng,cur.mlat)
-              );
-              
-            });
+        if(res.data.code == 0){
+          if(res.data.data){
+            if(res.data.data.length>0){
+              res.data.data.forEach((cur,index)=>{
+                    if(cur.mlng){
+             
+                         this.pathArr.push(
+                          new this.BMap.Point(cur.mlng,cur.mlat)
+                        );
+                      
+                     
+                };
+                cur.lc = cur.lc/1000;
+                cur.sp = cur.sp/10;
+                cur.s1 = this.binary(cur.s1);
+               
+              });
+            };
 
-             this.pagination.total = res.data.data.length - 1;
-               this.tableData = JSON.parse(JSON.stringify(res.data.data)).slice(0,50);
-               console.log(this.tableData)
-               this.tableData.forEach(cur=>{
-                 cur.lc = cur.lc/1000;
-                  cur.sp = cur.sp/10;
-                 cur.s1 = this.binary(cur.s1);
-                 this.geocoding(cur)
-               });
-
-                this.geocoding(this.firstList)
-           this.geocoding(this.lastList)
-
-            this.path = this.pathArr;
+             this.path = this.pathArr;
 
             this.start = this.pathArr[0]
 
@@ -518,6 +641,23 @@ export default {
                 strokeColor:"#49cc7d" //折线颜色
               }));
 
+
+              if(res.data.data){
+                if(res.data.data.length>0){
+                  res.data.data.forEach(cur=>{
+                    this.geocoding(cur)
+                  })
+                }
+              }
+
+
+
+      
+            this.pagination.total = res.data.data.length;
+            this.allList = res.data.data;
+            this.tableData = res.data.data;
+           
+
             
               console.log(this.stopList)
               // this.map.addOverlay(new this.BMap.Polyline(this.stopList,  {
@@ -528,16 +668,57 @@ export default {
               //   strokeOpacity: 1,//折线的透明度，取值范围0 - 1
               //   strokeColor:"red" //折线颜色
               // }));
-             
-
-
-               
-              
-           }else{
+          }else{
              this.pathArr = [];
              this.path = [];
+          };
+          
+
+          
+          
              
-           }
+          
+
+          
+       
+          
+           if(val != 1){
+             this.partitions = res.data.partitions;
+             this.firstList = res.data.first;
+             this.lastList = res.data.last;
+             this.deptName = res.data.deptName;
+             this.areaName = res.data.areaName;
+            if(this.firstList){
+              if(this.firstList.length>0){
+                 this.geocoding(this.firstList)
+                 this.geocoding(this.lastList)
+              }
+            };
+            
+
+              if(res.data.partitions){
+                this.partitions.forEach(cur=>{
+                  this.curStopList.push(new this.BMap.Point(cur.end.mlng,cur.end.mlat))
+                  this.geocoding(cur.start)
+                  this.geocoding(cur.end)
+                })
+              };
+             // 停止点开始
+            if(res.data.stopLocation.length>0){
+              res.data.stopLocation.forEach(cur=>{
+                this.geocoding(cur)
+              });
+            };
+            this.tableStopAllData = res.data.stopLocation;
+            this.tableStopData = res.data.stopLocation;
+            this.pagination1.total = res.data.stopLocation.length;
+           
+              // 停止点结束
+
+           };
+           
+         
+    
 
            
            
@@ -549,22 +730,24 @@ export default {
       })
     },
     geocoding(location){
+      if(location.mlat){
+        var geoc = new this.BMap.Geocoder();  
+        let point = {
+          lat:location.mlat,
+          lng:location.mlng
+        };
+        console.log(geoc)
+        geoc.getLocation(new this.BMap.Point(location.mlng,location.mlat),function(rs){
 
-       var geoc = new this.BMap.Geocoder();  
-      let point = {
-        lat:location.mlat,
-        lng:location.mlng
+ 
+          let addComp = rs.address;
+        location.ps = addComp
+
+          
+          // console.log(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+        })
       };
-
-      geoc.getLocation(new this.BMap.Point(location.mlng,location.mlat),function(rs){
-
-   
-        let addComp = rs.address;
-       location.ps = addComp
-
-        
-        // console.log(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
-      })
+       
         // let params = {
         //   ak:this.$store.getters.ak,
         //   location:location.lat/1000000 + ',' + location.lng/1000000
@@ -594,6 +777,14 @@ export default {
       const m = date3 - h*60;
 
       return h +'h' +' ' + m + 'min'
+    },
+    format(s){
+      console.log(s)
+      const h = Math.floor(s/(60*60));
+      const m = Math.floor((s - h*3600)/60)
+      const sen = s - h*3600 - m*60
+
+      return h + ' 时 ' + m + ' 分 ' + sen + " 秒"
     },
     onSearch(){
       this.pathArr = [];
@@ -706,7 +897,7 @@ export default {
       this.tableData = [];
       this.spotStop = false;
       this.isLi = i;
-       this.curStopList = [];
+      //  this.curStopList = [];
        this.pathArr = [];
       this.map.clearOverlays()
       this.getData(1)
@@ -778,7 +969,38 @@ export default {
       })
       sd = totalSd/allList.length
        return (h * sd).toFixed(1)
-    }
+    },
+    export2Excel() {
+        require.ensure([], () => {
+        const multiHeader = [['车牌号:'+this.formParmas.vehicleNo+';'+'企业:'+this.deptName+';'+'辖区:' + this.areaName+';'+'起始时间:' + this.allList[0].gt+';'+'结束时间:' + this.allList[this.allList.length-1].gt,'','','','','','']]
+        const multiHeader2 = []
+        const tHeader = ['经度','纬度','速度','位置','定位时间'] // 对应表格输出的中文title
+        const filterVal = ['mlng','mlat','sp','ps','rt'] // 对应表格输出的数据
+        // this.days.forEach(val => {
+        // tHeader.push(val.name)
+        // filterVal.push(val.value)
+        // })
+       
+
+        const list = this.allList // 表格data
+        const data = this.formatJson(filterVal, list)
+         const merges = [
+                'A1:E1'
+            ];
+
+        export_json_to_excel({multiHeader,multiHeader2,header: tHeader, data, filename:'轨迹',merges,}) // 对应下载文件的名字
+        });
+      },
+      formatJson(filterVal, jsonData) {
+        jsonData.map(v => filterVal.map(j => v[j]))
+        return jsonData.map(v => filterVal.map(j => v[j]))
+      },
+      filterData(val){
+        this.curStatue = val
+      },
+      fullscreen(){
+            launchFullscreen(this.$refs.bm_view.$el)
+      },
   }
 }
 </script>

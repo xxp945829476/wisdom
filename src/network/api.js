@@ -781,6 +781,15 @@ export function BlackList(data){
     })
 }
 
+// 下发黑名单
+export function SendBlacklist(data){
+    return fetch({
+        url:'/api/sz-blacklist/send-blacklist',
+        method:'post',
+        data:data,
+    })
+}
+
 // 导出轨迹
 export function ExportLocust(data){
     return fetch({
@@ -799,5 +808,193 @@ export function Geocoding(data){
         data:data,
     })
 }
+
+// 获取录像
+export function GetVideoFileInfo(data){
+    return fetch({
+        url:'/api/sz-vehicle/getVideoFileInfo',
+        method:'post',
+        data:data,
+    })
+}
+
+
+// 上下线汇总表
+export function OnlineOffline(data){
+    return fetch({
+        url:'/api/sys-login-summary/online-offline',
+        method:'post',
+        data:data,
+    })
+}
+
+// 上下线明细表
+export function onlineOfflineDetail(data){
+    return fetch({
+        url:'/api/sys-login-summary/online-offline-detail',
+        method:'post',
+        data:data,
+    })
+}
+
+// 上下线率表
+export function onlineOfflineSummary(data){
+    return fetch({
+        url:'/api/sys-login-summary/online-offline-summary',
+        method:'post',
+        data:data,
+    })
+}
+
+// 导出上下线汇总表
+export function ExportOnlineOffline(data){
+    return fetch({
+        url:'/api/sys-login-summary/export-online-offline',
+        method:'post',
+        data:data,
+        responseType:'arraybuffer'
+    })
+}
+
+// 导出上下线明细表
+export function exportOnlineOfflineDetail(data){
+    return fetch({
+        url:'/api/sys-login-summary/export-online-offline-detail',
+        method:'post',
+        data:data,
+        responseType:'arraybuffer'
+    })
+}
+
+// 导出上线率明
+export function ExportOnlineOfflineSummary(data){
+    return fetch({
+        url:'/api/sys-login-summary/export-online-offline-summary',
+        method:'post',
+        data:data,
+        responseType:'arraybuffer'
+    })
+}
+
+// 里程总表
+export function MileageSummary(data){
+    return fetch({
+        url:'/api/sys-mileage-summary/summary',
+        method:'post',
+        data:data,
+    })
+}
+
+// 导出里程总表
+export function ExportSummary(data){
+    return fetch({
+        url:'/api/sys-mileage-summary/export-summary',
+        method:'post',
+        data:data,
+        responseType:'arraybuffer'
+    })
+}
+
+//视屏上传列表查询
+export function QueryDownloadReplay(data){
+    return fetch({
+        url:'/api/sys-video/query-download-replay',
+        method:'post',
+        data:data,
+    })
+}
+
+//ftp上传状态
+export function QueryFtpStatus(data){
+    return fetch({
+        url:'/api/sys-video/query-ftp-status',
+        method:'post',
+        data:data,
+    })
+}
+
+//ftp上传
+export function FtpUpload(data){
+    return fetch({
+        url:'/api/sys-video/ftp-upload',
+        method:'post',
+        data:data,
+    })
+}
+
+//录像下载
+export function SubVideoDownload(data){
+    return fetch({
+        url:'/api/sys-video/sub-video-download',
+        method:'post',
+        data:data,
+    })
+}
+
+//添加管控
+export function AddControl(data){
+    return fetch({
+        url:'/api/sys-control-record/add',
+        method:'post',
+        data:data,
+    })
+}
+//管控列表
+export function ControlList(data){
+    return fetch({
+        url:'/api/sys-control-record/list',
+        method:'post',
+        data:data,
+    })
+}
+
+//报警报表
+export function DrivingAlarm(data){
+    return fetch({
+        url:'/api/sys-driving-summary/alarm',
+        method:'post',
+        data:data,
+    })
+}
+
+//停车明细报表
+export function ParkingDetail(data){
+    return fetch({
+        url:'/api/sys-driving-summary/parking-detail',
+        method:'post',
+        data:data,
+    })
+}
+
+// 导出报警报表
+export function ExportAlarm(data){
+    return fetch({
+        url:'/api/sys-driving-summary/export-alarm',
+        method:'post',
+        data:data,
+        responseType:'arraybuffer'
+    })
+}
+
+// 导出明细报表
+export function ExportParkingDetail(data){
+    return fetch({
+        url:'/api/sys-driving-summary/export-parking-detail',
+        method:'post',
+        data:data,
+        responseType:'arraybuffer'
+    })
+}
+
+// 在线状态
+export function GetDeviceOlStatus(data){
+    return fetch({
+        url:'/api/common/getDeviceOlStatus',
+        method:'post',
+        data:data,
+    })
+}
+
+
 
 

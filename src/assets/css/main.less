@@ -5,6 +5,25 @@
 }
 
 
+.modal_search .ant-form-inline .ant-form-item{
+    display: flex;
+    margin-bottom: 15px;
+}
+.modal_search .ant-form-inline .ant-form-item .ant-form-item-control-wrapper{
+    flex: 1;
+}
+.modal_search .ant-form-item-label{
+    line-height: 32px !important;
+}
+.modal_search .ant-form-item-control{
+    line-height: 32px !important;
+    height: 32px;
+}
+.modal_search  .ant-calendar-picker{
+    min-width: 100% !important;
+}
+
+
 .fullscreen_model {
     float: right;
     margin-right: 50px;
@@ -121,7 +140,7 @@
     .logo {
         font-size: 20px;
         padding: 14px 0;
-        width: 200px !important;
+        width: 260px !important;
     }
 
     .ant-menu {
@@ -193,7 +212,7 @@
     position: relative;
 
     .login_container {
-        background: #f0f2f5 url(../images/login2.png) no-repeat;
+        background: #f0f2f5 url(../images/login2.jpg) no-repeat;
         background-size: 100%;
         height: 100%;
         .pt_logo{
@@ -274,6 +293,9 @@
 }
 .layout_card_search{
  width: 50%;
+ .ant-calendar-picker{
+    width: 100%;
+ }
 }
 .layout_card_search_1{
     width: 30%;
@@ -534,15 +556,26 @@
     }
 }
 
-
+.vehicle_details .ant-descriptions-row > th, .vehicle_details .ant-descriptions-row > td{
+    display: flex;
+}
+.vehicle_details .ant-descriptions-row > th, .vehicle_details .ant-descriptions-row > td{
+    padding-bottom: 10px;
+}
+.vehicle_details .ant-descriptions-item-content{
+    width: 72%;
+}
 .vehicle_details{
     position: fixed;
-    top: 20vh;
+    top: 15vh;
     right: 50px;
     z-index: 1000;
-    width: 600px;
+    width: 360px;
     background: #fff;
     box-shadow: 0px 0 10px 2px #c8dce8;
+    span{
+        font-size: 12px;
+    }
     .vehicleDetail_brand{
         color: #333;
         font-weight: 600;
@@ -559,11 +592,11 @@
     .vehicle_details_fuc{
         padding: 0 20px 20px;
         span{
-            padding: 6px 30px;
+            padding: 6px 15px;
             background: #fff4eb;
             border-radius: 4px;
             display: inline-block;
-            margin-right: 40px;
+            margin-right: 20px;
             cursor: pointer;
             color: #ff872e;
         }
@@ -1388,4 +1421,70 @@
 
 .remote_cx{
     padding: 20px 10px;
+}
+.remote_calendar{
+    margin: 20px 10px 0;
+    .ant-calendar-picker{
+        width: 100%;
+    }
+}
+.selSecond{
+    padding:20px 10px 0;
+    .ant-row{
+            margin-right: 0px;
+    }
+}
+.loc_wenjian{
+    padding: 0 10px;
+}
+
+//报表
+
+.layout_card_search_report .ant-calendar-picker{
+    min-width: auto !important;
+}
+
+
+.pio_search{
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    width: 300px;
+}
+.upload_visible .ant-checkbox-group{
+    line-height: 40px !important;
+    display: block !important;
+
+}
+
+
+.details_em{
+    font-style: normal;
+    padding-left: 10px;
+}
+.model_table .ant-table-pagination.ant-pagination{
+    margin-bottom: 0 !important;
+}
+.selected_car{
+    padding-right: 10px;
+}
+.already_sel{
+    border: 1px solid #e8e8e8;
+    margin-left: 15px;
+    border-radius: 6px;
+    h3{
+        font-size: 14px;
+        padding:10px 15px;
+        border-bottom: 1px solid #e8e8e8;
+    }
+    ul{
+        padding: 0 15px;
+        overflow: auto;
+        li{
+            padding: 6px 0;
+        }
+    }
+}
+.radio_remote{
+    padding: 20px 10px 0;
 }

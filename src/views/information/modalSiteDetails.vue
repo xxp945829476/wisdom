@@ -24,7 +24,7 @@
                 <a-descriptions-item label="有效时间段">
                    {{addForm.fieldStartTime}} ~ {{addForm.fieldExpireTime}}
                 </a-descriptions-item>
-                <a-descriptions-item label="电子围栏">
+                <a-descriptions-item label="电子围栏" :span="2">
                     <span v-for="(item,index) in position" :key="'a' + index">{{item.lat}},{{item.lng}}; </span>
                 </a-descriptions-item>
                 <a-descriptions-item label="工地简称">

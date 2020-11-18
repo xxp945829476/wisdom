@@ -493,8 +493,8 @@ export default {
             this.addForm.fieldRemark = record.fieldRemark;
             this.addForm.fieldTransportationEnterprises = record.fieldTransportationEnterprises ? record.fieldTransportationEnterprises.split(',') : [] ;
             this.addForm.fieldCode = record.fieldCode;
-            this.addForm.fieldBuildEnterprises = record.fieldBuildEnterprises == 0 ? undefined : record.fieldBuildEnterprises;
-            this.addForm.fieldConstructEnterprise = record.fieldConstructEnterprise == 0 ? undefined : record.fieldConstructEnterprise;
+            this.addForm.fieldBuildEnterprises = record.fieldBuildEnterprises ? record.fieldBuildEnterprises.split(',') : [];
+            this.addForm.fieldConstructEnterprise = record.fieldConstructEnterprise ?  record.fieldConstructEnterprise.split(',') : [];
             this.addForm.projectCategory = record.projectCategory == 0 ? undefined : record.projectCategory;
             this.addForm.goodsType = record.goodsType == 0 ? undefined : record.goodsType;
             this.addForm.fieldDesignEnterprise = record.fieldDesignEnterprise;
@@ -502,7 +502,7 @@ export default {
             this.addForm.contractPrice = record.contractPrice;
             this.addForm.declaredCapacity = record.declaredCapacity;
             this.addForm.constructPermitNo = record.constructPermitNo;
-            this.addForm.fieldCalculateEnterprise = record.fieldCalculateEnterprise == 0 ? undefined : record.fieldCalculateEnterprise;;
+            this.addForm.fieldCalculateEnterprise = record.fieldCalculateEnterprise ? record.fieldCalculateEnterprise.split(',') : [];
             this.addForm.fieldConstructScale = record.fieldConstructScale;
             this.addForm.introversion = record.introversion;
             this.addForm.outward = record.outward;
@@ -670,7 +670,8 @@ export default {
       params.electronicFence.lng = this.addForm.lng;
       params.electronicFence.region = this.addForm.realAreaId;
       params.electronicFence.fieldType = this.addForm.fieldType;
-    
+
+ 
     
         params.fieldTransportationEnterprises =  params.fieldTransportationEnterprises && params.fieldTransportationEnterprises.length>0 ?  params.fieldTransportationEnterprises.join(',') : '';
         params.fieldBuildEnterprises =   params.fieldBuildEnterprises && params.fieldBuildEnterprises.length>0 ?  params.fieldBuildEnterprises.join(',') : '';
