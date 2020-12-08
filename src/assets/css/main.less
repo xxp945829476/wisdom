@@ -139,8 +139,9 @@
     }
     .logo {
         font-size: 20px;
-        padding: 14px 0;
-        width: 260px !important;
+        padding: 14px 15px 14px 0;
+        max-width: 340px !important;
+        float: left;
     }
 
     .ant-menu {
@@ -212,8 +213,9 @@
     position: relative;
 
     .login_container {
-        background: #f0f2f5 url(../images/login2.jpg) no-repeat;
-        background-size: 100%;
+        // background: url(../images/login2.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
         height: 100%;
         .pt_logo{
             padding: 40px 0 0 45px;
@@ -596,9 +598,12 @@
             background: #fff4eb;
             border-radius: 4px;
             display: inline-block;
-            margin-right: 20px;
+            margin-right: 12px;
             cursor: pointer;
             color: #ff872e;
+            &:last-child{
+                margin-right: 0;
+            }
         }
         .cancel_tracking{
             color: #999;
@@ -1488,3 +1493,25 @@
 .radio_remote{
     padding: 20px 10px 0;
 }
+
+
+// 登录页配置
+.configure_login_box{
+    height: calc(100vh - 100px);
+    background: #fff;
+    overflow: auto;
+}
+.configure_login_form{
+    width: 800px;
+    margin: 30px auto 0;
+}
+.configure_login_tip{
+    color: #999;
+    text-align: right;
+    width: 18%;
+    display: inline-block;
+}
+.login_image{
+    width: 300px;
+}
+

@@ -37,7 +37,10 @@
             <div class="left_button">
                 <a-button type="primary" icon="plus" @click="addEletronic(0)" v-if="isAdd">
                     新增
-                  </a-button>
+                </a-button>
+                <a-button @click="issueCar">
+                    下发至车载终端
+                </a-button>
             </div>
 
               <div class="right_btn">
@@ -69,7 +72,7 @@
           
 
 
-          <a-table :columns="columns" bordered :data-source="tableData" @change="changeTable" size="middle" :rowKey='record' :pagination="pagination" :scroll="{x:1200,y:height}" :loading="loading">
+          <a-table :columns="columns" :row-selection="{ onChange: onSelectChange }" bordered :data-source="tableData" @change="changeTable" size="middle" :rowKey='record' :pagination="pagination" :scroll="{x:1200,y:height}" :loading="loading">
                   <a slot="address" slot-scope="text,record" @click="drawDence(record)">经纬度点击地图查看</a>
                   <span slot="action" slot-scope="text,record">
                     <template v-if="isEdit">
@@ -88,6 +91,7 @@
     </a-row>
 
     <modalElectronic ref="add_eletronic" :originalData="originalData" @triggerData="getData"></modalElectronic>
+    <modalSelectCar ref="select_car" @getVehicleNo="getVehicleNo"></modalSelectCar>
     <drawFence ref="draw_fence"></drawFence>
    </div>
    
@@ -98,7 +102,7 @@ import {AreaList,Fencelist,BaseList,EditElectronic} from '@/network/api'
 import modalElectronic from './modalElectronic.vue'
 import {buildAreaTree} from '@/utils/utils.js'
 import drawFence from './drawFence.vue'
-
+import modalSelectCar from './modalSelectCar.vue'
 
 
 
@@ -109,9 +113,6 @@ import drawFence from './drawFence.vue'
 export default {
   data() {
       const columns = [
-      { title: '序号', fixed: 'left',width: 80, customRender:(text, row, index)=>{
-        return <span>{index}</span>;
-      },align:'center'},
       {
         title: '管辖区名称',
         dataIndex: 'regionName',
@@ -148,7 +149,6 @@ export default {
         key: 'action',
         width:'200px',
         align:'center',
-        fixed: 'right',
         scopedSlots: { customRender: 'action' },
       },
     ];
@@ -196,12 +196,14 @@ export default {
       },
       fieldTypeData:[],
       isAdd:false,
-      isEdit:false
+      isEdit:false,
+      selList:[]
     }
   },
   components:{
     modalElectronic,
-    drawFence
+    drawFence,
+    modalSelectCar
   },
   created(){
     this.init();
@@ -324,7 +326,6 @@ export default {
        };
 
         EditElectronic(params).then(res=>{
-
             if(res.data.code == 0){
               this.getData();
               this.$message.success('注销成功');
@@ -332,6 +333,20 @@ export default {
               this.$message.warning('注销失败')
             };
         })
+    },
+    onSelectChange(selectedRowKeys,selectedRows){
+      console.log(selectedRows)
+      this.selList = selectedRows;
+    },
+    issueCar(){
+      // if(this.selList.length<=0){
+      //   this.$message.warning('请选择围栏')
+      //     return false
+      // };
+      this.$refs.select_car.selCar(this.selList)
+    },
+    getVehicleNo(){
+      
     }
   }
 }

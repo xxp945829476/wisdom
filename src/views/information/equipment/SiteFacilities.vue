@@ -420,8 +420,8 @@ export default {
     
     
     monitorMap(record){
-      console.log(record.id)
-      window.open('/MonitoringDisplay?id='+record.id);
+      console.log(record)
+      window.open('/MonitoringDisplay?id='+record.id + '&simNo=' + record.simNo);
       // this.$setStorage('positionData',JSON.stringify(record.electronicFence));
     },
     

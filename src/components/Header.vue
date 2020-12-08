@@ -4,8 +4,9 @@
 
         
         <a-row class="header_content">
-            <a-col :md="4" class="logo" v-if="navigationMode=='horizontal'">
-                建筑垃圾运输处置管理系统
+            <a-col class="logo" v-if="navigationMode=='horizontal'">
+                <!-- 建筑垃圾运输处置管理系统 -->
+                {{sysHomeName}}
             </a-col>
             <a-col :md="14">
                <Sider v-if="navigationMode=='horizontal'"></Sider>
@@ -81,12 +82,14 @@
 
 <script>
 import Sider from '@/components/Sider.vue'
+import {GetLogin} from '@/network/api'
 export default {
     data () {
         return {
             setVisible:false,
             navValue:'',
-            account:''
+            account:'',
+            sysHomeName:''
         }
     },
     props:{
@@ -109,8 +112,27 @@ export default {
             let userInfoList = JSON.parse(this.$getStorage('userInfoList'))
             this.account = userInfoList.account;
         })
+        this.getData();
     },
     methods:{
+        getData(){
+            this.spinning = true;
+            GetLogin().then(res=>{
+                this.spinning = false;
+                if(res.data.code == 0){
+                    if(res.data.data){
+                        this.sysHomeName = res.data.data.sysHomeName
+                    }else{
+                     
+                        this.sysHomeName = '智能渣土系统平台'
+
+                        
+                    }
+                }else{
+                    this.$message.warning('加载失败')
+                };
+            });
+        },
         switchMenu(){
             this.$emit('switchMenu',this.collapsed)
         },

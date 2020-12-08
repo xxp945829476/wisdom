@@ -66,9 +66,7 @@ import {IndexVehicleList} from '@/network/api'
 export default {
   data() {
     const columns = [
-      { title: '序号', width: 80, fixed: 'left',customRender:(text, row, index)=>{
-        return <a href="javascript:;">{index}</a>;
-      },align:'center'},
+     
       { title: '车牌号码', dataIndex: 'vehicleNo', key: 'vehicleNo',ellipsis:true,align:'center',},
       { title: '车辆状态', dataIndex: 'ol', key: 'ol',ellipsis:true,align:'center',scopedSlots: { customRender: 'ol' },},
       { title: '车辆类型', dataIndex: 'vehicleTypeName', key: 'vehicleTypeName',ellipsis:true,align:'center',},
@@ -150,6 +148,7 @@ export default {
       },
       sure(){
         this.selectVisible = false;
+        console.log()
         this.$emit('getVehicleNo',this.selectedList)
       },
       onSelectChange(val,row){

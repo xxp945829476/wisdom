@@ -295,7 +295,7 @@ export default {
         key: 'simNo',
         align:'center',
         ellipsis:true,
-        width:100
+        width:150
       },
       {
         title: '入库时间',

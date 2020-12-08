@@ -8,3 +8,11 @@ export function ControlRemote(data,url){
         data:Qs.stringify({json: JSON.stringify(data)}),
     })
 }
+
+export function TruckSetting(data){
+    return fetch({
+        url:'/StandardApiAction_truckDocumentationSetting.action',
+        method:'post',
+        data:Qs.stringify(data),
+    })
+}

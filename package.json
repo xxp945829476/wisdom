@@ -27,6 +27,7 @@
     "vue-baidu-map": "^0.21.22",
     "vue-baidu-map-v3": "^1.0.2",
     "vue-draggable-resizable": "^2.1.0",
+    "vue-print-nb": "^1.5.0",
     "vue-router": "^3.2.0",
     "vue-video-player": "^5.0.2",
     "vuedraggable": "^2.24.1",

@@ -168,13 +168,15 @@ export default {
         return <span>{index}</span>;
       },align:'center'},
       {
-        title: '设备ID',
-        dataIndex: 'deviceId',
-        key: 'deviceId',
+        title: '设备名称',
+        dataIndex: 'deviceName',
+        key: 'deviceName',
         align:'center',
         ellipsis:true,
-        width:120
+        width:160,
+        scopedSlots: { customRender: 'deviceName' },
       },
+     
       {
         title: 'SIM号',
         dataIndex: 'simNo',
@@ -205,14 +207,13 @@ export default {
         ellipsis:true,
         width:150
       },
-      {
-        title: '设备名称',
-        dataIndex: 'deviceName',
-        key: 'deviceName',
+       {
+        title: '设备ID',
+        dataIndex: 'deviceId',
+        key: 'deviceId',
         align:'center',
         ellipsis:true,
-        width:160,
-        scopedSlots: { customRender: 'deviceName' },
+        width:120
       },
       {
         title: '车辆绑定状态',

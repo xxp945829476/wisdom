@@ -11,6 +11,8 @@ export default {install (Vue, options) {
       Vue.prototype.$removeStorage = function (key) {
          localStorage.removeItem(key);
       };//删除
+
+  
       Vue.directive('dialogDrag', {
          bind(el, binding, vnode, oldVnode) {
            // 自定义属性，判断是否可拖拽

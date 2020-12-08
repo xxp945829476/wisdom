@@ -90,6 +90,8 @@
                   </a>
                   <span slot="action" slot-scope="text,record">
                       <a @click="addBpm(1,record)">查看</a>
+                      <a-divider type="vertical" />
+                      <a @click="printing(record)">打印</a>
                   </span>
           </a-table>
 
@@ -100,6 +102,7 @@
 
  
    <modalMyCard ref="add_facilities" @triggerData = "getData"></modalMyCard>
+   <modalPrinting ref="print_facilities" ></modalPrinting>
 
 
     
@@ -110,6 +113,7 @@
 <script>
 
 import modalMyCard from './modalMyCard.vue'
+import modalPrinting from './modalPrinting.vue'
 import {ListWorkflow,ListMyLaunchWorkflow} from '@/network/api'
 
 
@@ -202,6 +206,7 @@ export default {
   },
   components:{
     modalMyCard,
+    modalPrinting
   },
   created(){
     this.init()
@@ -308,6 +313,9 @@ export default {
       this.formParmas.pageSize = pagination.pageSize;
       this.pagination.pageSize = pagination.pageSize;
       this.getData()
+    },
+    printing(record){
+      this.$refs.print_facilities.addBpm(record)
     }
     
   }

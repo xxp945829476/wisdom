@@ -868,7 +868,7 @@ export default {
    
     getUploadData(val){
         if(!this.taskForm.deviceNo){
-          this.$message.warning('请选择车辆设备')
+          this.$message.warning('请选择工地设备')
           return false
         };
         this.loading1 = true;

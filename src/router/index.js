@@ -36,6 +36,11 @@ const originalPush = VueRouter.prototype.push
     path: '/monitoringDisplay',
     name: '监控详情',
     component: () => import('@/views/MonitoringDisplay.vue')
+  },
+  {
+    path: '/policeForces',
+    name: '周边警力',
+    component: () => import('@/views/PoliceForces.vue')
   }
 ]
 
@@ -65,7 +70,7 @@ export function resetRouter () {
 router.beforeEach((to,from,next)=>{
   let subNavList = [];
   let isNavListExist = false;
-  if(to.path !='/login' && to.path !='/MonitoringDisplay'){
+  if(to.path !='/login' && to.path !='/MonitoringDisplay'&& to.path !='/policeForces'){
     if(Vue.prototype.$getStorage('subNav')){
       subNavList = JSON.parse(Vue.prototype.$getStorage('subNav'))
     };

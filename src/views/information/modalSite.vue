@@ -441,7 +441,7 @@ export default {
     addSite(val,record){
       this.siteVisible = true;
       this.isEdit = val;
-      this.addForm.fieldType = 11;
+      this.addForm.fieldType = 770;
       this.$nextTick(()=>{
           this.$refs.ruleForm.resetFields();
           if(val == 0){

@@ -5,7 +5,7 @@
         <baidu-map class="fence_view fence_view_1" :center="center" :scroll-wheel-zoom="true" :ak="$store.getters.ak"  :zoom="zoom" @ready="handler"  @mousemove="syncPolyline"
   @click="paintPolyline"
   @rightclick="newPolyline">
-          <template v-if="fieldType==56">
+          <template v-if="fieldType==210||fieldType==769">
              <mapPolyline :path="path" v-for="(path,index) of polyline.paths" :stroke-weight="2" :stroke-color="fillColor" :key="index"></mapPolyline>
           </template>
           <template v-else>
@@ -246,7 +246,7 @@ export default {
             let data = JSON.parse(res.data.data)
             console.log(data)
             console.log(data.result.pois[0])
-            if(this.fieldType==56){
+            if(this.fieldType==210||this.fieldType==769){
               this.areaList.push(data.result.addressComponent.street)
             }else{
               if(data.result.pois.length>0){

@@ -1,134 +1,38 @@
 <template>
     <div class="big_screen" ref="big_screen">
         <div class="monitor_display_nav">
-            <ul>
-                <li :class="{curColor:navCurrent==1}" :style="{backgroundImage:'url('+ navImgSel +')'}">黑车识别</li>
-                <!-- <li :class="{curColor:navCurrent==2}" :style="{backgroundImage:'url('+ navImg +')'}">黑车识别</li> -->
-            </ul>
-            <div class="monitor_display_t">建筑垃圾运输处置监管</div>
-            <div class="monitor_display_time">
+            <div class="left_time">
                 <span>{{today}}</span>
                 <img src="../assets/images/quanp.png" @click="fullScreen">
+            </div>
+            
+            <!-- <ul>
+                <li :class="{curColor:navCurrent==1}" :style="{backgroundImage:'url('+ navImgSel +')'}">黑车识别</li>
+                <li :class="{curColor:navCurrent==2}" :style="{backgroundImage:'url('+ navImg +')'}">黑车识别</li>
+            </ul> -->
+            <div class="monitor_display_t">周边警力</div>
+            <div class="monitor_display_time">
+                
+
+                <img class="set" src="../assets/images/set.png" @click="showSlider">
+            
             </div>
             
         </div>
         
 
         <div class="monitor_display_content">
-            <div class="monitor_display_left">
-                <h2>道闸监控<span v-if="onlineStatus==1">(在线)</span><span v-else>(离线)</span><img src="../assets/images/icon01.png"></h2>
-                <div class="congx" @click="playLiver">
-                     <a-spin :spinning="spinning">  
-                    <img src="../assets/images/dzsp.jpg" alt="">
-                     </a-spin>
-                </div>
-                <h2 class="congxzk congxzk_1">道闸状况<img src="../assets/images/icon01.png"></h2>
-                <div class="congxzk_content">
-                    <div class="congxzk_content_th">
-                        <span>通行车辆</span>
-                        <span>通行时间</span>
-                        <span>报警类型</span>
-                    </div>
-                    <div class="congxzk_content_list">
-                        <div class="congxzk_content_tr" :class="{'congxzk_content_tr_cur':curNum == index }" v-for="(item,index) in tableData" :key="item.keyIdex" @click="carDetail(item,index)">
-                            <span>{{item.vehicleNo}}</span>
-                            <span>{{item.time}}</span>
-                            <span>{{item.type}}</span>
-                        </div>
-                        
-                    </div>
-                   
-                </div>
-            </div>
+           
 
             <div class="monitor_display_map">
-                <ul class="car_num_box">
-                    <li>
-                        <span>今日作业车辆</span>
-                        <p><em>{{todayTotal}}</em>辆</p>
-                    </li>
-                    <li>
-                        <span>今日黑车车辆</span>
-                        <p><em>{{todayBlackNum}}</em>辆</p>
-                    </li>
-                    <li>
-                        <span>昨日作业车辆</span>
-                        <p><em>{{yesTotal}}</em>辆</p>
-                    </li>
-                    <li>
-                        <span>昨日黑车车辆</span>
-                        <p><em>{{yesBlackNum}}</em>辆</p>
-                    </li>
-                </ul>
+            
                 <div class="map_box">
-                     <!-- <baidu-map class="bm-view" :mapStyle="mapStyle"  @resize="resize" ref="bm_view" :scroll-wheel-zoom="true" ak="pfc1m07NsOzjmAFh8xbhvcIEMo2HWECr" :center="center" :zoom="zoom" @ready="handler">
-                          <mapMarker :position="{lng: center.lng, lat: center.lat}" :icon="{url: siteUrl, size: {width: 61, height: 61}}"></mapMarker>
-                    <mapMarkerClusterer :averageCenter="true" >
-                        <mapMarker :position="{lng: marker.lng, lat: marker.lat}"></mapMarker>
-                        <mapCircle :center="circlePath.center" :radius="circlePath.radius"  :stroke-opacity="0.1" :fillColor="'#0d2f48'" :strokeWeight="1" @lineupdate="updateCirclePath"></mapCircle>
-                    </mapMarkerClusterer>
-                </baidu-map> -->
-
                     <div id="bm-view"  class="bm-view"></div>
                 </div>
                
             </div>
 
-            <div class="monitor_display_right">
-                <h2>范围查车<img src="../assets/images/icon01.png">
-                    <img class="set" src="../assets/images/set.png" @click="showSlider">
-                </h2>
-                <div class="range_car">
-                    <h3>{{sliderValue}}米范围内共有 <em>{{areaNum}}</em> 辆车</h3>
-                    <ul>
-                        <li v-for="(item,index) in areaMarkersLists" :key="index+'a'"><span></span>{{item.name}}</li>
-
-                        
-                    </ul>
-                </div>
-                <h2 class="congxzk">通行车辆<img src="../assets/images/icon01.png">
-                </h2>
-                <div class="task_car">
-                    <div class="task_car_echarts">
-                        <div class="task_car_echarts_l">
-                            <div class="task_car_echarts_map_l" ref="echarts_bar_l"></div>
-                            <div class="yesterday">昨日</div>
-                        </div>
-                        <div class="task_car_echarts_r">
-                            <div class="task_car_echarts_map_r" ref="echarts_bar_r"></div>
-                            <div class="yesterday">今日</div>
-                        </div>
-                    </div>
-                    <ul>
-                        <li><span></span>黑车</li>
-                        <li><span></span>正常车</li>
-                        <li><span></span>其他车</li>
-                        <!-- <li><span></span>套牌车</li>
-                        <li><span></span>绕行</li>
-                        <li><span></span>未冲洗</li>
-                        <li><span></span>冲洗时间不足</li>
-                        <li><span></span>冲洗不干净</li> -->
-                    </ul>
-                </div>
-                <h2 class="congxzk">通行详情<img src="../assets/images/icon01.png">
-                </h2>
-                <div class="wash_status">
-                    <h4 v-if="details.vehicleNo">{{details.vehicleNo}}</h4>
-                    <h4 v-else>---</h4>
-                    <dl>
-                        <dt>
-                            <img src="../assets/images/load.png"/>
-                            <p></p>
-                        </dt>
-                        <dd>
-                            <p><span>通行时间：</span>{{details.time}}</p>
-                            <p><span>报警类型：</span>{{details.type}}</p>
-                            <p><span>所属企业：</span>{{details.deptName}}</p>
-                            <p><span>车辆型号：</span>{{details.vehicleModel}}</p>
-                        </dd>
-                    </dl>
-                </div>
-            </div>
+            
         </div>
 
 
@@ -154,11 +58,11 @@
             <div class="slider_box">
                 <h2 class="congxzk"><img src="../assets/images/icon01.png">查询范围设置</h2>
                 <div class="slider_area">
-                    <a-slider id="test" :default-value="sliderValue" @change="changeSlider" :min="200" :max="5000"/>
+                    <a-slider id="test" :default-value="sliderValue" @change="changeSlider" :min="2000" :max="8000"/>
                     <ul>
-                        <li>200m</li>
-                        <li>2600m</li>
+                        <li>2000m</li>
                         <li>5000m</li>
+                        <li>8000m</li>
                     </ul>
                 </div>
 
@@ -181,7 +85,7 @@ import 'echarts/lib/chart/bar'
 import {launchFullscreen,exitfullscreen} from '@/utils/utils.js'
 import BMapLibArea from '@/utils/GeoUtils_min.js'
 import debounce from 'lodash/debounce'
-import {FacilityList,IndexVehicleList,OnlineOffline,GetJsession,GetDeviceOlStatus,SummaryBlacklist} from "@/network/api"
+import {FacilityList,IndexVehicleList,OnlineOffline,GetJsession,GetDeviceOlStatus} from "@/network/api"
 
 
 
@@ -189,7 +93,6 @@ import {FacilityList,IndexVehicleList,OnlineOffline,GetJsession,GetDeviceOlStatu
 export default {
     data() {
         return {
-            details:'',
             onlineStatus:'',
              videoMultiple:[
                 {num:1,icon:'iconweibiaoti-1'},
@@ -201,9 +104,9 @@ export default {
                 {num:36,icon:'icon36bei'},
             ],
             sliderShow:false,
-            sliderValue:1500,
+            sliderValue:2000,
             livePlayerShow:false,
-            siteUrl:require('@/assets/images/jkgd.png'),
+            siteUrl:require('@/assets/images/tc.png'),
             
             navImg:require('@/assets/images/big_nosel.png'),
             navImgSel:require('@/assets/images/big_sel.png'),
@@ -1546,7 +1449,6 @@ export default {
                 vehicleStatus :'',
                 vehicleType:'',
             },
-            
             areaNum:0,
             markers:[],
             areaMarkersLists:[],
@@ -1561,41 +1463,11 @@ export default {
             devIdno:'',
             today:'',
             setTime:'',
-            spinning:false,
-            tableData:[],
-            todayBlackNum:0,
-            todayOtherNum:0,
-            todayWhiteNum:0,
-            yesBlackNum:0,
-            yesOtherNum:0,
-            yesWhiteNum:0,
-            curNum:0,
+            spinning:false
         }
     },
     mounted(){
 
-        this.myChart1 = echarts.init(this.$refs.echarts_bar_l);
-        
-       
-
-        this.myChart2 = echarts.init(this.$refs.echarts_bar_r);
-        
-
-       this.$nextTick(()=>{
-           setTimeout(()=>{
-                this.initVideo()
-            },200);
-
-           this.getHeight();
-           
-           window.addEventListener('resize',debounce(this.getHeight, 300))//防抖
-       
-       });
-
-      
-        
-        
-        
         this.$once('hook:beforeDestroy', () => {
             clearInterval(this.setTime)
           
@@ -1634,150 +1506,30 @@ export default {
             let yesEndtime = this.$moment()
             .subtract(1, "days")
             .format("YYYY-MM-DD 23:59:59");
-
-
-            
-          
            
             this.getOnlineData(todayBegintime,todayEndtime,1)
             this.getOnlineData(yesBegintime,yesEndtime,2)
-            this.getSiteData(this.$route.query.id);
-          
-            this.getBackData(todayBegintime,todayEndtime,1);
-            this.getBackData(yesBegintime,yesEndtime,2);
-        },
-        getBackData(s,e,val){
-            let params = {
-                begintime:s,
-                endtime:e,
-                currentPage:1,
-                pageRecords:9999,
-                geoaddress:1,
-                toMap:2,
-                armType:'530,531,532,533,536,537',
-                deviceNo:this.$route.query.simNo
-            };
-            SummaryBlacklist(params).then(res=>{
-        
-                if(res.data.code == 0){
-                    if(val==1){
-                        this.tableData = res.data.data.list;
-                            if(this.tableData.length>0){
-                            this.tableData.forEach((cur,index)=>{
-                                this.$set(cur,'keyIdex',index+'a')
-                            })
-                        };
-                        this.todayBlackNum = res.data.data.blackNum;
-                        this.todayOtherNum = res.data.data.otherNum;
-                        this.todayWhiteNum = res.data.data.whiteNum;
-                        this.details = this.tableData[0]
-                    }else{
-                         this.yesBlackNum = res.data.data.blackNum;
-                        this.yesOtherNum = res.data.data.otherNum;
-                        this.yesWhiteNum = res.data.data.whiteNum
-                    };
-
-                    
-                    this.getChart()
-                    
-                }else{
-                    this.$message.warning(res.data.message)
-                };
-                
-            }).catch(error=>{
-                this.tableData = []
-                this.loading = false;
-            })
-        },
-        getChart(){
-            
-             this.myChart1.setOption({
-                // title: {
-                //     text: '南丁格尔玫瑰图',
-                //     subtext: '纯属虚构',
-                //     left: 'center'
-                // },
-                series: [
-                    {
-                        // name: '面积模式',
-                        type: 'pie',
-                        label: {
-                            position: 'inner'
-                        },
-                        // roseType: 'area',
-                        radius: ['20%', '70%'],
-                        data: [
-                            {value: this.yesBlackNum, name:this.yesBlackNum,itemStyle: { color: '#ff5a00' }},
-                            {value: this.yesWhiteNum, name: this.yesWhiteNum,itemStyle: { color: '#ffc500' }},
-                            // {value: 3, name: '3',itemStyle: { color: '#1dd58f' }},
-                            // {value: 3, name: '3',itemStyle: { color: '#00beff' }},
-                            // {value: 5, name: '5',itemStyle: { color: '#7bbed5' }},
-                            {value: this.yesOtherNum, name: this.yesOtherNum,itemStyle: { color: '#6d45ee' }},
-                        ]
-                    }
-                ]
-            });
-            this.myChart2.setOption({
-                // title: {
-                //     text: '南丁格尔玫瑰图',
-                //     subtext: '纯属虚构',
-                //     left: 'center'
-                // },
-                series: [
-                    {
-                        // name: '面积模式',
-                        type: 'pie',
-                        label: {
-                            position: 'inner'
-                        },
-                        // roseType: 'area',
-                        radius: ['20%', '70%'],
-                         data: [
-                            {value: this.todayBlackNum, name:this.todayBlackNum,itemStyle: { color: '#ff5a00' }},
-                            {value: this.todayWhiteNum, name: this.todayWhiteNum,itemStyle: { color: '#ffc500' }},
-                            // {value: 3, name: '3',itemStyle: { color: '#1dd58f' }},
-                            // {value: 3, name: '3',itemStyle: { color: '#00beff' }},
-                            // {value: 5, name: '5',itemStyle: { color: '#7bbed5' }},
-                            {value: this.todayOtherNum, name: this.todayOtherNum,itemStyle: { color: '#6d45ee' }},
-                        ]
-                    }
-                ]
-            });
+            this.getSiteData(this.$route.query.vehicleNo);
         },
         getSiteData(siteId){
             let params = {
                 pageNum:1,
-                pageSize:20,
-                id:siteId,
-                areaId:'',
-                facilityName:'',
-                deviceName:'',
-                fieldId:'',
-            }
+                pageSize:10,
+                vehicleId:'',
+                vehicleNos:[siteId],
+                vehicleStatus :'',
+                vehicleType:'',
+            };
    
-            FacilityList(params).then(res=>{
+            IndexVehicleList(params).then(res=>{
                 this.loading = false;
                 if(res.data.code == 0){
                     let data = res.data.data.records;
                     this.positionData = data[0];
-                    this.siteName = this.positionData.fieldName;
-                     this.getData();
-                     this.getDeviceOlStatus();
-                }else{
-                    this.$message.warning('加载失败')
-                };
-                
-            });
-        },
-        getDeviceOlStatus(){
-            let params = {
-                deviceNo: this.positionData.simNo,
-            }
-   
-            GetDeviceOlStatus(params).then(res=>{
-             
-                if(res.data.code == 0){
-                    this.onlineStatus = res.data.data.onlines[0].online
+                    this.siteName = this.positionData.vehicleNo
+                    this.$nextTick(()=>{
+                          this.mapReady()
+                    })
                 }else{
                     this.$message.warning('加载失败')
                 };
@@ -1832,16 +1584,16 @@ export default {
                 };
                 
             }).catch(error=>{
-    
-           
+            this.tableData = []
+            this.loading = false;
             })
         },
         mapReady(){
             let that = this;
             var map = new BMap.Map('bm-view');
             const position = this.positionData;
-                let lngAry = position.lng.split(',');
-                let latAry = position.lat.split(',');
+                let lngAry = position.mlng.split(',');
+                let latAry = position.mlat.split(',');
 
 
                 var x = 0.0;
@@ -1874,7 +1626,7 @@ export default {
                 
                 map.enableScrollWheelZoom();
                 map.setMapStyleV2({styleJson:this.mapStyle.styleJson}); 
-                let myIcon = new BMap.Icon(that.siteUrl, new BMap.Size(61, 61));
+                let myIcon = new BMap.Icon(that.siteUrl, new BMap.Size(64, 64));
                 let marker1 = new BMap.Marker(point,{
                     icon: myIcon
                 });
@@ -2134,11 +1886,6 @@ export default {
         closed(){
             this.livePlayerShow = false;
             this.closeVideo()
-        },
-        carDetail(obj,i){
-            console.log(obj)
-            this.details = obj;
-            this.curNum = i;
         }
     }
 }
@@ -2199,6 +1946,13 @@ export default {
             }
         }
     }
+    .left_time{
+        padding-left: 40px;
+        width: 400px;
+        span{
+            padding-right: 18px;
+        }
+    }
 
     .monitor_display_content{
         display: block;
@@ -2238,12 +1992,15 @@ export default {
                 display: flex;
                 span{
                     flex: 1;
-                    text-align: center;
+                    text-align: left;
+                    &:nth-child(3){
+                        flex: 1.5;
+                    }
                 }
             }
             .congxzk_content_list{
                 height: 47vh;
-                overflow: hidden;
+                overflow: auto;
             }
             .congxzk_content_tr{
                 color: #fff;
@@ -2251,15 +2008,14 @@ export default {
                 display: flex;
                 padding: 1vh 0;
                 align-items: center;
-                cursor: pointer;
                 span{
                    flex: 1;
-                    text-align: center;
+                    text-align: left;
                     word-break: break-all;
+                    &:nth-child(3){
+                        flex: 1.5;
+                    } 
                 }
-            }
-            .congxzk_content_tr_cur{
-                background:rgba(0,0,0,0.2);
             }
         }
         .monitor_display_map{
@@ -2415,7 +2171,7 @@ export default {
                 padding: 0 12px;
                 overflow: hidden;
                 p{
-                    margin-botom: 10px;
+                    margin: 0;
                 }
                 h4{
                     color: #fff;
@@ -2478,7 +2234,7 @@ export default {
                 padding: 2px;
              }
             .bm-view{
-                height: 76vh;
+                height: 88vh;
                 
             }
         }

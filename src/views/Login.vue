@@ -1,12 +1,14 @@
 <template>
     <div class="login_box">
-        <div class="login_container">
+        <div class="login_container" :style="{backgroundImage: 'url('+ form.sysLoginImage+')'}">
             <div class="pt_logo">
                 <!-- <img src="../assets/images/logo.png" class="login_logo"> -->
-                <span>建筑垃圾运输处置管理系统</span>
+                <span v-if="form.sysLoginName">{{form.sysLoginName}}</span>
+                <span v-else>智能渣土系统平台</span>
             </div>
             <div class="login_main">
                 <div class="login_left">
+                    <!-- <img :src="pathUrl.imgurl + form.sysLoginImage" v-if="form.sysLoginImage"> -->
                     <img src="../assets/images/gd.png">
                 </div>
 
@@ -57,8 +59,8 @@
 import { resetRouter } from '@/router';
 import MenuUtils from '@/utils/MenuUtils'
 import {buildTree} from '@/utils/utils.js'
-import {login,menuList,GetUser,GetMenuList} from '@/network/api'
-
+import {login,menuList,GetUser,GetMenuList,GetLogin} from '@/network/api'
+import pathUrl from "@/network/requestUrl";
 import Identify from './Identify.vue'
 
 // var data = [
@@ -280,6 +282,8 @@ import Identify from './Identify.vue'
 export default {
     data() {
         return {
+            
+            pathUrl,
             code:'',
             identifyCodes: '1234567890',
             identifyCode: '',
@@ -297,7 +301,8 @@ export default {
                 password:[
                     { required: true, message: '请输入密码', trigger: 'blur' },
                 ]
-            }
+            },
+            form:{}
         }
     },
     components: {
@@ -311,8 +316,59 @@ export default {
         this.$removeStorage('subNav');
         this.$removeStorage('menuList');
         this.$removeStorage('taken');
+        this.getData();
     },
     methods:{
+         getData(){
+            
+            GetLogin().then(res=>{
+                
+                if(res.data.code == 0){
+                    if(res.data.data){
+                        this.form = res.data.data;
+                        if(!this.form.sysLoginImage){
+                            this.form.sysLoginImage = require('@/assets/images/login2.jpg')
+                        }else{
+                            let that = this
+                 
+                                this.$getBase64Image(this.pathUrl.imgurl + this.form.sysLoginImage,that);
+                            
+                            
+                            
+                        };
+                    }else{
+                        this.form = {
+                             id:'',
+                            sysCopyright:'',
+                            sysCopyrightUrl:'',
+                            sysHomeName:'',
+                            sysLoginImage:require('@/assets/images/login2.jpg'),
+                            sysLoginName:'',
+                            sysLogo:'',
+                            sysRecordNo:'',
+                        }
+                    }
+                }else{
+                    this.$message.warning('加载失败')
+                };
+            });
+        },
+        $getBase64Image(img,that){
+            let image = new Image();
+                image.setAttribute('crossOrigin', 'anonymous');
+                image.src = img
+        
+                image.onload = () => {
+                var canvas = document.createElement("canvas");
+                canvas.width = image .width;
+                canvas.height = image .height;
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(image , 0, 0, image .width, image .height);
+                var ext = image.src.substring(image.src.lastIndexOf(".") + 1).toLowerCase();
+                var dataURL = canvas.toDataURL("image" + ext);
+                that.form.sysLoginImage =dataURL 
+            }
+        },
          makeCode (o, l) {
             for (let i = 0; i < l; i++) {
                 this.identifyCode += this.identifyCodes[

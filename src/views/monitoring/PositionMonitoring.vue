@@ -285,6 +285,7 @@
             <span @click.stop="tracking(detailsData,true)" v-if="!isTracking">跟踪</span>
             <span @click.stop="tracking(detailsData,false)" v-else class="cancel_tracking">取消跟踪</span>
             <span @click.stop="control">管控</span>
+            <span @click.stop="policeForces(detailsData)">警力</span>
         </div>
     </div>
 
@@ -1264,6 +1265,10 @@ export default {
         },
         changeType(val){
           this.getVehicleList()
+        },
+        policeForces(obj){
+          console.log(obj.vehicleNo)
+          window.open('/policeForces?vehicleNo='+obj.vehicleNo);
         }
         
   }

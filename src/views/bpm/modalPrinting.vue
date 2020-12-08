@@ -1,288 +1,65 @@
 <template>
 <div>
-  <a-modal v-model="bmpVisible" :title="title" class="approval_modal" :maskClosable="false" :keyboard="false" width="700px" v-dialogDrag="dialog">
+  <a-modal v-model="bmpVisible" :title="title" class="approval_modal" :maskClosable="false" :keyboard="false" width="1200px" v-dialogDrag="dialog">
      <a-spin :spinning="spinning">
-      <div>
-          <a-form-model :model="addForm" ref="ruleForm" :label-col="labelCol" :wrapper-col="wrapperCol">
+      <div id="printTest">
 
-              <template v-for="(item,index) in fromList">
-                <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 1 || item.controlFormType == 3 || item.controlFormType == 5 || item.controlFormType == 13 || item.controlFormType == 22">
-                    <a-input v-model="item.content" :placeholder="item.controlRemindContent"/>
-                </a-form-model-item>
+          <a-descriptions bordered>
+            <template v-for="(item,index) in fromList">
+              <a-descriptions-item :label="item.controlName" :key="'a' + index" v-if="item.controlFormType == 1 || item.controlFormType == 3 || item.controlFormType == 5 || item.controlFormType == 13 || item.controlFormType == 22">
+                {{item.content}}
+              </a-descriptions-item>
 
-                <a-form-model-item :label="item.controlName"  :key="'a' + index" v-if="item.controlFormType == 2">
-                   <a-range-picker
-                   v-model="item.content"
-                    format="YYYY-MM-DD" valueFormat="YYYY-MM-DD"
-                  />
-                </a-form-model-item>
+              <a-descriptions-item :label="item.controlName" :key="'a' + index" v-if="item.controlFormType == 2">
+                {{item.content[0]}} ~ {{item.content[1]}}
+              </a-descriptions-item>
 
-              
+              <a-descriptions-item :label="item.controlName" :key="'a' + index" v-if="item.controlFormType == 4">
+                {{item.content}}
+              </a-descriptions-item>
 
-                <a-form-model-item :label="item.controlName"  :key="'a' + index" v-if="item.controlFormType == 4">
-                    <a-date-picker v-model="item.content" :placeholder="item.controlRemindContent" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD"/>
-                </a-form-model-item>
+              <a-descriptions-item :label="item.controlName" :key="'a' + index" v-if="item.controlFormType == 6">
+                {{item.content}}
+              </a-descriptions-item>
 
-                <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 6">
-                    <a-input v-model="item.content" :placeholder="item.controlRemindContent"/>
-                </a-form-model-item>
+              <a-descriptions-item :label="item.controlName" :key="'a' + index" v-if="item.controlFormType == 7">
+                {{item.content}}
+              </a-descriptions-item>
 
-                <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 7">
-                    <a-input v-model="item.content" :placeholder="item.controlRemindContent"/>
-                </a-form-model-item>
+              <a-descriptions-item :label="item.controlName" :key="'a' + index" v-if="item.associateDept == 1&&item.controlFormType == 7">
+                {{item.content}}
+              </a-descriptions-item>
 
-                <a-form-model-item label="运输企业"  :key="'b'+index" 
-                v-if="item.associateDept == 1&&item.controlFormType == 7">
-                     <a-select v-model="item.ids"
-                            mode="tags"
-                           placeholder="请选择运输企业"
-                            :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
-                              <a-select-option v-for="item in transportList" :key="item.id">
-                                  {{item.deptName}}
-                              </a-select-option>
-                            </a-select>
-                </a-form-model-item>
+              <a-descriptions-item :label="item.controlName" :key="'a' + index" v-if="item.controlFormType == 8">
+                {{item.content}}
+              </a-descriptions-item>
 
-                <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 8">
-                     <a-input v-model="item.content" :placeholder="item.controlRemindContent"/>
-                </a-form-model-item>
+              <a-descriptions-item :label="item.controlName" :key="'a' + index" v-if="item.controlFormType == 9">
+                {{item.content}}
+              </a-descriptions-item>
 
-                <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 9">
-                     
-                      <a-select v-model="item.content"
-                      :placeholder="item.controlRemindContent"
-                      allowClear>
-                        <a-select-option v-for="item in vehicleList" :key="item.id">
-                            {{item.vehicleNo}}
-                        </a-select-option>
-                      </a-select>
-                </a-form-model-item>
+              <a-descriptions-item :label="item.controlName" :key="'a' + index" v-if="item.controlFormType == 10">
+                {{item.content}}
+              </a-descriptions-item>
 
-                <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 10">
-                     <a-select v-model="item.content"
-                      :placeholder="item.controlRemindContent"
-                      allowClear>
-                        <a-select-option v-for="item in vehicleList1" :key="item.id">
-                            {{item.vehicleNo}}
-                        </a-select-option>
-                      </a-select>
-                </a-form-model-item>
+              <!-- <a-descriptions-item :label="item.controlName" :key="'a' + index" v-if="item.controlFormType == 11">
+                {{item.content}}
+              </a-descriptions-item> -->
+            </template>
+            
+          </a-descriptions>
 
 
-                <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 11 || item.controlFormType == 12">
-                     <a-input-search
-                     :placeholder="item.controlRemindContent"
-                     v-model="item.content"
-                      enter-button="绘制"
-                      @search="onDraw($event,index)"
-                    />
-                </a-form-model-item>
-
-
-                <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 14">
-                    <a-upload
-                      name="avatar"
-                      list-type="picture-card"
-                      :file-list="fileList1"
-                     :before-upload="uploadOne"
-                    >
-                      <div v-if="fileList1.length < item.uploadNum">
-                        <a-icon type="plus" />
-                        <div class="ant-upload-text">
-                          {{item.controlRemindContent}}
-                        </div>
-                      </div>
-                    </a-upload>
-                </a-form-model-item>
-
-
-                <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 15">
-                    <a-upload
-                      name="avatar"
-                      list-type="picture-card"
-                      :file-list="fileList2"
-                     :before-upload="uploadTwo"
-                    >
-                      <div v-if="fileList2.length < item.uploadNum">
-                        <a-icon type="plus" />
-                        <div class="ant-upload-text">
-                          {{item.controlRemindContent}}
-                        </div>
-                      </div>
-                    </a-upload>
-                </a-form-model-item>
-
-                <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 16">
-                    <a-upload
-                      name="avatar"
-                      list-type="picture-card"
-                      :file-list="fileList3"
-                     :before-upload="uploadThree"
-                    >
-                      <div v-if="fileList3.length < item.uploadNum">
-                        <a-icon type="plus" />
-                        <div class="ant-upload-text">
-                          {{item.controlRemindContent}}
-                        </div>
-                      </div>
-                    </a-upload>
-                </a-form-model-item>
-
-                 <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 17">
-                    <a-upload
-                      name="avatar"
-                      list-type="picture-card"
-                      :file-list="fileList4"
-                     :before-upload="uploadFour"
-                    >
-                      <div v-if="fileList4.length < item.uploadNum">
-                        <a-icon type="plus" />
-                        <div class="ant-upload-text">
-                          {{item.controlRemindContent}}
-                        </div>
-                      </div>
-                    </a-upload>
-                </a-form-model-item>
-
-                 <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 18">
-                    <a-upload
-                      name="avatar"
-                      list-type="picture-card"
-                      :file-list="fileList5"
-                     :before-upload="uploadFive"
-                    >
-                      <div v-if="fileList5.length < item.uploadNum">
-                        <a-icon type="plus" />
-                        <div class="ant-upload-text">
-                          {{item.controlRemindContent}}
-                        </div>
-                      </div>
-                    </a-upload>
-                </a-form-model-item>
-
-                 <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 19">
-                    <a-upload
-                      name="avatar"
-                      list-type="picture-card"
-                      :file-list="fileList6"
-                     :before-upload="uploadSix"
-                    >
-                      <div v-if="fileList6.length < item.uploadNum">
-                        <a-icon type="plus" />
-                        <div class="ant-upload-text">
-                          {{item.controlRemindContent}}
-                        </div>
-                      </div>
-                    </a-upload>
-                </a-form-model-item>
-
-                <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 20">
-                    <a-upload
-                      name="avatar"
-                      list-type="picture-card"
-                      :file-list="fileList7"
-                     :before-upload="uploadSeven"
-                    >
-                      <div v-if="fileList7.length < item.uploadNum">
-                        <a-icon type="plus" />
-                        <div class="ant-upload-text">
-                          {{item.controlRemindContent}}
-                        </div>
-                      </div>
-                    </a-upload>
-                </a-form-model-item>
-
-                <a-form-model-item :label="item.controlName"  :key="'a' + index" 
-                v-if="item.controlFormType == 21">
-                    <a-upload
-                      name="avatar"
-                      list-type="picture-card"
-                      :file-list="fileList8"
-                     :before-upload="uploadEight"
-                    >
-                      <div v-if="fileList8.length < item.uploadNum">
-                        <a-icon type="plus" />
-                        <div class="ant-upload-text">
-                          {{item.controlRemindContent}}
-                        </div>
-                      </div>
-                    </a-upload>
-                </a-form-model-item>
-           
-
-              </template>
-                      
-                      
-          </a-form-model>
+          
       </div>
      </a-spin>
       <template slot="footer">
           <a-button key="back" @click="bmpVisible=false">
           取消
           </a-button>
-          <a-button key="submit" type="primary" @click="save" v-if="isEdit==0">
-          发起审批
+          <a-button key="submit" type="primary" v-print="'#printTest'">
+          打印
           </a-button>
-
-            <template v-if="isEdit==1&&flag&&tmplStatus==0">
-
-              <a-popover v-model="visible" title="审批意见" trigger="click">
-                <a slot="content">
-                  <a-textarea
-                    v-model="comments"
-                    :placeholder="workflowOpinion"
-                    :auto-size="{ minRows: 5 }"
-                  />
-
-                  <a-button key="submit" type="primary" @click="approval(1)" class="bh_btn">
-                              确定
-                    </a-button>
-                      <a-button @click="visible=false" class="bh_btn bh_btn_right">
-                            取消
-                    </a-button>
-                </a>
-                <a-button type="primary">
-                  通过
-                </a-button>
-              </a-popover>
-
-              <a-popover v-model="visible1" title="审批意见" trigger="click">
-                <a slot="content">
-                  <a-textarea
-                    v-model="comments"
-                    :placeholder="workflowOpinion"
-                    :auto-size="{ minRows: 5 }"
-                  />
-
-                  <a-button key="submit" type="primary" @click="approval(2)" class="bh_btn">
-                              确定
-                    </a-button>
-                      <a-button @click="visible1=false" class="bh_btn bh_btn_right">
-                            取消
-                    </a-button>
-                </a>
-                <a-button type="danger">
-                 拒绝
-                </a-button>
-              </a-popover>
-              
-
-              
-            </template>
           
       </template>
   </a-modal>
@@ -363,35 +140,14 @@ export default {
      this.save = debounce(this.save,500)//保存防止重复点击
   },
   methods:{
-    addBpm(val,record){
+    addBpm(record){
       console.log(record)
       //val 0 新增 1 编辑
       this.bmpVisible = true;
-      this.isEdit = val;
+
       this.$nextTick(()=>{
 
-        if(val == 0){
-          this.title = '新增审批';
-          this.addForm.id = '';
-          this.workflowId = record.workflowId;
-          this.fileList1 = [];
-          this.contentImg1 = [];
-          this.fileList2 = [];
-          this.contentImg2 = [];
-          this.fileList3 = [];
-          this.contentImg3 = [];
-          this.fileList4 = [];
-          this.contentImg4 = [];
-          this.fileList5 = [];
-          this.contentImg5 = [];
-          this.fileList6 = [];
-          this.contentImg6 = [];
-          this.fileList7 = [];
-          this.contentImg7 = [];
-          this.fileList8 = [];
-          this.contentImg8 = [];
-          this.getFormInfo()
-        }else{
+        
           this.title = '查看审批';
           this.tmplId = record.tmplId;
           this.tmplStatus = record.tmplStatus;
@@ -400,7 +156,7 @@ export default {
           };
           this.getInstTmpl(record.tmplId);
           this.getBaseInfoWorkflow(record.workflowId);
-        }
+        
          document.querySelector('.ant-modal-body').scrollTop = 0;
       });
       
@@ -469,6 +225,7 @@ export default {
             this.spinning = false;
             if(res.data.code == 0){
                this.fromList = res.data.data;
+              //  this.fromListLength = Math.ceil(this.fromList.length/2)
                this.fromList.forEach(cur=>{
                   if(cur.controlFormType == 2){
                     
@@ -622,13 +379,6 @@ export default {
                         })
                     }
                   };
-
-                  if(cur.controlFormType == 9){
-                    this.getVehicle(cur.vehicleTypeSelect,9)
-                  };//申报车辆或戒掉车辆
-                  if(cur.controlFormType == 10){
-                    this.getVehicle(cur.vehicleTypeSelect,10)
-                  };//申报车辆或戒掉车辆
 
                   
                });
@@ -979,6 +729,8 @@ export default {
         })
         return false
       },
+     
+      
       
     },
 }

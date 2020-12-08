@@ -39,7 +39,7 @@ module.exports = {
   // see https://github.com/staven630/vue-cli4-config/tree/vue-cli3
   // webpack配置
   chainWebpack: (config) => {
-    // config.module
+    config.module
     //   .rule('images')
     //   .use('image-webpack-loader')
     //   .loader('image-webpack-loader')
@@ -121,7 +121,7 @@ module.exports = {
     },
     open: true, // 是否打开浏览器
     host: "localhost",
-    port: "8081", // 代理断就
+    port: "8088", // 代理断就
     https: false,
     hotOnly: true, // 热更新
     proxy: {

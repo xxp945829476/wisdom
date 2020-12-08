@@ -995,6 +995,63 @@ export function GetDeviceOlStatus(data){
     })
 }
 
+// 保存登录页面配置
+export function SetLogin(data){
+    return fetch({
+        url:'/api/sys-setting/set',
+        method:'post',
+        data:data,
+    })
+}
+
+// 登录页面配置详情
+export function GetLogin(data){
+    return fetch({
+        url:'/api/sys-setting/get',
+        method:'post',
+        data:data,
+    })
+}
+
+// 获取黑白车
+export function SummaryBlacklist(data){
+    return fetch({
+        url:'/api/sys-summary-blacklist/list',
+        method:'post',
+        data:data,
+    })
+}
+
+// 导出黑白车
+export function ExportSummaryBlacklist(data){
+    return fetch({
+        url:'/api/sys-summary-blacklist/export-list',
+        method:'post',
+        data:data,
+        responseType:'arraybuffer'
+    })
+}
+
+// 下发电子围栏
+export function SendCertificate(data){
+    return fetch({
+        url:'/api/sys-send-certificate/send',
+        method:'post',
+        data:data,
+    })
+}
+
+// 获取黑车附件
+export function GetAlarmFile(data){
+    return fetch({
+        url:'/api/sys-summary-blacklist/alarmFile',
+        method:'post',
+        data:data,
+    })
+}
+
+
+
 
 
 

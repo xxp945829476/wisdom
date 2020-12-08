@@ -46,13 +46,14 @@ import router from './router'
 import store from './store'
 import MenuUtils from '@/utils/MenuUtils'
 import toggleSearch from '@/utils/toggleSearch'
+import Print from 'vue-print-nb'
 
 Vue.mixin(toggleSearch);
 
 import moment  from 'moment'
 Vue.prototype.$moment = moment;
 import 'moment/locale/zh-cn';
-
+Vue.use(Print); //注册
 
 import VueDraggableResizable from 'vue-draggable-resizable'
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
