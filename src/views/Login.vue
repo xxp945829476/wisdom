@@ -317,6 +317,7 @@ export default {
         this.$removeStorage('menuList');
         this.$removeStorage('taken');
         this.getData();
+       
     },
     methods:{
          getData(){
@@ -336,6 +337,12 @@ export default {
                             
                             
                         };
+                        if(this.form.sysLoginName){
+                            document.title = this.form.sysLoginName;
+                        }else{
+                           document.title = '智慧渣土管理平台' 
+                        };
+
                     }else{
                         this.form = {
                              id:'',
