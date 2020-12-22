@@ -37,6 +37,9 @@
                 <a-button type="primary" icon="plus" @click="addSite(0)" v-if="isAdd">
                     新增
                   </a-button>
+                 <a-button  @click="LinkMigrateMap">
+                    渣土流向
+                  </a-button>
                   <!-- <a-button>
                     导出
                   </a-button> -->
@@ -249,14 +252,14 @@ export default {
         ellipsis:true,
         width:240
       },
-      {
-        title: '设备状态（在线/总数）',
-        dataIndex: 'slaveName',
-        key: 'slaveName',
-        align:'center',
-        ellipsis:true,
-        width:150
-      },
+      // {
+      //   title: '设备状态（在线/总数）',
+      //   dataIndex: 'slaveName',
+      //   key: 'slaveName',
+      //   align:'center',
+      //   ellipsis:true,
+      //   width:150
+      // },
       // {
       //   title: '今日作业车次',
       //   dataIndex: 'simNo',
@@ -529,6 +532,9 @@ export default {
     updateData(){
       this.getData();
       this.getTree();
+    },
+    LinkMigrateMap(){
+       window.open('/migrateMap');
     }
   }
 }

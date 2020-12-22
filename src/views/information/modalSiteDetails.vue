@@ -30,6 +30,12 @@
                 <a-descriptions-item label="电子围栏" :span="3">
                     <span v-for="(item,index) in position" :key="'a' + index">{{item.lat}},{{item.lng}}; </span>
                 </a-descriptions-item>
+                <a-descriptions-item label="出土量(m³)">
+                    {{commonFun(addForm.excavate)}}
+                </a-descriptions-item>
+                <a-descriptions-item label="回填量(m³)">
+                    {{commonFun(addForm.backfill)}}
+                </a-descriptions-item>
                 <a-descriptions-item label="工地简称">
                     {{commonFun(addForm.fieldAbbr)}}
                 </a-descriptions-item>

@@ -43,6 +43,16 @@
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
+                        <a-form-model-item label="出土量(m³)" prop="excavate">
+                          <a-input-number style="width:100%" placeholder="请输入出土量" v-model="addForm.excavate" :min="0" />
+                        </a-form-model-item>
+                    </a-col>
+                    <a-col :md="8">
+                        <a-form-model-item label="回填量(m³)" prop="backfill">
+                           <a-input-number style="width:100%" v-model="addForm.backfill" placeholder="请输入回填量" :min="0" />
+                        </a-form-model-item>
+                    </a-col>
+                    <a-col :md="8">
                         <a-form-model-item label="电子围栏" prop="vehicleColor">
                             <a-input v-model="value" @click="drawDence" placeholder="请输入电子围栏"/>
                         </a-form-model-item>
@@ -344,6 +354,8 @@ export default {
       siteVisible:false,
       initial:[],
       addForm:{
+         excavate:'',
+         backfill:'',
          id:'',
          fieldName:'',
          realAreaId:'',
@@ -427,6 +439,12 @@ export default {
         ],
         time:[
           { required: true, message: '请选择日期', trigger: 'change' },
+        ],
+        excavate:[
+          { required: true, message: '请输入出土量', trigger: 'blur' },
+        ],
+        backfill:[
+          { required: true, message: '请输入回填量', trigger: 'blur' },
         ]
       },
     }
@@ -519,6 +537,8 @@ export default {
             this.addForm.fieldBuildEnterprisesName = record.buildDeptNames;
             this.addForm.fieldConstructEnterpriseName = record.constructDeptNames;
             this.addForm.fieldCalculateEnterpriseName = record.calculateDeptNames;
+            this.addForm.excavate = record.excavate;
+            this.addForm.backfill = record.backfill;
 
             let addressArr = [];
             let index = 0;
