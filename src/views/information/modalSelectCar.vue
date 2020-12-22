@@ -220,7 +220,7 @@ export default {
               this.jsonObj.LINE22.push({
                 ID:cur.id,
                 NAME:'线路名称',
-                
+                SLAGTYPE: cur.fieldType,
                 POINT:this.getPoint(cur)
               })
             }else{
@@ -230,7 +230,7 @@ export default {
                 ALMIN:1,
                 ALMOUT:1,
                 UPIN:1,
-                SLAGTYPE:'',
+                SLAGTYPE:cur.fieldType,
               
                 POINT:this.getPoint(cur)
               })

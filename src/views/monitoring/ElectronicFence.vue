@@ -198,19 +198,19 @@ export default {
                     latArr.forEach((ele,index)=>{
                       paths.push(new BMap.Point(lngArr[index], ele))
                     });
-                    if(cur.fieldType == 56){
+                    if(cur.fieldType == 210 || cur.fieldType == 769){
                        this.polyline.paths.push(paths)
-                    }else if(cur.fieldType==11){
+                    }else if(cur.fieldType==770){
                       this.Polygon.paths.push(paths)
-                    }else if(cur.fieldType==12){
+                    }else if(cur.fieldType==771){
                       this.givenPolygon.paths.push(paths)
-                    }else if(cur.fieldType==13){
+                    }else if(cur.fieldType==773){
                       this.parkingPolygon.paths.push(paths)
                     }else if(cur.fieldType==14){
                       this.bituminousPolygon.paths.push(paths)
-                    }else if(cur.fieldType==15){
+                    }else if(cur.fieldType==772){
                       this.speedPolygon.paths.push(paths)
-                    }else if(cur.fieldType==16){
+                    }else if(cur.fieldType==774){
                       this.outPolygon.paths.push(paths)
                     }
                   
