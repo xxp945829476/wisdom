@@ -43,8 +43,8 @@ const originalPush = VueRouter.prototype.push
     component: () => import('@/views/PoliceForces.vue')
   },
   {
-    path: '/migrateMap',
-    name: '回流',
+    path: '/migrate',
+    name: '流向',
     component: () => import('@/views/MigrateMap.vue')
   }
 ]
@@ -75,7 +75,7 @@ export function resetRouter () {
 router.beforeEach((to,from,next)=>{
   let subNavList = [];
   let isNavListExist = false;
-  if(to.path !='/login' && to.path !='/MonitoringDisplay'&& to.path !='/policeForces'&& to.path !='/migrateMap'){
+  if(to.path !='/login' && to.path !='/MonitoringDisplay'&& to.path !='/policeForces'&& to.path !='/migrate'){
     if(Vue.prototype.$getStorage('subNav')){
       subNavList = JSON.parse(Vue.prototype.$getStorage('subNav'))
     };

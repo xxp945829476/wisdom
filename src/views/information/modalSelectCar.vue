@@ -230,6 +230,7 @@ export default {
                 ALMIN:1,
                 ALMOUT:1,
                 UPIN:1,
+                UPOUT: 1,
                 SLAGTYPE:cur.fieldType,
               
                 POINT:this.getPoint(cur)
@@ -298,13 +299,13 @@ export default {
             point.push({
               ID: index,
 					    W: 100, 
-              Y:cur.lat,
-              X:cur.lng
+              Y:parseInt(cur.lat),
+              X:parseInt(cur.lng)
             })
           }else{
             point.push({
-              Y:cur.lat,
-              X:cur.lng
+              Y:parseInt(cur.lat),
+              X:parseInt(cur.lng)
             })
           }
           

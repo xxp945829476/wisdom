@@ -43,7 +43,13 @@ export default {
     },
     menuClick({ item, key, keyPath }){
       if(item.level>1){
-        this.$router.push(key);
+        console.log(key)
+        if(key=== '/migrateMap'){
+          window.open('/migrate')
+        }else{
+           this.$router.push(key);
+        }
+       
       };
     },
     

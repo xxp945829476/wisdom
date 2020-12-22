@@ -37,9 +37,6 @@
                 <a-button type="primary" icon="plus" @click="addSite(0)" v-if="isAdd">
                     新增
                   </a-button>
-                 <a-button  @click="LinkMigrateMap">
-                    渣土流向
-                  </a-button>
                   <!-- <a-button>
                     导出
                   </a-button> -->
@@ -533,9 +530,6 @@ export default {
       this.getData();
       this.getTree();
     },
-    LinkMigrateMap(){
-       window.open('/migrateMap');
-    }
   }
 }
 </script>
