@@ -284,8 +284,8 @@
             <span @click.stop="previewVideo(detailsData.simNo)">视频</span>
             <span @click.stop="tracking(detailsData,true)" v-if="!isTracking">跟踪</span>
             <span @click.stop="tracking(detailsData,false)" v-else class="cancel_tracking">取消跟踪</span>
-            <!-- <span @click.stop="control">管控</span>
-            <span @click.stop="policeForces(detailsData)">警力</span> -->
+            <span @click.stop="control">管控</span>
+            <span @click.stop="policeForces(detailsData)">警力</span>
         </div>
     </div>
 
