@@ -206,12 +206,12 @@
           <span v-if="detailsData.deviceCalibration==0">是</span>
           <span v-else>否</span>
         </a-descriptions-item>
-        <a-descriptions-item label="验证信息">
+        <!-- <a-descriptions-item label="验证信息">
           ---
-        </a-descriptions-item>
-        <a-descriptions-item label="有效证件">
+        </a-descriptions-item> -->
+        <!-- <a-descriptions-item label="有效证件">
          ---
-        </a-descriptions-item>
+        </a-descriptions-item> -->
         <a-descriptions-item label="所属公司">
          {{detailsData.deptName}}
         </a-descriptions-item>
@@ -228,9 +228,9 @@
            {{detailsData.sp}}km/h
         </a-descriptions-item>
        
-        <a-descriptions-item label="偏离路线">
+        <!-- <a-descriptions-item label="偏离路线">
           ---
-        </a-descriptions-item>
+        </a-descriptions-item> -->
         <a-descriptions-item label="货箱状态">
           <span v-if="(detailsData.s3 >> 20) & 1 > 0">半载</span>
           <span v-else-if="(detailsData.s2 >> 19) & 1 > 0">重载</span>
@@ -253,12 +253,12 @@
           <span v-else-if="detailsData.tp[1] == '03'">异常</span>
             </em>
         </a-descriptions-item>
-        <a-descriptions-item label="围栏状态">
+        <!-- <a-descriptions-item label="围栏状态">
           ---
-        </a-descriptions-item>
-        <a-descriptions-item label="证件状态">
-          <!-- ---  <a @click="certificateRecord(detailsData.vehicleId)">证件记录</a> -->
-        </a-descriptions-item>
+        </a-descriptions-item> -->
+        <!-- <a-descriptions-item label="证件状态">
+          ---  <a @click="certificateRecord(detailsData.vehicleId)">证件记录</a>
+        </a-descriptions-item> -->
         <!-- <a-descriptions-item label="平台管控状态">
           --- <a>管控记录</a>
         </a-descriptions-item> -->
@@ -284,8 +284,8 @@
             <span @click.stop="previewVideo(detailsData.simNo)">视频</span>
             <span @click.stop="tracking(detailsData,true)" v-if="!isTracking">跟踪</span>
             <span @click.stop="tracking(detailsData,false)" v-else class="cancel_tracking">取消跟踪</span>
-            <span @click.stop="control">管控</span>
-            <span @click.stop="policeForces(detailsData)">警力</span>
+            <!-- <span @click.stop="control">管控</span>
+            <span @click.stop="policeForces(detailsData)">警力</span> -->
         </div>
     </div>
 
