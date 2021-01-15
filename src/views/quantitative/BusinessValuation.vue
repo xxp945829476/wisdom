@@ -3,26 +3,24 @@
 
        <div class="table-operator">
            <div class="left_button">
-               <a-button type="primary" icon="plus" @click="addQuan(0)">
-                  新增考核依据
+               <a-button type="primary">
+                  导出
                 </a-button>
            </div>
 
             <div class="right_btn">
                  <a-button type="primary" class="search_btn" @click="searchData">查询</a-button>
                   <a-button class="reload_btn" @click="resetData">重置</a-button>
+                  <a @click="toggleSearch">
+                      <a-icon :type="advanced ? 'up' : 'down'"/>
+                  </a>
             </div>
 
            <div class="layout_card_search">
                 <a-form-model layout="inline" :model="formParmas" @submit="searchData" @submit.native.prevent>
                     <a-row :gutter="24">
-                        <a-col :md="12">
-                            <a-form-model-item label="条目名称">
-                            <a-input v-model="formParmas.deptName" placeholder=""/>
-                            </a-form-model-item>
-                        </a-col>
-                        <a-col :md="12">
-                            <a-form-model-item label="考核对象">
+                        <a-col :md="8">
+                            <a-form-model-item label="评价周期">
                                  <a-select v-model="formParmas.deptBusinessType" allowClear>
                                     <a-select-option v-for="item in depList" :key="item.id">
                                         {{item.name}}
@@ -30,6 +28,29 @@
                                   </a-select>
                             </a-form-model-item>
                         </a-col>
+                        <a-col :md="8">
+                            <a-form-model-item label="评价时间">
+                            <a-input v-model="formParmas.deptName" placeholder=""/>
+                            </a-form-model-item>
+                        </a-col>
+                        <a-col :md="8">
+                            <a-form-model-item label="评价等级">
+                            <a-input v-model="formParmas.deptName" placeholder=""/>
+                            </a-form-model-item>
+                        </a-col>
+                        <template v-if="advanced">
+                            <a-col :md="8">
+                                <a-form-model-item label="企业名称">
+                                <a-input v-model="formParmas.deptName" placeholder=""/>
+                                </a-form-model-item>
+                            </a-col>
+                            <a-col :md="8">
+                                <a-form-model-item label="管辖区">
+                                <a-input v-model="formParmas.deptName" placeholder=""/>
+                                </a-form-model-item>
+                            </a-col>
+                        </template>
+                        
                     </a-row>
                 </a-form-model>
            </div>
@@ -54,14 +75,14 @@
                 </span>
         </a-table>
 
-       <modalQuan ref="add_quan" @triggerData="getData"></modalQuan>
+       <modalScoring ref="add_quan" @triggerData="getData"></modalScoring>
 
    </div>
 </template>
 
 <script>
 
-import modalQuan from './modalQuan.vue'
+import modalScoring from './modalScoring.vue'
 
 import {DepartmentList,BaseList,EditDepartment,ExportDepartment} from '@/network/api'
 
@@ -74,55 +95,41 @@ export default {
         return <span>{index+1}</span>;
       },align:'center'},
       {
-        title: '考核对象',
+        title: '企业名称',
         dataIndex: 'deptAbbreviation',
         key: 'deptAbbreviation',
         align:'center',
         ellipsis:true,
       },
       {
-        title: '考核名称',
+        title: '管辖区',
         dataIndex: 'deptName',
         key: 'deptName',
         align:'center',
         ellipsis:true,
       },
       {
-        title: '条目名称',
+        title: '得分',
         dataIndex: 'deptBusinessTypeName',
         key: 'deptBusinessTypeName',
         align:'center',
         ellipsis:true,
       },
       {
-        title: '加减分',
+        title: '评价等级',
         align:'center',
         ellipsis:true,
         scopedSlots: { customRender: 'deptJurisdictionalArea' },
   
       },
       {
-        title: '考核能容',
+        title: '备注',
         dataIndex: 'points',
         key: 'points',
         align:'center',
         ellipsis:true,
   
-      },
-      {
-        title: '依据文件',
-        dataIndex: 'deptLegalPerson',
-        key: 'deptLegalPerson',
-        align:'center',
-        ellipsis:true,
-     
-      },
-      {
-        title: '操作',
-        key: 'action',
-        align:'center',
-        scopedSlots: { customRender: 'action' },
-      },
+      }
     ];
       
     return {
@@ -161,7 +168,7 @@ export default {
     }
   },
   components:{
-      modalQuan
+      modalScoring
   },
   created(){
     // this.init();

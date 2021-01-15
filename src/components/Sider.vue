@@ -46,6 +46,8 @@ export default {
         console.log(key)
         if(key=== '/migrateMap'){
           window.open('/migrate')
+        }else if(key=== '/thermodynamicMap'){
+          window.open('/thermodynamic')
         }else{
            this.$router.push(key);
         }

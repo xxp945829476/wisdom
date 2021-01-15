@@ -4,7 +4,7 @@
        <div class="table-operator">
            <div class="left_button">
                <a-button type="primary" icon="plus" @click="addQuan(0)">
-                  新增考核依据
+                  新增考核
                 </a-button>
            </div>
 
@@ -16,18 +16,23 @@
            <div class="layout_card_search">
                 <a-form-model layout="inline" :model="formParmas" @submit="searchData" @submit.native.prevent>
                     <a-row :gutter="24">
-                        <a-col :md="12">
-                            <a-form-model-item label="条目名称">
+                        <a-col :md="8">
+                            <a-form-model-item label="考核对象">
                             <a-input v-model="formParmas.deptName" placeholder=""/>
                             </a-form-model-item>
                         </a-col>
-                        <a-col :md="12">
-                            <a-form-model-item label="考核对象">
+                        <a-col :md="8">
+                            <a-form-model-item label="考核周期">
                                  <a-select v-model="formParmas.deptBusinessType" allowClear>
                                     <a-select-option v-for="item in depList" :key="item.id">
                                         {{item.name}}
                                     </a-select-option>
                                   </a-select>
+                            </a-form-model-item>
+                        </a-col>
+                        <a-col :md="8">
+                            <a-form-model-item label="考核时间">
+                            <a-input v-model="formParmas.deptName" placeholder=""/>
                             </a-form-model-item>
                         </a-col>
                     </a-row>
@@ -54,14 +59,14 @@
                 </span>
         </a-table>
 
-       <modalQuan ref="add_quan" @triggerData="getData"></modalQuan>
+       <modalScoring ref="add_quan" @triggerData="getData"></modalScoring>
 
    </div>
 </template>
 
 <script>
 
-import modalQuan from './modalQuan.vue'
+import modalScoring from './modalScoring.vue'
 
 import {DepartmentList,BaseList,EditDepartment,ExportDepartment} from '@/network/api'
 
@@ -81,48 +86,34 @@ export default {
         ellipsis:true,
       },
       {
-        title: '考核名称',
+        title: '基础分数',
         dataIndex: 'deptName',
         key: 'deptName',
         align:'center',
         ellipsis:true,
       },
       {
-        title: '条目名称',
+        title: '扣分数',
         dataIndex: 'deptBusinessTypeName',
         key: 'deptBusinessTypeName',
         align:'center',
         ellipsis:true,
       },
       {
-        title: '加减分',
+        title: '加分数',
         align:'center',
         ellipsis:true,
         scopedSlots: { customRender: 'deptJurisdictionalArea' },
   
       },
       {
-        title: '考核能容',
+        title: '得分',
         dataIndex: 'points',
         key: 'points',
         align:'center',
         ellipsis:true,
   
-      },
-      {
-        title: '依据文件',
-        dataIndex: 'deptLegalPerson',
-        key: 'deptLegalPerson',
-        align:'center',
-        ellipsis:true,
-     
-      },
-      {
-        title: '操作',
-        key: 'action',
-        align:'center',
-        scopedSlots: { customRender: 'action' },
-      },
+      }
     ];
       
     return {
@@ -161,7 +152,7 @@ export default {
     }
   },
   components:{
-      modalQuan
+      modalScoring
   },
   created(){
     // this.init();

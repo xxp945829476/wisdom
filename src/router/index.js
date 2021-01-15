@@ -38,14 +38,24 @@ const originalPush = VueRouter.prototype.push
     component: () => import('@/views/MonitoringDisplay.vue')
   },
   {
-    path: '/policeForces',
-    name: '周边警力',
-    component: () => import('@/views/PoliceForces.vue')
+    path: '/monitoringDisplay',
+    name: '监控详情',
+    component: () => import('@/views/MonitoringDisplay.vue')
+  },
+  {
+    path: '/rinse',
+    name: '冲洗设备',
+    component: () => import('@/views/Rinse.vue')
   },
   {
     path: '/migrate',
     name: '流向',
     component: () => import('@/views/MigrateMap.vue')
+  },
+  {
+    path: '/thermodynamic',
+    name: '密集度热力图',
+    component: () => import('@/views/Thermodynamic.vue')
   }
 ]
 

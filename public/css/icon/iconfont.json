@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "19434972",
+      "name": "考评",
+      "font_class": "kaoping",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
       "icon_id": "19414423",
       "name": "查询车辆",
       "font_class": "chaxun",

@@ -75,6 +75,8 @@ export default {
     menuClick({ item, key, keyPath }){
      if(key=== '/migrateMap'){
           window.open('/migrate')
+        }else if(key=== '/thermodynamicMap'){
+          window.open('/thermodynamic')
         }else{
            this.$router.push(key);
         }

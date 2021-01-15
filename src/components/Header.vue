@@ -8,7 +8,7 @@
                 <!-- 建筑垃圾运输处置管理系统 -->
                 {{sysHomeName}}
             </a-col>
-            <a-col :md="14">
+            <a-col :md="16">
                <Sider v-if="navigationMode=='horizontal'"></Sider>
                <a-icon
                 class="trigger"

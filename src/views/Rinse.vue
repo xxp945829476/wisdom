@@ -2,8 +2,8 @@
     <div class="big_screen" ref="big_screen">
         <div class="monitor_display_nav">
             <ul>
-                <li :class="{curColor:navCurrent==1}" :style="{backgroundImage:'url('+ navImgSel +')'}">黑车识别</li>
-                <li :class="{curColor:navCurrent==2}" @click="linkRinse" :style="{backgroundImage:'url('+ navImg +')'}">冲洗设备</li>
+                <li :class="{curColor:navCurrent==1}"  @click="linkRinse" :style="{backgroundImage:'url('+ navImgSel +')'}">黑车识别</li>
+                <li :class="{curColor:navCurrent==2}" :style="{backgroundImage:'url('+ navImg +')'}">冲洗设备</li>
             </ul>
             <div class="monitor_display_t">建筑垃圾运输处置监管</div>
             <div class="monitor_display_time">
@@ -16,13 +16,13 @@
 
         <div class="monitor_display_content">
             <div class="monitor_display_left">
-                <h2>道闸监控<span v-if="onlineStatus==1">(在线)</span><span v-else>(离线)</span><img src="../assets/images/icon01.png"></h2>
+                <h2>冲洗监控<span v-if="onlineStatus==1">(在线)</span><span v-else>(离线)</span><img src="../assets/images/icon01.png"></h2>
                 <div class="congx" @click="playLiver">
                      <a-spin :spinning="spinning">  
-                    <img src="../assets/images/dzsp.jpg" alt="">
+                    <img src="../assets/images/congx.jpg" alt="">
                      </a-spin>
                 </div>
-                <h2 class="congxzk congxzk_1">道闸状况<img src="../assets/images/icon01.png"></h2>
+                <h2 class="congxzk congxzk_1">冲洗状况<img src="../assets/images/icon01.png"></h2>
                 <div class="congxzk_content">
                     <div class="congxzk_content_th">
                         <span>通行车辆</span>
@@ -208,7 +208,7 @@ export default {
             navImg:require('@/assets/images/big_nosel.png'),
             navImgSel:require('@/assets/images/big_sel.png'),
             carImg:require('@/assets/images/pos.png'),
-            navCurrent:1,
+            navCurrent:2,
             center: {lng: 0, lat: 0},  //经纬度
             map:'',
             BMap:'',
@@ -2140,8 +2140,8 @@ export default {
             this.details = obj;
             this.curNum = i;
         },
-        linkRinse(){
-            this.$router.push({path:'/rinse',query:{id:this.$route.query.id,simNo:this.$route.query.simNo}})
+         linkRinse(){
+             this.$router.push({path:'/monitoringDisplay',query:{id:this.$route.query.id,simNo:this.$route.query.simNo}})
         }
     }
 }
