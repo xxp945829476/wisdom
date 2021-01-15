@@ -214,7 +214,13 @@ export default {
       },
       saveOK(jsession){
         this.spinning =true;
-        ControlRemote(this.addForm,'?jsession='+jsession+'&DevIDNO='+'019911112222'+'&Command='+this.command).then(res=>{
+        let devIDNO = [];
+        console.log(this.vehicleList)
+        this.vehicleList.forEach(cur=>{
+          devIDNO.push(cur.simNo)
+        });
+        devIDNO = devIDNO.join(',')
+        ControlRemote(this.addForm,'?jsession='+jsession+'&DevIDNO='+devIDNO+'&Command='+this.command).then(res=>{
            this.spinning =false;
           if(res.data.result==0||res.data.result==22){
            

@@ -218,20 +218,20 @@ export default {
           arr.forEach(cur=>{
             if(cur.fieldType==210||cur.fieldType==769){
               this.jsonObj.LINE22.push({
-                ID:cur.id,
+                ID:parseInt(cur.id),
                 NAME:'线路名称',
-                SLAGTYPE: cur.fieldType,
+                SLAGTYPE: parseInt(cur.fieldType),
                 POINT:this.getPoint(cur)
               })
             }else{
               this.jsonObj.POLY22.push({
-                ID:cur.id,
+                ID:parseInt(cur.id),
                 NAME:'围栏名称',
                 ALMIN:1,
                 ALMOUT:1,
                 UPIN:1,
                 UPOUT: 1,
-                SLAGTYPE:cur.fieldType,
+                SLAGTYPE:parseInt(cur.fieldType),
               
                 POINT:this.getPoint(cur)
               })
@@ -297,7 +297,7 @@ export default {
         wgsArr.forEach((cur,index)=>{
           if(obj.fieldType==210||obj.fieldType==769){
             point.push({
-              ID: index,
+              ID: parseInt(index),
 					    W: 100, 
               Y:parseInt(cur.lat),
               X:parseInt(cur.lng)

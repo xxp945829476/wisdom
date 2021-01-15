@@ -75,17 +75,21 @@
       <a-col flex="auto" ref="right_map" class="right_map">
         <baidu-map class="bm-view"  @resize="resize" ref="bm_view" :scroll-wheel-zoom="true" :ak="$store.getters.ak" :center="center" :zoom="zoom" @ready="handler">
           <navigation></navigation>
+         
           <mapMarker :position="item" v-for="(item,index) in centerList" :key="index" :rotation="item.rotation" :icon="{url: iconUrl, size: {width: 55, height: 24}}" @click="showCarDetails(item)">
             <mapLabel :content="item.content" :labelStyle="tipStyle" :offset="{width: 0, height: -35}"></mapLabel>
           </mapMarker>
           <mapOverlay>
-            <!-- 收缩左侧树按钮 -->
+         
             <div class="double_left" @click.stop="toggleLeftTree" ref="double_left">
               <a-icon type="double-left" v-if="leftWidth=='280px'" />
               <a-icon type="double-right" v-else />
             </div>
           </mapOverlay>
+         
         </baidu-map>
+   
+
 
         <div class="status_list" ref="status_list">
           <a-row type="flex" justify="start" class="status_list_nav" ref="status_list_nav">
@@ -209,9 +213,9 @@
         <!-- <a-descriptions-item label="验证信息">
           ---
         </a-descriptions-item> -->
-        <!-- <a-descriptions-item label="有效证件">
+        <a-descriptions-item label="有效证件">
          ---
-        </a-descriptions-item> -->
+        </a-descriptions-item>
         <a-descriptions-item label="所属公司">
          {{detailsData.deptName}}
         </a-descriptions-item>
@@ -256,9 +260,9 @@
         <!-- <a-descriptions-item label="围栏状态">
           ---
         </a-descriptions-item> -->
-        <!-- <a-descriptions-item label="证件状态">
+        <a-descriptions-item label="证件状态">
           ---  <a @click="certificateRecord(detailsData.vehicleId)">证件记录</a>
-        </a-descriptions-item> -->
+        </a-descriptions-item>
         <!-- <a-descriptions-item label="平台管控状态">
           --- <a>管控记录</a>
         </a-descriptions-item> -->
@@ -318,6 +322,8 @@ import navigation from 'vue-baidu-map/components/controls/Navigation.vue'
 import mapMarker from 'vue-baidu-map/components/overlays/Marker.vue'
 import mapLabel from 'vue-baidu-map/components/overlays/Label.vue'
 import mapOverlay from 'vue-baidu-map/components/overlays/Overlay.vue'
+import mapTraffic from 'vue-baidu-map/components/layers/Traffic.vue'
+
 import {launchFullscreen,exitfullscreen,isJSON} from '@/utils/utils.js'
 import modalCertificates from './modalCertificates.vue'
 
@@ -886,6 +892,13 @@ export default {
       this.map = map
       this.BMap = BMap
       this.zoom = 12
+
+      var ctrl = new BMapLib.TrafficControl({
+        showPanel: false //是否显示路况提示面板
+      });   
+      map.addControl(ctrl);
+    ctrl.setAnchor(BMAP_ANCHOR_BOTTOM_RIGHT);  
+      
      
     },
     bd_encrypt(gcjLat, gcjLon){

@@ -294,7 +294,7 @@ export default {
             },
             logging: false,//登录加载
             allMeunList:[],
-             rules:{
+            rules:{
                 account:[
                     { required: true, message: '请输入用户账号', trigger: 'blur' },
                 ],

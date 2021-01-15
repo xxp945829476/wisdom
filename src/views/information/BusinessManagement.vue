@@ -114,6 +114,14 @@ export default {
   
       },
       {
+        title: '积分',
+        dataIndex: 'points',
+        key: 'points',
+        align:'center',
+        ellipsis:true,
+  
+      },
+      {
         title: '企业法人',
         dataIndex: 'deptLegalPerson',
         key: 'deptLegalPerson',

@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "19414423",
+      "name": "查询车辆",
+      "font_class": "chaxun",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "19414406",
+      "name": "绘制区域",
+      "font_class": "huizhi",
+      "unicode": "e650",
+      "unicode_decimal": 58960
+    },
+    {
       "icon_id": "1494621",
       "name": "大数据",
       "font_class": "dashuju",

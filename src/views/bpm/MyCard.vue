@@ -34,9 +34,9 @@
         <div class=" layout_card_content layout_card_content_p">
         <div class="table-operator">
             <div class="left_button">
-                <a-button type="primary" icon="plus" @click="addBpm(0,formParmas)">
+                <!-- <a-button type="primary" icon="plus" @click="addBpm(0,formParmas)">
                     新增
-                  </a-button>
+                  </a-button> -->
                   <!-- <a-button>
                     导出
                   </a-button> -->
