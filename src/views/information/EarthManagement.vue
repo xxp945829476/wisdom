@@ -6,7 +6,7 @@
           <a-form-model-item>
             <a-input-search
               v-model="treeParmas.keyName"
-              placeholder="请输入工地名称"
+              placeholder="请输入土场名称"
               enter-button="搜索"
               @search="onSearch"
             />
@@ -92,7 +92,7 @@
                           </a-col>
 
                            <a-col :md="8">
-                              <a-form-model-item label="工地名称">
+                              <a-form-model-item label="土场名称">
                                  <a-input v-model="formParmas.fieldName" placeholder="" allowClear/>
                               </a-form-model-item>
                           </a-col>
@@ -147,7 +147,7 @@
           
 
           <a-table :columns="columns" bordered :data-source="tableData" @change="changeTable" :rowKey='record' size="middle" :pagination="pagination" :loading="loading" :scroll="{x:1200,y:height}">
-                  <a slot="fieldName" slot-scope="text,record" @click="viewDetails(record,1)">
+                  <a slot="fieldName" slot-scope="text,record" >
                     {{text}}
                   </a>
 
@@ -206,7 +206,7 @@
       </a-col>
     </a-row>
 
-    <modalSite ref="add_site" @triggerData="updateData"></modalSite>
+    <modalEarth ref="add_site" @triggerData="updateData"></modalEarth>
     <modalSiteDetails ref="view_details" @triggerData="getData"></modalSiteDetails>
     <drawFenceMap ref="draw_fence"></drawFenceMap>
 
@@ -218,7 +218,7 @@
 
 <script>
 
-import modalSite from './modalSite.vue'
+import modalEarth from './modalEarth.vue'
 import modalSiteDetails from './modalSiteDetails.vue'
 import {SiteleftList,SiteList,BaseList,SiteEdit,Devicelist} from '@/network/api'
 import drawFenceMap from './drawFenceMap.vue'
@@ -233,7 +233,7 @@ export default {
         return <span>{index}</span>;
       },align:'center'},
       {
-        title: '工地名称',
+        title: '土场名称',
         dataIndex: 'fieldName',
         key: 'fieldName',
         align:'center',
@@ -250,7 +250,7 @@ export default {
         width:150
       },
       {
-        title: '工地地址',
+        title: '土场地址',
         dataIndex: 'fieldAddress',
         key: 'fieldAddress',
         align:'center',
@@ -288,14 +288,6 @@ export default {
         ellipsis:true,
         width:100,
         scopedSlots: { customRender: 'ef' },
-      },
-      {
-        title: '工程类别',
-        dataIndex: 'projectTypeName',
-        key: 'projectTypeName',
-        align:'center',
-        ellipsis:true,
-        width:150
       },
       {
         title: '审核状态',
@@ -354,11 +346,11 @@ export default {
         activition:'',
         id:'',
         areaId:'',
-        fieldType:770
+        fieldType:771
       },
       treeParmas: {
         keyName: '',
-        fieldType:770
+        fieldType:771
       },
       replaceFields:{
         children:'childs',
@@ -385,7 +377,7 @@ export default {
     }
   },
   components:{
-    modalSite,
+    modalEarth,
     modalSiteDetails,
     drawFenceMap
   },

@@ -27,13 +27,14 @@
                     <div class="congxzk_content_th">
                         <span>通行车辆</span>
                         <span>通行时间</span>
-                        <span>报警类型</span>
+                        <span>冲洗状态</span>
                     </div>
                     <div class="congxzk_content_list">
                         <div class="congxzk_content_tr" :class="{'congxzk_content_tr_cur':curNum == index }" v-for="(item,index) in tableData" :key="item.keyIdex" @click="carDetail(item,index)">
                             <span>{{item.vehicleNo}}</span>
                             <span>{{item.time}}</span>
-                            <span>{{item.type}}</span>
+                            <span v-if="index==2">未冲洗</span>
+                            <span v-else>已冲洗</span>
                         </div>
                         
                     </div>
@@ -1642,9 +1643,12 @@ export default {
             this.getOnlineData(todayBegintime,todayEndtime,1)
             this.getOnlineData(yesBegintime,yesEndtime,2)
             this.getSiteData(this.$route.query.id);
+
+        
           
             this.getBackData(todayBegintime,todayEndtime,1);
             this.getBackData(yesBegintime,yesEndtime,2);
+
         },
         getBackData(s,e,val){
             let params = {

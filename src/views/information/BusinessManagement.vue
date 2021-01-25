@@ -57,7 +57,8 @@
                       <a @click="cancellation(record)" v-if="record.activition == 1">恢复</a>
                       <span class="yellow" @click="cancellation(record)" v-else>注销</span>
                     </template>
-                    
+                    <a-divider type="vertical" />
+                    <a>删除</a>
                 </span>
         </a-table>
 

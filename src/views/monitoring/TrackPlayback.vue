@@ -208,6 +208,25 @@
                   <span v-if="text>270&&text<360">东</span>
               </template>
 
+              <template slot="statusJob" slot-scope="text,record">
+                  
+                  <span v-if="(record.s3 >> 20) & 1 > 0">半载</span>
+                  <span v-else-if="(record.s2 >> 19) & 1 > 0">重载</span>
+                  <span v-else>空载</span>
+                  &nbsp;
+                  <span v-if="record.tp[0] == '00'">无效</span>
+                  <span v-else-if="record.tp[0] == '01'">关闭</span>
+                  <span v-else-if="record.tp[0] == '02'">打开</span>
+                  <span v-else-if="record.tp[0] == '03'">异常</span>
+                  <span v-else-if="record.tp[0] == '04'">开启未完全</span>
+                  <span v-else-if="record.tp[0] == '05'">关闭未完全</span>
+                  &nbsp;
+                  <span v-if="record.tp[1] == '00'">无效</span>
+                  <span v-else-if="record.tp[1] == '01'">平放</span>
+                  <span v-else-if="record.tp[1] == '02'">举升</span>
+                  <span v-else-if="record.tp[1] == '03'">异常</span>
+              </template>
+
                <template slot="accSwitch" slot-scope="text">
                   <span v-if="text.substr(1,1)==1">开启</span>
                   <span v-else>关闭</span>
@@ -279,6 +298,7 @@ export default {
       { title: '位置',width: 200, dataIndex: 'ps', key: 'ps' ,ellipsis:true,align:'center',},
       { title: '定位时间',width: 150,dataIndex: 'gt', key: 'gt',ellipsis:true,align:'center',},
       { title: '接收时间',width: 150,dataIndex: 'rt', key: 'rt',ellipsis:true,align:'center',},
+       { title: '作业状态', width: 150,dataIndex: 'statusJob', key: 'statusJob',ellipsis:true,align:'center',scopedSlots: { customRender: 'statusJob' }},
       { title: '传输方式',dataIndex: 'way', key: 'way',ellipsis:true,align:'center',scopedSlots: { customRender: 'way' }},
       { title: '车辆状态',dataIndex: 'vehicleStatus', key: 'vehicleStatus',ellipsis:true,align:'center',scopedSlots: { customRender: 'vehicleStatus' }},
     { title: 'acc开关',dataIndex: 's1', key: 's1',ellipsis:true,align:'center',scopedSlots: { customRender: 'accSwitch' }},
@@ -519,6 +539,7 @@ export default {
                  cur.lc = cur.lc/1000;
                   cur.sp = cur.sp/10;
                  cur.s1 = that.binary(cur.s1);
+                 
                  this.geocoding(cur)
                });
                 that.flag = false;
@@ -526,6 +547,8 @@ export default {
               
           }
       }
+
+      
       
     },
     getEndTime(obj){
@@ -622,6 +645,12 @@ export default {
                 cur.lc = cur.lc/1000;
                 cur.sp = cur.sp/10;
                 cur.s1 = this.binary(cur.s1);
+
+                let list=[];
+             for(let i=0;i<cur.tp.length-1;i+=2){
+              list.push((cur.tp.substring(i,i+2)))
+             };
+             cur.tp = list;
                
               });
             };

@@ -28,7 +28,7 @@
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
-                        <a-form-model-item label="工地名称" prop="fieldName">
+                        <a-form-model-item label="土场名称" prop="fieldName">
                            <a-input v-model="addForm.fieldName" placeholder="请输入工地名称"/>
                         </a-form-model-item>
                     </a-col>
@@ -42,13 +42,9 @@
                            <a-range-picker style="width:100%"  v-model="addForm.time" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD"/>
                         </a-form-model-item>
                     </a-col>
+                    
                     <a-col :md="8">
-                        <a-form-model-item label="出土量(m³)" prop="excavate">
-                          <a-input-number style="width:100%" placeholder="请输入出土量" v-model="addForm.excavate" :min="0" />
-                        </a-form-model-item>
-                    </a-col>
-                    <a-col :md="8">
-                        <a-form-model-item label="回填量(m³)" prop="backfill">
+                        <a-form-model-item label="土场容量(m³)" prop="backfill">
                            <a-input-number style="width:100%" v-model="addForm.backfill" placeholder="请输入回填量" :min="0" />
                         </a-form-model-item>
                     </a-col>
@@ -57,23 +53,14 @@
                             <a-input v-model="value" @click="drawDence" placeholder="请输入电子围栏"/>
                         </a-form-model-item>
                     </a-col>
+                   
                     <a-col :md="8">
-                        <a-form-model-item label="关联消纳场" prop="fieldAbbr">
-                            <a-input v-model="addForm.fieldAbbr" placeholder="请选择消纳场"/>
-                        </a-form-model-item>
-                    </a-col>
-                     <a-col :md="8">
-                        <a-form-model-item label="关联路线" prop="fieldAbbr">
-                            <a-input v-model="addForm.fieldAbbr" placeholder="请选择关联路线"/>
-                        </a-form-model-item>
-                    </a-col>
-                    <a-col :md="8">
-                        <a-form-model-item label="工地简称" prop="fieldAbbr">
+                        <a-form-model-item label="土场简称" prop="fieldAbbr">
                             <a-input v-model="addForm.fieldAbbr" placeholder="请输入工地简称"/>
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
-                        <a-form-model-item label="工地负责人" prop="fieldFzrName">
+                        <a-form-model-item label="土场负责人" prop="fieldFzrName">
                            <a-input v-model="addForm.fieldFzrName" placeholder="请输入工地负责人"/>
                         </a-form-model-item>
                     </a-col>
@@ -83,17 +70,7 @@
                         </a-form-model-item>
                     </a-col>
 
-                    <a-col :md="8">
-                        <a-form-model-item label="星标" prop="fieldStarBeacon">
-                           <a-select v-model="addForm.fieldStarBeacon"
-                           placeholder="请选择星标"
-                            :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
-                              <a-select-option v-for="item in starList" :key="item.id">
-                                  {{item.name}}
-                              </a-select-option>
-                            </a-select>
-                        </a-form-model-item>
-                    </a-col>
+                   
 
                     <a-col :md="24">
                         <a-form-model-item label="备注" prop="fieldRemark">
@@ -105,53 +82,27 @@
                         </a-form-model-item>
                     </a-col>
 
-                    <a-col :md="24">
-                        <a-form-model-item label="运输企业" prop="fieldTransportationEnterprises">
-                           <a-select v-model="addForm.fieldTransportationEnterprises"
-                            mode="tags"
-                            placeholder="请选择运输企业"
-                            @change="changeTransport"
-                            :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
-                              <a-select-option v-for="item in transportList" :key="item.id">
-                                  {{item.deptName}}
-                              </a-select-option>
-                            </a-select>
-                        </a-form-model-item>
-                    </a-col>
-
-                    <a-col :md="24">
-                        <a-form-model-item label="建设单位" prop="fieldBuildEnterprises">
-                             <a-select v-model="addForm.fieldBuildEnterprises"
-                              mode="tags"
-                              placeholder="请选择建设单位"
-                              @change="changeBuild"
-                            :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
-                              <a-select-option v-for="item in buildList" :key="item.id">
-                                  {{item.deptName}}
-                              </a-select-option>
-                            </a-select>
-                        </a-form-model-item>
-                    </a-col>
-                    <a-col :md="24">
-                        <a-form-model-item label="施工单位" prop="fieldConstructEnterprise">
-                            <a-select v-model="addForm.fieldConstructEnterprise"
-                            mode="tags"
-                            placeholder="请选择施工单位"
-                            @change="changeConstruct"
-                            :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
-                              <a-select-option v-for="item in constructionList" :key="item.id">
-                                  {{item.deptName}}
-                              </a-select-option>
-                            </a-select>
-                        </a-form-model-item>
-                    </a-col>
-
+                   
+                  
                     <a-col :md="8">
-                        <a-form-model-item label="工地编号" prop="fieldCode">
+                        <a-form-model-item label="土场编号" prop="fieldCode">
                             <a-input v-model="addForm.fieldCode" placeholder="请输入工地编号"/>
                         </a-form-model-item>
                     </a-col>
-                    
+
+                     <a-col :md="8">
+                        <a-form-model-item label="星标" prop="fieldStarBeacon">
+                           <a-select v-model="addForm.fieldStarBeacon"
+                           placeholder="请选择星标"
+                            :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
+                              <a-select-option v-for="item in starList" :key="item.id">
+                                  {{item.name}}
+                              </a-select-option>
+                            </a-select>
+                        </a-form-model-item>
+                    </a-col>
+
+<!--                     
                     <a-col :md="8">
                         <a-form-model-item label="工程类别" prop="projectCategory">
                              <a-select v-model="addForm.projectCategory"
@@ -162,11 +113,11 @@
                               </a-select-option>
                             </a-select>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :md="8">
-                        <a-form-model-item label="货物类型" prop="goodsType">
+                        <a-form-model-item label="土场类型" prop="goodsType">
                             <a-select v-model="addForm.goodsType"
-                            placeholder="请选择货物类型"
+                            placeholder="请选择土场类型"
                              :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
                               <a-select-option v-for="item in goodsTypeList" :key="item.id">
                                   {{item.name}}
@@ -174,11 +125,7 @@
                             </a-select>
                         </a-form-model-item>
                     </a-col>
-                    <a-col :md="8">
-                        <a-form-model-item label="设计单位" prop="fieldDesignEnterprise">
-                            <a-input v-model="addForm.fieldDesignEnterprise" placeholder="请输入设计单位"/>
-                        </a-form-model-item>
-                    </a-col>
+                   
                     <a-col :md="8">
                         <a-form-model-item label="监理单位" prop="fieldSupervisorEnterprise">
                             <a-input v-model="addForm.fieldSupervisorEnterprise" placeholder="请输入监理单位"/>
@@ -190,43 +137,22 @@
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
-                        <a-form-model-item label="建设规模(m³)" prop="fieldConstructScale">
-                             <a-input v-model="addForm.fieldConstructScale" placeholder="请输入建设规模"/>
+                        <a-form-model-item label="土场面积(m³)" prop="fieldConstructScale">
+                             <a-input v-model="addForm.fieldConstructScale" placeholder="请输入土场面积"/>
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
-                        <a-form-model-item label="申报容量(m³)" prop="declaredCapacity">
-                            <a-input v-model="addForm.declaredCapacity" placeholder="请输入申报容量" />
+                        <a-form-model-item label="日处理能力(m³)" prop="declaredCapacity">
+                            <a-input v-model="addForm.declaredCapacity" placeholder="请输入日处理能力" />
                         </a-form-model-item>
                     </a-col>
                     <a-col :md="8">
-                        <a-form-model-item label="建设施工许可证号" prop="constructPermitNo">
-                           <a-input v-model="addForm.constructPermitNo" placeholder="请输入建设施工许可证号"/>
+                        <a-form-model-item label="卸土费单价(元)" prop="constructPermitNo">
+                           <a-input v-model="addForm.constructPermitNo" placeholder="请输入卸土费单价"/>
                         </a-form-model-item>
                     </a-col>
-                    <a-col :md="24">
-                        <a-form-model-item label="测算单位" prop="fieldCalculateEnterprise">
-                             <a-select v-model="addForm.fieldCalculateEnterprise"
-                             mode="tags"
-                             placeholder="请选择测算单位"
-                             @change="changeCalculate"
-                            :getPopupContainer="triggerNode => {return triggerNode.parentNode || document.body;}" allowClear>
-                              <a-select-option v-for="item in calculationList" :key="item.id">
-                                  {{item.deptName}}
-                              </a-select-option>
-                            </a-select>
-                        </a-form-model-item>
-                    </a-col>
-                    <a-col :md="8">
-                        <a-form-model-item label="内转(m³)" prop="introversion">
-                            <a-input v-model="addForm.introversion" placeholder="请输入内转"/>
-                        </a-form-model-item>
-                    </a-col>
-                    <a-col :md="8">
-                        <a-form-model-item label="外运(m³)" prop="outward">
-                            <a-input v-model="addForm.outward" placeholder="请输入外运"/>
-                        </a-form-model-item>
-                    </a-col>
+                    
+                   
                     <a-col :md="24">
                         <a-form-model-item label="上传附件">
                             <a-row type="flex" justify="start" class="upload_enclosure">
@@ -246,7 +172,7 @@
                                             </div>
                                         </div>
                                     </a-upload>
-                                    <p>国有土地使用证</p>
+                                    <p>冲洗设备</p>
                                 </a-col>
 
                                 <a-col flex="100px">
@@ -265,7 +191,7 @@
                                             </div>
                                         </div>
                                     </a-upload>
-                                        <p>建设工程规划许可证</p>
+                                        <p>道路硬化设备</p>
                                 </a-col>
 
                                 <a-col flex="100px">
@@ -284,46 +210,10 @@
                                             </div>
                                         </div>
                                     </a-upload>
-                                        <p>建筑垃圾排放证</p>
+                                        <p>隔离护栏</p>
                                 </a-col>
 
-                                <a-col flex="100px">
-                                   <a-upload
-                                        name="avatar"
-                                        list-type="picture-card"
-                                        class="avatar-uploader"
-                                       :show-upload-list="false"
-                                        :before-upload="uploadFour"
-                                    >
-                                       <img v-if="addForm.contractPhoto != 0" :src="pathUrl.imgurl + addForm.contractPhoto" alt="avatar" />
-                                        <div v-else>
-                                            <a-icon :type="loading ? 'loading' : 'plus'" />
-                                            <div class="ant-upload-text">
-                                                上传
-                                            </div>
-                                        </div>
-                                    </a-upload>
-                                        <p>施工承包合同</p>
-                                </a-col>
-
-                                <a-col flex="100px">
-                                    <a-upload
-                                        name="avatar"
-                                        list-type="picture-card"
-                                        class="avatar-uploader"
-                                       :show-upload-list="false"
-                                        :before-upload="uploadFive"
-                                    >
-                                       <img v-if="addForm.contractPhoto != 0" :src="pathUrl.imgurl + addForm.constructPermitPhoto" alt="avatar" />
-                                        <div v-else>
-                                            <a-icon :type="loading ? 'loading' : 'plus'" />
-                                            <div class="ant-upload-text">
-                                                上传
-                                            </div>
-                                        </div>
-                                    </a-upload>
-                                        <p>建设工程施工许可证</p>
-                                </a-col>
+                              
 
                                
                                 
@@ -359,7 +249,7 @@ export default {
   data() {
     return {
      title:'',
-     value:'绘制工地',
+     value:'绘制土场',
       dialog:true,
       siteVisible:false,
       initial:[],
@@ -469,12 +359,12 @@ export default {
     addSite(val,record){
       this.siteVisible = true;
       this.isEdit = val;
-      this.addForm.fieldType = 770;
+      this.addForm.fieldType = 771;
       this.$nextTick(()=>{
           this.$refs.ruleForm.resetFields();
           if(val == 0){
-              this.title = '新增工地'
-              this.value = '点击进入地图绘制工地（已绘制0个点）'
+              this.title = '新增土场'
+              this.value = '点击进入地图绘制土场（已绘制0个点）'
               this.addForm.id = '';
               this.addForm.fieldStartTime = '';
               this.addForm.fieldStartTime = '';

@@ -56,6 +56,11 @@ const originalPush = VueRouter.prototype.push
     path: '/thermodynamic',
     name: '密集度热力图',
     component: () => import('@/views/Thermodynamic.vue')
+  },
+  {
+    path: '/routeSummary',
+    name: '已核准的运输路线大数据统计',
+    component: () => import('@/views/RouteSummary.vue')
   }
 ]
 
@@ -85,7 +90,7 @@ export function resetRouter () {
 router.beforeEach((to,from,next)=>{
   let subNavList = [];
   let isNavListExist = false;
-  if(to.path !='/login' && to.path !='/MonitoringDisplay'&& to.path !='/policeForces'&& to.path !='/migrate'){
+  if(to.path !='/login' && to.path !='/MonitoringDisplay'&& to.path !='/policeForces'&& to.path !='/migrate'&& to.path !='/routeSummary'&& to.path !='/thermodynamic'){
     if(Vue.prototype.$getStorage('subNav')){
       subNavList = JSON.parse(Vue.prototype.$getStorage('subNav'))
     };

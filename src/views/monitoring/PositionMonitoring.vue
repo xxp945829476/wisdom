@@ -86,7 +86,12 @@
               <a-icon type="double-right" v-else />
             </div>
           </mapOverlay>
-         
+           <bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_Right"></bm-map-type>
+           <mapOverlay>
+             <a-button type="primary"  @click="openDistanceTool" class="ceju">
+                    开启测距
+            </a-button> 
+           </mapOverlay>
         </baidu-map>
    
 
@@ -323,11 +328,14 @@ import mapMarker from 'vue-baidu-map/components/overlays/Marker.vue'
 import mapLabel from 'vue-baidu-map/components/overlays/Label.vue'
 import mapOverlay from 'vue-baidu-map/components/overlays/Overlay.vue'
 import mapTraffic from 'vue-baidu-map/components/layers/Traffic.vue'
+import BmMapType from 'vue-baidu-map/components/controls/MapType.vue'
+import BmControl from 'vue-baidu-map/components/controls/Control.vue'
 
 import {launchFullscreen,exitfullscreen,isJSON} from '@/utils/utils.js'
 import modalCertificates from './modalCertificates.vue'
 
 import {IndexTree,GetJsession,IndexVehicleList,Geocoding,BaseList} from "@/network/api"
+import DistanceTool from 'bmaplib.distancetool'
 
 
 /*!
@@ -482,7 +490,9 @@ export default {
     mapMarker,
     mapLabel,
     mapOverlay,
-    modalCertificates
+    modalCertificates,
+    BmMapType,
+    BmControl
   },
   created(){
 
@@ -513,6 +523,11 @@ export default {
     
   },
   methods:{
+    
+     openDistanceTool (e) {
+      const {distanceTool} = this
+      distanceTool && distanceTool.open()
+    },
     init(){
       
     
@@ -876,6 +891,7 @@ export default {
     },
     handler ({BMap, map}) {
       let that = this;
+     this.distanceTool = new DistanceTool(map, {lineStroke : 2})
       that.center.lng = 120.640643;
       that.center.lat = 31.155029;
       // var geolocation = new BMap.Geolocation();

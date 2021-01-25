@@ -6,6 +6,125 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "19478796",
+      "name": "车载总设备",
+      "font_class": "huoche",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
+      "icon_id": "19478738",
+      "name": "电源正常",
+      "font_class": "dianyuan1",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "19478695",
+      "name": "电源异常",
+      "font_class": "dianyuan",
+      "unicode": "e662",
+      "unicode_decimal": 58978
+    },
+    {
+      "icon_id": "19478684",
+      "name": "车厢异常",
+      "font_class": "chexiang1",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
+      "icon_id": "19478658",
+      "name": "货箱正常",
+      "font_class": "chexiang",
+      "unicode": "e661",
+      "unicode_decimal": 58977
+    },
+    {
+      "icon_id": "19478620",
+      "name": "翻盖正常",
+      "font_class": "mibiyunshu",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
+      "icon_id": "19478594",
+      "name": "翻盖异常",
+      "font_class": "mibiyunshu1",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "19478576",
+      "name": "车辆载重",
+      "font_class": "tms-cheliangzaizhong",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
+      "icon_id": "19478574",
+      "name": "车辆载重 异常",
+      "font_class": "tms-cheliangzaizhong1",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
+      "icon_id": "19478566",
+      "name": "定位 异常",
+      "font_class": "dingweiweizhi",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "19478562",
+      "name": "定位 正常",
+      "font_class": "dingweiweizhi1",
+      "unicode": "e659",
+      "unicode_decimal": 58969
+    },
+    {
+      "icon_id": "19478557",
+      "name": "通讯正常",
+      "font_class": "tongxunyichang",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "19478554",
+      "name": "通讯异常",
+      "font_class": "tongxunyichang1",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
+      "icon_id": "19478547",
+      "name": "在线率",
+      "font_class": "zaixianshuai",
+      "unicode": "e656",
+      "unicode_decimal": 58966
+    },
+    {
+      "icon_id": "19478461",
+      "name": "设备异常",
+      "font_class": "shebei",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    },
+    {
+      "icon_id": "19478426",
+      "name": "设备正常",
+      "font_class": "shebei1",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    },
+    {
+      "icon_id": "19478155",
+      "name": "事设备检测",
+      "font_class": "shijian-shebeijiance",
+      "unicode": "e653",
+      "unicode_decimal": 58963
+    },
+    {
       "icon_id": "19434972",
       "name": "考评",
       "font_class": "kaoping",

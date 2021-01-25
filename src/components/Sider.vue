@@ -48,6 +48,8 @@ export default {
           window.open('/migrate')
         }else if(key=== '/thermodynamicMap'){
           window.open('/thermodynamic')
+        }else if(key=== '/routeSummaryMap'){
+          window.open('/routeSummary')
         }else{
            this.$router.push(key);
         }

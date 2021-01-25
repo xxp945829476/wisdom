@@ -114,7 +114,7 @@ export default {
         scopedSlots: { customRender: 'fileNum' },
       },
       {
-        title: '总回填量(m³)',
+        title: '总收土量(m³)',
         dataIndex: 'fileNum1',
         key: 'fileNum1',
         align:'center',
@@ -123,7 +123,7 @@ export default {
       }
       ,
       {
-        title: '回填量(m³)',
+        title: '收土量(m³)',
         dataIndex: 'fileNum4',
         key: 'fileNum4',
         align:'center',
@@ -131,7 +131,7 @@ export default {
         scopedSlots: { customRender: 'fileNum' },
       },
       {
-        title: '出土车次',
+        title: '出土趟数',
         dataIndex: 'fileNum5',
         key: 'fileNum5',
         align:'center',
@@ -139,7 +139,7 @@ export default {
         scopedSlots: { customRender: 'fileNum' },
       },
       {
-        title: '回填车次',
+        title: '收土趟数',
         dataIndex: 'fileNum6',
         key: 'fileNum6',
         align:'center',

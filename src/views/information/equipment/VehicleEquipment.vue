@@ -102,6 +102,9 @@
                         <template>
                         <a @click="cancellation(record)" v-if="record.activition == 1">恢复</a>
                         <span class="yellow" @click="cancellation(record)" v-else>注销</span>
+                        <a-divider type="vertical" />
+                        <a>删除</a>
+                        
                         <!-- <a-divider type="vertical" />
                         <a @click="bundling(record)">绑定</a> -->
                       </template>

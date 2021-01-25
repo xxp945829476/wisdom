@@ -17,7 +17,7 @@
 
             <ul class="mi_left_content">
                 <li class="mi_left_content_list">
-                    <label>某某工地</label>
+                    <label>合景领峰</label>
                     <div class="mi_progress_box">
                         <div class="mi_progress" :style="{width:5698/7456*100+'%'}">
                           
@@ -27,7 +27,27 @@
                 </li>
 
                 <li class="mi_left_content_list">
-                    <label>某某工地</label>
+                    <label>龙信家园</label>
+                    <div class="mi_progress_box">
+                        <div class="mi_progress" :style="{width:5000/10000*100+'%'}">
+                          
+                        </div>
+                        <span>5000m3（10000m3）</span>
+                    </div>
+                </li>
+
+                 <li class="mi_left_content_list">
+                    <label>珠光锦苑</label>
+                    <div class="mi_progress_box">
+                        <div class="mi_progress" :style="{width:5000/10000*100+'%'}">
+                          
+                        </div>
+                        <span>5000m3（10000m3）</span>
+                    </div>
+                </li>
+
+                 <li class="mi_left_content_list">
+                    <label>紫金南湾</label>
                     <div class="mi_progress_box">
                         <div class="mi_progress" :style="{width:5000/10000*100+'%'}">
                           
@@ -37,134 +57,72 @@
                 </li>
 
                 <li class="mi_left_content_list">
-                    <label>某某工地</label>
+                    <label>盐河之星</label>
                     <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:4000/6000*100+'%'}">
+                        <div class="mi_progress" :style="{width:5000/10000*100+'%'}">
                           
                         </div>
-                        <span>4000m3（6000m3）</span>
+                        <span>5000m3（10000m3）</span>
+                    </div>
+                </li>
+                <li class="mi_left_content_list">
+                    <label>绿地</label>
+                    <div class="mi_progress_box">
+                        <div class="mi_progress" :style="{width:5000/10000*100+'%'}">
+                          
+                        </div>
+                        <span>5000m3（10000m3）</span>
+                    </div>
+                </li>
+                <li class="mi_left_content_list">
+                    <label>润丰苑</label>
+                    <div class="mi_progress_box">
+                        <div class="mi_progress" :style="{width:5000/10000*100+'%'}">
+                          
+                        </div>
+                        <span>5000m3（10000m3）</span>
+                    </div>
+                </li>
+                <li class="mi_left_content_list">
+                    <label>吾悦广场虎踞湾</label>
+                    <div class="mi_progress_box">
+                        <div class="mi_progress" :style="{width:5000/10000*100+'%'}">
+                          
+                        </div>
+                        <span>5000m3（10000m3）</span>
+                    </div>
+                </li>
+                 <li class="mi_left_content_list">
+                    <label>翰林国际</label>
+                    <div class="mi_progress_box">
+                        <div class="mi_progress" :style="{width:5000/10000*100+'%'}">
+                          
+                        </div>
+                        <span>5000m3（10000m3）</span>
+                    </div>
+                </li>
+                 <li class="mi_left_content_list">
+                    <label>中兴大道</label>
+                    <div class="mi_progress_box">
+                        <div class="mi_progress" :style="{width:5000/10000*100+'%'}">
+                          
+                        </div>
+                        <span>5000m3（10000m3）</span>
+                    </div>
+                </li>
+                 <li class="mi_left_content_list">
+                    <label>运河东堤</label>
+                    <div class="mi_progress_box">
+                        <div class="mi_progress" :style="{width:5000/10000*100+'%'}">
+                          
+                        </div>
+                        <span>5000m3（10000m3）</span>
                     </div>
                 </li>
 
-                <li class="mi_left_content_list">
-                    <label>某某工地</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:3000/9900*100+'%'}">
-                          
-                        </div>
-                        <span>3000m3（9000m3）</span>
-                    </div>
-                </li>
 
-                <li class="mi_left_content_list">
-                    <label>某某工地</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:5000/8000*100+'%'}">
-                          
-                        </div>
-                        <span>5000m3（8000m3）</span>
-                    </div>
-                </li>
 
-                <li class="mi_left_content_list">
-                    <label>某某工地</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:1000/2000*100+'%'}">
-                          
-                        </div>
-                        <span>1000m3（2000m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某工地</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:4000/4000*100+'%'}">
-                          
-                        </div>
-                        <span>4000m3（4000m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某工地</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:1000/9000*100+'%'}">
-                          
-                        </div>
-                        <span>1000m3（9000m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某工地</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:2000/6000*100+'%'}">
-                          
-                        </div>
-                        <span>2000m3（6000m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某工地</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:4000/22222*100+'%'}">
-                          
-                        </div>
-                        <span>4000m3（22222m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某工地</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:2000/44444*100+'%'}">
-                          
-                        </div>
-                        <span>2000m3（44444m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某工地</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:8000/50000*100+'%'}">
-                          
-                        </div>
-                        <span>8000m3（50000m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某工地</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:5050/10250*100+'%'}">
-                          
-                        </div>
-                        <span>5050m3（10250m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某工地</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:3560/9582*100+'%'}">
-                          
-                        </div>
-                        <span>3560m3（9582m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某工地</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:5000/15500*100+'%'}">
-                          
-                        </div>
-                        <span>5000m3（15500m3）</span>
-                    </div>
-                </li>
+                
 
                
             </ul>
@@ -201,7 +159,7 @@
 
             <ul class="mi_left_content">
                 <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
+                    <label title="锡山区消纳场">锡山区消纳场</label>
                     <div class="mi_progress_box">
                         <div class="mi_progress mi_progress_red" :style="{width:100+'%'}">
                           
@@ -211,7 +169,7 @@
                 </li>
 
                 <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
+                    <label title="新吴区消纳场">新吴区消纳场</label>
                     <div class="mi_progress_box">
                         <div class="mi_progress" :style="{width:5000/10000*100+'%'}">
                           
@@ -221,7 +179,7 @@
                 </li>
 
                 <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
+                    <label title="惠山区消纳场">惠山区消纳场</label>
                     <div class="mi_progress_box">
                         <div class="mi_progress" :style="{width:4000/6000*100+'%'}">
                           
@@ -230,125 +188,7 @@
                     </div>
                 </li>
 
-                <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:3000/9900*100+'%'}">
-                          
-                        </div>
-                        <span>3000m3（9000m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:5000/8000*100+'%'}">
-                          
-                        </div>
-                        <span>5000m3（8000m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:1000/2000*100+'%'}">
-                          
-                        </div>
-                        <span>1000m3（2000m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:4000/4000*100+'%'}">
-                          
-                        </div>
-                        <span>4000m3（4000m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:1000/9000*100+'%'}">
-                          
-                        </div>
-                        <span>1000m3（9000m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:2000/6000*100+'%'}">
-                          
-                        </div>
-                        <span>2000m3（6000m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:4000/22222*100+'%'}">
-                          
-                        </div>
-                        <span>4000m3（22222m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:2000/44444*100+'%'}">
-                          
-                        </div>
-                        <span>2000m3（44444m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:8000/50000*100+'%'}">
-                          
-                        </div>
-                        <span>8000m3（50000m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:5050/10250*100+'%'}">
-                          
-                        </div>
-                        <span>5050m3（10250m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:3560/9582*100+'%'}">
-                          
-                        </div>
-                        <span>3560m3（9582m3）</span>
-                    </div>
-                </li>
-
-                <li class="mi_left_content_list">
-                    <label>某某消纳场</label>
-                    <div class="mi_progress_box">
-                        <div class="mi_progress" :style="{width:5000/15500*100+'%'}">
-                          
-                        </div>
-                        <span>5000m3（15500m3）</span>
-                    </div>
-                </li>
+                
 
                
             </ul>
@@ -362,7 +202,7 @@
               <li v-if="detailsList.backfill">可回填总量：{{detailsList.backfill}}m3</li>
               <li v-if="detailsList.excavated">出土量：{{detailsList.excavated}}m3</li>
               <li v-if="detailsList.backfilled">回填量：{{detailsList.backfilled}}m3</li>
-              <li v-if="detailsList.trainNumber">车次：{{detailsList.trainNumber}}</li>
+              <li v-if="detailsList.trainNumber">趟数：{{detailsList.trainNumber}}</li>
           </ul>
            <img class="mipic5" src="../assets/images/mipic5.png">
     </div>
@@ -1908,11 +1748,11 @@ export default {
 }]
                             },
           geoCoordMap: {
-            工地1: [120.6574945536216, 31.179529646317082],
-            工地2: [120.59655350782471, 31.46382608319382],
-            消纳场: [120.39899816007035, 31.352814309873935],
-            工地4: [120.63320437263181, 31.54085830668408],
-            工地5: [120.29698658635726, 31.534856899786686],
+            合景领峰: [120.6574945536216, 31.179529646317082],
+            龙信家园: [120.59655350782471, 31.46382608319382],
+            新吴区消纳场: [120.39899816007035, 31.352814309873935],
+            珠光锦苑: [120.63320437263181, 31.54085830668408],
+            紫金南湾: [120.29698658635726, 31.534856899786686],
             疑似黑工地: [120.451962,31.553476],
             疑似黑消纳场: [120.149557,31.604665]
         },
@@ -1944,20 +1784,20 @@ export default {
       this.mapChart = echarts.init(this.$refs.mapChart);
 
        const BJData = [
-        [{ name: "工地1" }, { name: "工地2", value: 95, excavate:2080,backfill:1000}],//excavate出土总量 backfill回填总量
-        [{ name: "工地1" }, { name: "消纳场", value: 90, excavate:0,backfill:10000 }],
-        [{ name: "工地1" }, { name: "工地4", value: 95, excavate:2080,backfill:1000 }],
-        [{ name: "工地1" }, { name: "工地5", value: 95, excavate:2080,backfill:1000 }],
-        [{ name: "工地1" }, { name: "疑似黑工地", value: 80, excavate:2080,backfill:1000 }],
-        [{ name: "工地1" }, { name: "疑似黑消纳场", value: 70, excavate:2080,backfill:1000 }],
+        [{ name: "合景领峰" }, { name: "龙信家园", value: 95, excavate:2080,backfill:1000}],//excavate出土总量 backfill回填总量
+        [{ name: "合景领峰" }, { name: "新吴区消纳场", value: 90, excavate:0,backfill:10000 }],
+        [{ name: "合景领峰" }, { name: "珠光锦苑", value: 95, excavate:2080,backfill:1000 }],
+        [{ name: "合景领峰" }, { name: "紫金南湾", value: 95, excavate:2080,backfill:1000 }],
+        [{ name: "合景领峰" }, { name: "疑似黑工地", value: 80, excavate:2080,backfill:1000 }],
+        [{ name: "合景领峰" }, { name: "疑似黑消纳场", value: 70, excavate:2080,backfill:1000 }],
       ];
       const SHData = [
-        [{ name: "工地2" }, { name: "工地1", value: 95, excavate:2080,backfill:9000,trainNumber:10, excavated:800,backfilled:5000}],
-        [{ name: "工地2" }, { name: "消纳场", value: 90, excavate:0,backfill:10000,trainNumber:50,excavated:0,backfilled:5000 }],
-        [{ name: "工地2" }, { name: "工地4", value: 95 , excavate:3080,backfill:8000,trainNumber:10,excavated:1000,backfilled:6000}],
-        [{ name: "工地2" }, { name: "工地5", value: 95 , excavate:4080,backfill:5000,trainNumber:10,excavated:2000,backfilled:3000}],
-        [{ name: "工地2" }, { name: "疑似黑工地", value: 80, excavate:'',backfill:'',trainNumber:2, excavated:1600,backfilled:4000}],
-        [{ name: "工地2" }, { name: "疑似黑消纳场", value: 70, excavate:'',backfill:'',trainNumber:20, excavated:0,backfilled:8000}],
+        [{ name: "龙信家园" }, { name: "合景领峰", value: 95, excavate:2080,backfill:9000,trainNumber:10, excavated:800,backfilled:5000}],
+        [{ name: "龙信家园" }, { name: "新吴区消纳场", value: 90, excavate:0,backfill:10000,trainNumber:50,excavated:0,backfilled:5000 }],
+        [{ name: "龙信家园" }, { name: "珠光锦苑", value: 95 , excavate:3080,backfill:8000,trainNumber:10,excavated:1000,backfilled:6000}],
+        [{ name: "龙信家园" }, { name: "紫金南湾", value: 95 , excavate:4080,backfill:5000,trainNumber:10,excavated:2000,backfilled:3000}],
+        [{ name: "龙信家园" }, { name: "疑似黑工地", value: 80, excavate:'',backfill:'',trainNumber:2, excavated:1600,backfilled:4000}],
+        [{ name: "龙信家园" }, { name: "疑似黑消纳场", value: 70, excavate:'',backfill:'',trainNumber:20, excavated:0,backfilled:8000}],
       ];
 
       const color =['#7eff00', '#00f0ff', '#ff0012', '#f97b12'];
@@ -1965,7 +1805,7 @@ export default {
       const series = [];
 
       [
-        [ {name: "工地2", excavate:2080,backfill:9000,trainNumber:10, excavated:800,backfilled:5000}, SHData]
+        [ {name: "龙信家园", excavate:2080,backfill:9000,trainNumber:10, excavated:800,backfilled:5000}, SHData]
       ].forEach((item, i) => {
         series.push(
           {

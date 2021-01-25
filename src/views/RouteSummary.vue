@@ -5,7 +5,7 @@
                 <!-- <li :class="{curColor:navCurrent==1}" :style="{backgroundImage:'url('+ navImgSel +')'}">黑车识别</li>
                 <li :class="{curColor:navCurrent==2}" @click="linkRinse" :style="{backgroundImage:'url('+ navImg +')'}">冲洗设备</li> -->
             </ul>
-            <div class="monitor_display_t">渣土车运输1小时实时热力图</div>
+            <div class="monitor_display_t">运输路线大数据</div>
             <div class="monitor_display_time">
                 <span>{{today}}</span>
                 <img src="../assets/images/quanp.png" @click="fullScreen">
@@ -37,7 +37,6 @@
             <li><span></span>工地</li>
             <li><span class="c_thermody"></span>消纳场</li>
             <li><em></em>线路</li>
-            <li><em class="cl_thermody"></em>热点</li>
         </ul>
         
     </div>
@@ -1377,9 +1376,6 @@ export default {
                 新吴区消纳场: [120.39899816007035, 31.352814309873935],
                 珠光锦苑: [120.63320437263181, 31.54085830668408],
                 紫金南湾: [120.29698658635726, 31.534856899786686],
-                热点: [120.26341690944906,31.610814879496285],
-                热点1: [120.275490135503166,31.467521846235734],
-                热点2: [120.36172746446105,31.615243080306143],
             },
             
         }
@@ -1401,28 +1397,45 @@ export default {
             { name: "新吴区消纳场", value: 90,type:2},
             { name: "珠光锦苑", value: 95,type:1 },
             { name: "紫金南湾", value: 95,type:1 },
-            { name: "热点", value: 80,type:3},
-            { name: "热点1", value: 80,type:3},
-            { name: "热点2", value: 80,type:3},
          ]
 
 
          const lineData = [
-    [ {
-        "coord": [120.6574945536216, 31.179529646317082],
-        "elevation": 256.9
-    }, {
-        "coord": [120.59655350782471, 31.46382608319382],
-        "elevation": 244.7
-    },],
-     [ {
-        "coord": [120.6574945536216, 31.179529646317082],
-        "elevation": 256.9
-    }, {
-        "coord": [120.29698658635726, 31.534856899786686],
-        "elevation": 244.7
-    },]
-]
+                [ {
+                    "coord": [120.31038930456613,31.510662664154246],
+                    "elevation": 256.9
+                },{
+                    "coord": [120.31592286650759,31.512571345187947],
+                    "elevation": 251.9
+                }, {
+                    "coord": [120.33360151894396,31.516388589154417],
+                    "elevation": 251.9
+                }, {
+                    "coord": [120.34786661044241,31.521375396430024],
+                    "elevation": 251.9
+                }, {
+                    "coord": [120.3601194975985,31.526423495422208],
+                    "elevation": 251.9
+                }, {
+                    "coord": [120.37068357039585,31.531932996324723],
+                    "elevation": 251.9
+                }, {
+                    "coord": [120.37923543885084,31.523991823591427],
+                    "elevation": 251.9
+                },  {
+                    "coord": [120.39148832600694,31.512294281028737],
+                    "elevation": 244.7
+                },],
+
+            ]
+
+var lines = lineData.map(function (track) {
+        return {
+            coords: track.map(function (seg, idx) {
+                return seg.coord;
+            })
+        };
+    });
         
         
 
@@ -1513,7 +1526,8 @@ export default {
             name: '33',
             type: "lines",
             coordinateSystem: 'bmap',
-            polyline: true,
+     
+             polyline: true,
             lineStyle: {
               normal: {
                 width: 3,
@@ -1527,7 +1541,7 @@ export default {
                 },
               }
             },
-            data: lineData
+            data: lines
           },
         );
  
@@ -1651,19 +1665,13 @@ export default {
             return res;
         },
         convertData2(data){
-             const res = [];
-            for (let i = 0; i < data.length; i++) {
-                const dataItem = data[i];
-
-                 console.log(dataItem.location)
-      
-                    res.push({
-                        coords: [dataItem.location,dataItem.location],
-                        numValue:dataItem.value
-                    });
-                
-            }
-            return res;
+            data.map(function (track) {
+                return {
+                    coords: track.map(function (seg, idx) {
+                        return seg.coord;
+                    })
+                };
+            });
         },
       fullScreen(){
             launchFullscreen(this.$refs.big_screen)
