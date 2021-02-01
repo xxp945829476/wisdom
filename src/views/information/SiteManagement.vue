@@ -345,16 +345,7 @@ export default {
       roleVisible:false,
       height:'',
       formParmas: {
-        fieldName :'',
-        ef:'',
-        pageNum:1,
-        pageSize:20,
-        fieldStatus:'',
-        permitStatus:'',
-        activition:'',
-        id:'',
-        areaId:'',
-        fieldType:770
+        npm
       },
       treeParmas: {
         keyName: '',

@@ -1050,6 +1050,106 @@ export function GetAlarmFile(data){
     })
 }
 
+// 考核依据列表
+export function GetAssessList(data){
+    return fetch({
+        url:'/api/sys-assess-basis/list',
+        method:'post',
+        data:data,
+    })
+}
+
+// 新增考核依据
+export function AddAssess(data){
+    return fetch({
+        url:'/api/sys-assess-basis/add',
+        method:'post',
+        data:data,
+    })
+}
+
+// 编辑考核依据
+export function EditAssess(data){
+    return fetch({
+        url:'/api/sys-assess-basis/edit',
+        method:'post',
+        data:data,
+    })
+}
+
+// 删除考核依据
+export function DelAssess(data){
+    return fetch({
+        url:'/api/sys-assess-basis/del',
+        method:'post',
+        data:data,
+    })
+}
+
+// 新增考核
+export function AddAssessPoint(data){
+    return fetch({
+        url:'/api/sys-assess-point/add',
+        method:'post',
+        data:data,
+    })
+}
+
+// 考核列表
+export function AssessPointList(data){
+    return fetch({
+        url:'/api/sys-assess-point/list',
+        method:'post',
+        data:data,
+    })
+}
+
+// 企业评价
+export function DeptAssess(data){
+    return fetch({
+        url:'api/sys-assess-point/dept-assess',
+        method:'post',
+        data:data,
+    })
+}
+
+// 导出企业评价
+export function ExportDeptAssess(data){
+    return fetch({
+        url:'/api//sys-assess-point/export-dept-assess',
+        method:'post',
+        data:data,
+        responseType:'arraybuffer'
+    })
+}
+
+// 新增车辆黑名单
+export function AddVehicleBlack(data){
+    return fetch({
+        url:'api/sys-vehicle-blacklist/add',
+        method:'post',
+        data:data,
+    })
+}
+
+// 车辆黑名单列表
+export function VehicleBlackList(data){
+    return fetch({
+        url:'api/sys-vehicle-blacklist/list',
+        method:'post',
+        data:data,
+    })
+}
+
+// 移除车辆黑名单
+export function RemoveVehicleBlack(data){
+    return fetch({
+        url:'api/sys-vehicle-blacklist/remove',
+        method:'post',
+        data:data,
+    })
+}
+
 
 
 

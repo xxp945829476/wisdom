@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11343591",
+      "name": "黑名单",
+      "font_class": "heimingdan",
+      "unicode": "e7ef",
+      "unicode_decimal": 59375
+    },
+    {
+      "icon_id": "19679396",
+      "name": "执法管理",
+      "font_class": "zhifarenwu1",
+      "unicode": "e665",
+      "unicode_decimal": 58981
+    },
+    {
       "icon_id": "19478796",
       "name": "车载总设备",
       "font_class": "huoche",

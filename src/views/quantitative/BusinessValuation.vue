@@ -3,7 +3,7 @@
 
        <div class="table-operator">
            <div class="left_button">
-               <a-button type="primary">
+               <a-button type="primary" @click="exportDep">
                   导出
                 </a-button>
            </div>
@@ -20,37 +20,53 @@
                 <a-form-model layout="inline" :model="formParmas" @submit="searchData" @submit.native.prevent>
                     <a-row :gutter="24">
                         <a-col :md="8">
-                            <a-form-model-item label="评价周期">
-                                 <a-select v-model="formParmas.deptBusinessType" allowClear>
-                                    <a-select-option v-for="item in depList" :key="item.id">
+                            <a-form-model-item label="评价等级">
+                              <a-select v-model="formParmas.assessLevel">
+                                    <a-select-option v-for="item in objList" :key="item.id">
+                                        {{item.name}}
+                                    </a-select-option>
+                                </a-select>
+                            </a-form-model-item>
+                        </a-col>
+                        <a-col :md="8">
+                            <a-form-model-item label="考核周期">
+                                 <a-select v-model="formParmas.cycle">
+                                    <a-select-option v-for="item in cycleList" :key="item.id">
                                         {{item.name}}
                                     </a-select-option>
                                   </a-select>
                             </a-form-model-item>
                         </a-col>
                         <a-col :md="8">
-                            <a-form-model-item label="评价时间">
-                            <a-input v-model="formParmas.deptName" placeholder=""/>
+                            <a-form-model-item label="考核年份" v-if="formParmas.cycle == '1011'">
+                                  <a-input v-model="formParmas.year" @change="getYear"/>
+                            </a-form-model-item>
+
+                            <a-form-model-item label="考核年份" v-if="formParmas.cycle == '1012'">
+                                  <a-input v-model="formParmas.year" @change="getYear"/>
+                            </a-form-model-item>
+
+                            <a-form-model-item label="考核月份" v-else-if="formParmas.cycle == '1013'">
+                                   <a-month-picker @change="changeMouth" v-model="formParmas.mouthDate" format="YYYY-MM"  valueFormat="YYYY-MM" />
                             </a-form-model-item>
                         </a-col>
-                        <a-col :md="8">
-                            <a-form-model-item label="评价等级">
-                            <a-input v-model="formParmas.deptName" placeholder=""/>
-                            </a-form-model-item>
-                        </a-col>
+
                         <template v-if="advanced">
-                            <a-col :md="8">
-                                <a-form-model-item label="企业名称">
-                                <a-input v-model="formParmas.deptName" placeholder=""/>
+                            <a-col :md="8" v-if="formParmas.cycle == '1012'">
+                                <a-form-model-item label="考核季度">
+                                <a-select v-model="formParmas.quarter" @change="changeQuarter">
+                                    <a-select-option v-for="item in quarterList" :key="item.id">
+                                        {{item.name}}
+                                    </a-select-option>
+                                  </a-select>
                                 </a-form-model-item>
                             </a-col>
                             <a-col :md="8">
-                                <a-form-model-item label="管辖区">
-                                <a-input v-model="formParmas.deptName" placeholder=""/>
-                                </a-form-model-item>
+                            <a-form-model-item label="企业名称">
+                                  <a-input v-model="formParmas.deptName"/>
+                            </a-form-model-item>
                             </a-col>
                         </template>
-                        
                     </a-row>
                 </a-form-model>
            </div>
@@ -58,21 +74,8 @@
         
 
         <a-table :columns="columns" bordered :data-source="tableData" @change="changeTable" :rowKey='record' size="middle" :pagination="pagination" :loading="loading" :scroll="{y:height}">
-                <a slot="deptName" slot-scope="text,record" @click="viewDetails(record)">
-                    {{record.deptName}}
-                </a>
-                <span slot="deptJurisdictionalArea" slot-scope="text,record">
-                    {{record.provinceName}}{{record.cityName}}{{record.regionName}}
-                </span>
-                <span slot="activition" slot-scope="text,record">
-                    <a-badge v-if="record.activition == 0" status="success" text="有效" />
-                    <a-badge v-else status="error" text="无效"></a-badge>
-                </span>
-                <span slot="action" slot-scope="text,record">
-                    <a>编辑</a>
-                    
-                    
-                </span>
+               
+                
         </a-table>
 
        <modalScoring ref="add_quan" @triggerData="getData"></modalScoring>
@@ -84,7 +87,7 @@
 
 import modalScoring from './modalScoring.vue'
 
-import {DepartmentList,BaseList,EditDepartment,ExportDepartment} from '@/network/api'
+import {DeptAssess,BaseList,ExportDeptAssess} from '@/network/api'
 
 
 
@@ -96,40 +99,34 @@ export default {
       },align:'center'},
       {
         title: '企业名称',
-        dataIndex: 'deptAbbreviation',
-        key: 'deptAbbreviation',
-        align:'center',
-        ellipsis:true,
-      },
-      {
-        title: '管辖区',
         dataIndex: 'deptName',
         key: 'deptName',
         align:'center',
         ellipsis:true,
       },
       {
+        title: '管辖区',
+        dataIndex: 'areaName',
+        key: 'areaName',
+        align:'center',
+        ellipsis:true,
+      },
+      {
         title: '得分',
-        dataIndex: 'deptBusinessTypeName',
-        key: 'deptBusinessTypeName',
-        align:'center',
-        ellipsis:true,
-      },
-      {
-        title: '评价等级',
-        align:'center',
-        ellipsis:true,
-        scopedSlots: { customRender: 'deptJurisdictionalArea' },
-  
-      },
-      {
-        title: '备注',
         dataIndex: 'points',
         key: 'points',
         align:'center',
         ellipsis:true,
   
-      }
+      },
+      {
+        title: '评价等级',
+        dataIndex: 'assessLevelName',
+        key: 'assessLevelName',
+        align:'center',
+        ellipsis:true,
+  
+      },
     ];
       
     return {
@@ -141,15 +138,27 @@ export default {
       roleVisible:false,
       height:'',
       formParmas: {
-        deptName: '',
+        assessLevel:'',
         pageNum:1,
         pageSize:20,
-        deptType:'3',
-        deptBusinessType:''
+        cycle:'',
+        year:'',
+        mouthDate:'',
+        begintime :'',
+        endtime :'',
+        quarter:'',
+        deptName:''
       },
       advanced:false,
       tableData:[],
-      depList:[],
+      cycleList:[],
+      objList:[],
+      quarterList:[
+        {id:1,name:'一季度'},
+        {id:2,name:'二季度'},
+        {id:3,name:'三季度'},
+        {id:4,name:'四季度'},
+      ],
       columns,
       pagination:{
         total:0,
@@ -163,19 +172,18 @@ export default {
         showTotal:total => `共 ${total} 条`
       },
       isAdd:false,
-      isEdit:false,
-      isExport:false
     }
   },
   components:{
       modalScoring
   },
   created(){
-    // this.init();
+    this.init();
   },
   mounted(){
    this.$nextTick(()=>{
       this.tableHeight()
+     
     })
   },
   methods:{
@@ -185,7 +193,11 @@ export default {
     init(){
       this.permissionControl()
       this.getData();
-      this.getDepType();
+      this.getType(1015);
+      
+      this.getType(1010);
+      this.formParmas.year = this.$moment().format("YYYY");
+      this.getYear();
     },
     permissionControl(){
      
@@ -193,39 +205,74 @@ export default {
       
       console.log(permission)
       permission.forEach(cur=>{
-        if(cur.menuPermission == 'sys:dept:add'){
+        if(cur.menuPermission == 'sys:assesspoint:add'){
           this.isAdd = true;
-        }else if(cur.menuPermission == 'sys:dept:edit'){
-          this.isEdit = true;
-        }else if(cur.menuPermission == 'sys:dept:export'){
-          this.isExport = true;
         }
       })
     },
+    getYear(){
+      let start = this.formParmas.year + '-' + '01'+ '-' + '01';
+      let end = this.formParmas.year + '-' + '12'+ '-' + '31'
+      this.formParmas.begintime = this.$moment(start).unix();
+      this.formParmas.endtime = this.$moment(end).unix();
+    },
+    changeQuarter(){
+      let start = ''
+      let end = ''
+      if(this.formParmas.quarter == 1){
+        start = this.formParmas.year + '-' + '01'+ '-' + '01';
+        end = this.$moment(this.formParmas.year + '-' + '03').endOf('month').format("YYYY-MM-DD");
+      }else if(this.formParmas.quarter == 2){
+        start = this.formParmas.year + '-' + '04'+ '-' + '01';
+        end = this.$moment(this.formParmas.year + '-' + '06').endOf('month').format("YYYY-MM-DD");
+      }else if(this.formParmas.quarter == 3){
+        start = this.formParmas.year + '-' + '07'+ '-' + '01';
+        end = this.$moment(this.formParmas.year + '-' + '09').endOf('month').format("YYYY-MM-DD");
+      }else if(this.formParmas.quarter == 4){
+        start = this.formParmas.year + '-' + '10'+ '-' + '01';
+        end = this.$moment(this.formParmas.year + '-' + '12').endOf('month').format("YYYY-MM-DD");
+      }
+      this.formParmas.begintime = this.$moment(start).unix();
+      this.formParmas.endtime = this.$moment(end).unix();
+    },
+   
+    changeMouth(){
+      let start = this.formParmas.mouthDate + '-' + '01';
+      let end = this.$moment(this.formParmas.mouthDate).endOf('month').format("YYYY-MM-DD");
+     
+      this.formParmas.begintime = this.$moment(start).unix();
+      this.formParmas.endtime = this.$moment(end).unix();
+    },
     getData(){
          this.loading = true;
-        DepartmentList(this.formParmas).then(res=>{
+        DeptAssess(this.formParmas).then(res=>{
              this.loading = false;
             if(res.data.code == 0){
-                let data = res.data.data.records;
+                let data = res.data.data;
                 this.tableData = data;
-                this.tableData.forEach(cur=>{
-                    cur.createTime = this.$moment.unix(cur.createTime).format('YYYY-MM-DD') 
-                });
-                this.pagination.total = res.data.data.total;
+                this.tableData.forEach((cur,index)=>{
+                  this.$set(cur,'index',index+'a')
+                })
+                this.pagination.total = res.data.total;
             }else{
                 this.$message.warning('加载失败')
             };
             
         });
     },
-    getDepType(){
+    getType(val){
         let params = {
-              pid: "77"
+              pid: val
             };
         BaseList(params).then(res=>{
           if(res.data.code == 0){
-            this.depList = res.data.data
+            if(val==1015){
+              this.objList = res.data.data
+            }else if(val==1010){
+              this.cycleList = res.data.data
+              this.formParmas.cycle = '1011'
+            }
+            
           };
         });
     },
@@ -237,58 +284,42 @@ export default {
     resetData(){
       this.formParmas.pageNum = 1;
       this.pagination.current = 1;
+      this.formParmas.assessLevel = '';
+      this.formParmas.begintime = '';
+      this.formParmas.endtime = '';
+      this.formParmas.mouthDate = '';
+      this.formParmas.quarter = '';
       this.formParmas.deptName = '';
-      this.formParmas.deptBusinessType = '';
+      this.formParmas.year = this.$moment().format("YYYY");
       this.getData()
     },
     record(key){
-          return key.id
+          return key.index
     },
-    addQuan(val,record){
-      this.$refs.add_quan.addQuan(val,record)
-    },
-    cancellation(obj){
-       //注销
+ 
 
-       let params = {
-        id:obj.id,
-        activition:obj.activition == 0 ? 1 : 0
-       };
-
-        EditDepartment(params).then(res=>{
-
-            if(res.data.code == 0){
-              this.getData();
-              this.$message.success('操作成功');
-            }else{
-              this.$message.warning('操作失败')
-            };
-        });
-    },
-    viewDetails(record){
-      this.$refs.add_business_details.viewDetails(record)
-    },
     exportDep(){
 
       let params = {
-        deptName:this.formParmas.deptName,
-        deptType:this.formParmas.deptType
+        endtime:this.formParmas.endtime,
+        begintime:this.formParmas.begintime
       };
-      ExportDepartment(params).then(res=>{
+      ExportDeptAssess(params).then(res=>{
           if(window.navigator.msSaveBlob){
             const blobObject = new Blob([res.data]);
-            window.navigator.msSaveBlob(blobObject, '企业信息.xls');
+            window.navigator.msSaveBlob(blobObject, '企业评价.xls');
           }else{
             let blob = new Blob([res.data]); // 假设文件为pdf
             let link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            link.download = '企业信息.xls';
+            link.download = '企业评价.xls';
             link.click();
             link.remove();
           }
          
       });
     },
+   
     changeTable(pagination){
       this.pagination.current = pagination.current;
       this.formParmas.pageNum = pagination.current;

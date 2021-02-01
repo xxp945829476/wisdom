@@ -57,9 +57,9 @@ import {UserList,DelUser,DelUserBatch} from '@/network/api'
 export default {
   data() {
       const columns = [
-      { title: '序号', width: 80, customRender:(text, row, index)=>{
-        return <span>{index}</span>;
-      },align:'center'},
+      // { title: '序号', width: 80, customRender:(text, row, index)=>{
+      //   return <span>{index}</span>;
+      // },align:'center'},
       {
         title: '用户账号',
         dataIndex: 'account',
@@ -203,7 +203,7 @@ export default {
     },
     delUserBatch(){
       let that = this;
-
+      console.log(this.delList)
       if(that.delList.length<=0){
             that.$message.warning('请选择用户');
             return false

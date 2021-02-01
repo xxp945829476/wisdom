@@ -273,7 +273,7 @@ export default {
               this.addForm.deptAbbreviation = record.deptAbbreviation;
               this.addForm.deptAddress = record.deptAddress;
               this.addForm.deptName = record.deptName;
-              this.addForm.deptBusinessType = record.deptBusinessType;
+              this.addForm.deptBusinessType = record.deptBusinessType == 0 ? '' : record.deptBusinessType;
               this.addForm.jurisdiction = [record.province,record.city,record.region];
               this.addForm.deptCode = record.deptCode;
               this.addForm.deptLegalPerson = record.deptLegalPerson;

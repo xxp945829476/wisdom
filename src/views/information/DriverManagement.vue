@@ -38,7 +38,7 @@
         <a-table :columns="columns" bordered :data-source="tableData"  @change="changeTable" :rowKey='record' size="middle" :pagination="pagination" :loading="loading" :scroll="{x:1200,y:height}">
                 <span slot="driverPhoto" slot-scope="text,record">
                   <template v-if="text">
-                      <img :src="pathUrl.imgurl + text" class="img_width"/>
+                      <!-- <img :src="pathUrl.imgurl + text" class="img_width"/> -->
                       <a @click="viewImg(text)" class="view_img">查看</a>
                   </template>
                 </span>
