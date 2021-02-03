@@ -81,7 +81,7 @@
 
 import modalScoring from './modalScoring.vue'
 
-import {AssessPointList,BaseList,EditDepartment,ExportDepartment} from '@/network/api'
+import {AssessPointList,BaseList} from '@/network/api'
 
 
 

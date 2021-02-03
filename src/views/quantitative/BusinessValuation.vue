@@ -279,7 +279,7 @@ export default {
     searchData(){
       this.formParmas.pageNum = 1;
       this.pagination.current = 1;
-      this.getData()
+      this.getData();
     },
     resetData(){
       this.formParmas.pageNum = 1;
@@ -291,6 +291,7 @@ export default {
       this.formParmas.quarter = '';
       this.formParmas.deptName = '';
       this.formParmas.year = this.$moment().format("YYYY");
+      this.getYear();
       this.getData()
     },
     record(key){
@@ -302,7 +303,8 @@ export default {
 
       let params = {
         endtime:this.formParmas.endtime,
-        begintime:this.formParmas.begintime
+        begintime:this.formParmas.begintime,
+        deptName:this.formParmas.deptName
       };
       ExportDeptAssess(params).then(res=>{
           if(window.navigator.msSaveBlob){

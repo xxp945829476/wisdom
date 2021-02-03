@@ -1116,7 +1116,7 @@ export function DeptAssess(data){
 // 导出企业评价
 export function ExportDeptAssess(data){
     return fetch({
-        url:'/api//sys-assess-point/export-dept-assess',
+        url:'/api/sys-assess-point/export-dept-assess',
         method:'post',
         data:data,
         responseType:'arraybuffer'
@@ -1132,10 +1132,28 @@ export function AddVehicleBlack(data){
     })
 }
 
+// 新增企业黑名单
+export function AddDeptBlack(data){
+    return fetch({
+        url:'api/sys-dept-blacklist/add',
+        method:'post',
+        data:data,
+    })
+}
+
 // 车辆黑名单列表
 export function VehicleBlackList(data){
     return fetch({
         url:'api/sys-vehicle-blacklist/list',
+        method:'post',
+        data:data,
+    })
+}
+
+// 企业黑名单列表
+export function VehicleDeptList(data){
+    return fetch({
+        url:'api/sys-dept-blacklist/list',
         method:'post',
         data:data,
     })
@@ -1147,6 +1165,35 @@ export function RemoveVehicleBlack(data){
         url:'api/sys-vehicle-blacklist/remove',
         method:'post',
         data:data,
+    })
+}
+
+// 移除企业黑名单
+export function RemoveDeptBlack(data){
+    return fetch({
+        url:'api/sys-dept-blacklist/remove',
+        method:'post',
+        data:data,
+    })
+}
+
+// 导出车辆黑名单
+export function ExportVehicleBlack(data){
+    return fetch({
+        url:'/api/sys-vehicle-blacklist/export',
+        method:'post',
+        data:data,
+        responseType:'arraybuffer'
+    })
+}
+
+// 导出企业黑名单
+export function ExportDeptBlack(data){
+    return fetch({
+        url:'/api/sys-dept-blacklist/export',
+        method:'post',
+        data:data,
+        responseType:'arraybuffer'
     })
 }
 

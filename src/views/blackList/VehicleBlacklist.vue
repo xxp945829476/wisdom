@@ -6,6 +6,10 @@
                <a-button type="primary" icon="plus" v-if="isAdd" @click="addQuan">
                   新增黑名单
                 </a-button>
+              
+                <a-button @click="exportBlack">
+                  导出
+                </a-button>
            </div>
 
             <div class="right_btn">
@@ -68,15 +72,34 @@
 
                 <span slot="action" slot-scope="text,record">
                   
-                    <a>查看</a>
-                    <a-divider type="vertical" />
-                    <a  class="yellow" @click="removeBlack(record.id)">移除</a>
+                    <a @click="viewDetails(record)">查看</a>
+
+                    <template v-if="record.removeUser=='0'&&isRemove">
+                          <a-divider type="vertical" />
+                       <a class="yellow" @click="removeBlack(record.id)">移除</a>
+                    </template>
+   
+                    
+                      
+                       
+          
+                   
                           
              
                   </span>
         </a-table>
 
        <modalBack ref="add_quan" @triggerData="getData"></modalBack>
+       <modalBackDetails ref="view_details"></modalBackDetails>
+       
+        <a-modal v-model="visibleRemark" title="移除黑名单" ok-text="确认" cancel-text="取消" @ok="removeBlackOK">
+          <a-textarea
+            v-model="remark"
+            placeholder="备注"
+            :auto-size="{ minRows: 5 }"
+            />
+        </a-modal>
+
 
    </div>
 </template>
@@ -84,8 +107,11 @@
 <script>
 
 import modalBack from './modalBack.vue'
+import modalBackDetails from './modalBackDetails.vue'
 
-import {VehicleBlackList,BaseList,RemoveVehicleBlack,ExportDepartment} from '@/network/api'
+import {VehicleBlackList,BaseList,RemoveVehicleBlack,ExportVehicleBlack} from '@/network/api'
+
+
 
 
 
@@ -156,6 +182,9 @@ export default {
     ];
       
     return {
+      remark:'',
+      dlID:'',
+      visibleRemark:false,
       loading:false,
       businessVisible:false,
       dialog:true,
@@ -199,14 +228,19 @@ export default {
         showTotal:total => `共 ${total} 条`
       },
       isAdd:false,
+      jsRemove:false,
+      isExport:false
     }
   },
   components:{
-      modalBack
+      modalBack,
+      modalBackDetails
   },
   created(){
     this.init();
   },
+
+   
   mounted(){
    this.$nextTick(()=>{
       this.tableHeight()
@@ -231,8 +265,10 @@ export default {
       
       console.log(permission)
       permission.forEach(cur=>{
-        if(cur.menuPermission == 'sys:assesspoint:add'){
+        if(cur.menuPermission == 'sys:vehicleblacklist:add'){
           this.isAdd = true;
+        }else if(cur.menuPermission == 'sys:vehicleblacklist:remove'){
+          this.isRemove = true;
         }
       })
     },
@@ -247,7 +283,14 @@ export default {
                 let data = res.data.data.records;
                 this.tableData = data;
                 this.tableData.forEach(cur=>{
-                    cur.entryTime = this.$moment.unix(cur.entryTime).format('YYYY-MM-DD hh:mm:ss') 
+                    cur.entryTime = this.$moment.unix(cur.entryTime).format('YYYY-MM-DD hh:mm:ss')
+                    cur.createTime = this.$moment.unix(cur.createTime).format('YYYY-MM-DD hh:mm:ss') 
+                    if(cur.expireTime != 0){
+                      cur.expireTime = this.$moment.unix(cur.expireTime).format('YYYY-MM-DD hh:mm:ss')
+                    }else{
+                      cur.expireTime = ''
+                    }
+                      
                 });
                 this.pagination.total = res.data.data.total;
             }else{
@@ -299,28 +342,19 @@ export default {
     removeBlack(id){
       let that = this;
 
- 
-      this.$confirm({
-        title: '确定移除吗?',
-        content: '',
-        okText: '确定',
-        okType: 'danger',
-        cancelText: '取消',
-        onOk() {
-            that.removeBlackOK(id)
-        },
-        onCancel() {
-          console.log('Cancel');
-        },
-      });
+      that.visibleRemark = true;
+      this.dlID = id;
+      
     },
-    removeBlackOK(val){
+    removeBlackOK(){
       let parmas = {
-        id:val
+        id:this.dlID,
+        removeRemark:this.remark
       }
         RemoveVehicleBlack(parmas).then(res=>{
             if(res.data.code == 0){
                 this.getData()
+                this.visibleRemark = false;
                 this.$message.success('移除成功')
             }else{
                 this.$message.warning(res.data.message)
@@ -334,6 +368,30 @@ export default {
       this.formParmas.searchStartTime = this.$moment(val[0]).unix();
       this.formParmas.searchEndTime = this.$moment(val[1]).unix();
     },
+    exportBlack(){
+
+      let params = {
+        searchStartTime:this.formParmas.searchStartTime,
+        searchEndTime:this.formParmas.searchEndTime,
+        status:this.formParmas.status,
+        reasonType:this.formParmas.reasonType,
+      };
+      ExportVehicleBlack(params).then(res=>{
+          if(window.navigator.msSaveBlob){
+            const blobObject = new Blob([res.data]);
+            window.navigator.msSaveBlob(blobObject, '车辆黑名单.xls');
+          }else{
+            let blob = new Blob([res.data]); // 假设文件为pdf
+            let link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = '车辆黑名单.xls';
+            link.click();
+            link.remove();
+          }
+         
+      });
+    },
+   
    
     changeTable(pagination){
       this.pagination.current = pagination.current;

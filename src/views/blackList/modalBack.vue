@@ -12,7 +12,7 @@
               
                         
 
-                             <a-form-model-item label="车辆名称" prop="vehicleNo">
+                             <a-form-model-item label="车辆名称" prop="vehicleNo" v-if="isType!=1">
 
 
                                 <a-select placeholder="请选择车辆名称" 
@@ -70,12 +70,44 @@
                                       
               
               
-                    <a-form-model-item label="黑名单类型" prop="basisId">
+                    <a-form-model-item label="黑名单类型" prop="reasonType">
                          <a-select v-model="addForm.reasonType" placeholder="请选择黑名单类型">
                             <a-select-option v-for="item in typeList" :key="item.id">
                                 {{item.name}}
                             </a-select-option>
                         </a-select>
+                    </a-form-model-item>
+
+                    <a-form-model-item label="黑名单说明" prop="remark">
+                        <a-textarea
+                        v-model="addForm.remark"
+                        placeholder="请输入黑名单说明"
+                        :auto-size="{ minRows: 5 }"
+                        />
+                    </a-form-model-item>
+
+
+                    <a-form-model-item label="审批材料" prop="file">
+                        <a-row type="flex" justify="start" class="upload_enclosure">
+                            <a-col flex="100px">
+                                <a-upload
+                                    name="avatar"
+                                    list-type="picture-card"
+                                    class="avatar-uploader"
+                                    :show-upload-list="false"
+                                    :before-upload="uploadOne"
+                                >
+                                   <img v-if="addForm.file" :src="pathUrl.imgurl + addForm.file" alt="avatar" />
+                                    <div v-else>
+                                        <a-icon :type="loading ? 'loading' : 'plus'" />
+                                        <div class="ant-upload-text">
+                                            上传
+                                        </div>
+                                    </div>
+                                </a-upload>
+                            </a-col>
+                        </a-row>
+                        
                     </a-form-model-item>
              
 
@@ -98,13 +130,14 @@
 </template>
 
 <script>
-import {BaseList,DepartmentList,AddVehicleBlack,Vehiclelist} from '@/network/api'
+import {BaseList,DepartmentList,AddVehicleBlack,Vehiclelist,uploadOne,AddDeptBlack} from '@/network/api'
 
 import debounce from 'lodash/debounce'
-
+import pathUrl from "@/network/requestUrl";
 export default {
   data() {
     return {
+      pathUrl,
       labelCol: { span: 5 },
       wrapperCol: { span: 16 },
       loading:false,
@@ -117,6 +150,8 @@ export default {
         reasonType:undefined,
         vehicleNo:'',
         vehicleId:undefined,
+        file:'',
+        remark:''
       },
       rules:{
         vehicleNo:[
@@ -130,7 +165,7 @@ export default {
         ]
       },
      title:'新增黑名单',
-      isEdit:0,
+      isType:0,
       typeList:[],
       companyList:[],
       vehiclelist:[],
@@ -158,11 +193,12 @@ export default {
       this.save = debounce(this.save,500)//保存防止重复点击
   },
   methods:{
-    addQuan(){
+    addQuan(val){
             this.backVisible = true;
-
+            this.isType = val;
           this.$nextTick(()=>{
               this.$refs.ruleForm.resetFields();
+              this.addForm.vehicleNo = '';
              document.querySelector('.ant-modal-body').scrollTop = 0;    
           })
           
@@ -250,6 +286,19 @@ export default {
       this.getCompanyData();
     },
 
+     uploadOne(file, fileList){
+        let param = new FormData()
+        param.append('file',file);
+        this.loading = true;
+        uploadOne(param).then(res=>{
+            this.loading = false;
+            if(res.data.code == 0){
+                this.addForm.file = res.data.data.path;
+            };
+        })
+        return false
+    },
+
     
     
 
@@ -257,8 +306,12 @@ export default {
       
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-      
-             this.onSubmit();
+            if(this.isType==1){
+               this.onDeptSubmit();
+            }else{
+               this.onSubmit();
+            }
+            
          
          
         } else {
@@ -270,6 +323,19 @@ export default {
     onSubmit(){
      this.spinning = true;
       AddVehicleBlack(this.addForm).then(res=>{
+          this.spinning = false;
+          if(res.data.code == 0){
+            this.backVisible = false;
+            this.$message.success('保存成功');
+            this.$emit('triggerData');
+          }else{
+            this.$message.warning('保存失败')
+          };
+      });
+    },
+    onDeptSubmit(){
+     this.spinning = true;
+      AddDeptBlack(this.addForm).then(res=>{
           this.spinning = false;
           if(res.data.code == 0){
             this.backVisible = false;
