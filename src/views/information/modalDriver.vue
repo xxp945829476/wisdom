@@ -73,7 +73,7 @@
         </div>
         </a-spin>
         <template slot="footer">
-            <a-button key="back">
+            <a-button key="back" @click="driverVisible=false">
             取消
             </a-button>
             <a-button key="submit" type="primary" @click="save">
