@@ -1197,6 +1197,59 @@ export function ExportDeptBlack(data){
     })
 }
 
+// 案件列表
+export function CaseList(data){
+    return fetch({
+        url:'api/sys-case/list',
+        method:'post',
+        data:data,
+    })
+}
+
+// 新增案件
+export function AddCase(data){
+    return fetch({
+        url:'api/sys-case/add',
+        method:'post',
+        data:data,
+    })
+}
+
+// 编辑案件
+export function EditCase(data){
+    return fetch({
+        url:'api/sys-case/edit',
+        method:'post',
+        data:data,
+    })
+}
+
+// 新增案件处罚
+export function AddPunish(data){
+    return fetch({
+        url:'api/sys-case/add-punish',
+        method:'post',
+        data:data,
+    })
+}
+// 编辑案件处罚
+export function EditPunish(data){
+    return fetch({
+        url:'api/sys-case/edit-punish',
+        method:'post',
+        data:data,
+    })
+}
+
+// 编辑案件处罚
+export function SavePunish(data){
+    return fetch({
+        url:'api/sys-case/save-punish',
+        method:'post',
+        data:data,
+    })
+}
+
 
 
 

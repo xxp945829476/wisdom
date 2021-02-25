@@ -80,6 +80,9 @@ li {
     background: #cdcdcd;
     border-radius: 2px;
 }
+em,i,b{
+    font-style: normal;
+}
 
 
 html, body {

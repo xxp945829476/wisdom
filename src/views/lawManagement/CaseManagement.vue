@@ -22,38 +22,19 @@
            <div class="layout_card_search">
                 <a-form-model layout="inline" :model="formParmas" @submit="searchData" @submit.native.prevent>
                     <a-row :gutter="24">
-                         <a-col :md="8">
-                            <a-form-model-item label="车辆名称">
-                                  <a-input v-model="formParmas.vehicleNo"/>
+                         <a-col :md="12">
+                            <a-form-model-item label="企业名称">
+                                  <a-input v-model="formParmas.deptName"/>
                             </a-form-model-item>
                         </a-col>
 
-                        <a-col :md="8">
-                            <a-form-model-item label="黑名单类型">
-                              <a-select v-model="formParmas.reasonType">
-                                    <a-select-option v-for="item in typeList" :key="item.id">
-                                        {{item.name}}
-                                    </a-select-option>
-                                </a-select>
-                            </a-form-model-item>
-                        </a-col>
-                        <a-col :md="8">
-                            <a-form-model-item label="黑名单状态">
-                                 <a-select v-model="formParmas.status">
-                                    <a-select-option v-for="item in statusList" :key="item.id">
-                                        {{item.name}}
-                                    </a-select-option>
-                                  </a-select>
+                        <a-col :md="12">
+                            <a-form-model-item label="车牌号码">
+                                 <a-input v-model="formParmas.vehicleNo"/>
                             </a-form-model-item>
                         </a-col>
 
-                        <template v-if="advanced">
-                            <a-col :md="16">
-                                <a-form-model-item label="时间选择">
-                                  <a-range-picker :allowClear="false"  v-model="formParmas.date" @change="changeDate" format="YYYY-MM-DD"  valueFormat="YYYY-MM-DD"/>
-                                </a-form-model-item>
-                            </a-col>
-                        </template>
+                
                     </a-row>
                 </a-form-model>
            </div>
@@ -64,28 +45,22 @@
                
                
                <span slot="status" slot-scope="text,record">
-                 
-                     <a-badge  v-if="record.removeUser=='0'" status="success" text="生效" />
-                     <a-badge   v-else status="error" text="移除" />
+                     
+                     <a-badge  v-if="text=='0'"  status="processing" text="待处理" />
+                     <a-badge  v-else-if="text=='1'"  status="processing" text="待处罚" />
+                     <a-badge  v-else  status="default" text="已结案" />
                 </span>
 
                 <span slot="action" slot-scope="text,record">
                   
-                    <a @click="viewDetails(record)">查看</a>
-
-                    <template v-if="record.removeUser=='0'&&isRemove">
-                          <a-divider type="vertical" />
-                       <a class="yellow" @click="removeBlack(record.id)">移除</a>
+                    <a @click="addCase(1,record)">编辑</a>
+                    <template v-if="record.status!='0'&&record.status!='1'">
+                      <a-divider type="vertical" />
+                    <a @click="addCase(2,record)">查看</a>
                     </template>
-   
                     
-                      
-                       
-          
-                   
-                          
-             
-                  </span>
+
+                </span>
         </a-table>
 
        <modalCase ref="add_case" @triggerData="getData"></modalCase>
@@ -99,9 +74,9 @@
 <script>
 
 import modalCase from './modalCase.vue'
-// import modalBackDetails from './modalBackDetails.vue'
 
-import {VehicleBlackList,BaseList,RemoveVehicleBlack,ExportVehicleBlack} from '@/network/api'
+import {CaseList,BaseList,RemoveVehicleBlack,ExportVehicleBlack} from '@/network/api'
+
 
 
 
@@ -115,8 +90,8 @@ export default {
       },align:'center'},
       {
         title: '执法单号',
-        dataIndex: 'vehicleNo1',
-        key: 'vehicleNo',
+        dataIndex: 'caseNo',
+        key: 'caseNo',
         align:'center',
         ellipsis:true,
       },
@@ -136,84 +111,93 @@ export default {
       },
       {
         title: '驾驶员',
-        dataIndex: 'deptName1',
-        key: 'deptName',
+        dataIndex: 'driverName',
+        key: 'driverName',
         align:'center',
         ellipsis:true,
       },
       {
         title: '驾驶证号',
-        dataIndex: 'reasonName',
-        key: 'reasonName',
+        dataIndex: 'driverLicenseNo',
+        key: 'driverLicenseNo',
         align:'center',
         ellipsis:true,
   
       },
       {
         title: '经办人',
-        dataIndex: 'createUserName',
-        key: 'createUserName',
+        dataIndex: 'agentName',
+        key: 'agentName',
         align:'center',
         ellipsis:true,
   
       },
       {
-        title: '检查时间',
-        dataIndex: 'removeUserName',
-        key: 'removeUserName',
-        align:'center',
-        ellipsis:true,
-      },
-      {
-        title: '检查地点',
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
         align:'center',
         ellipsis:true,
         scopedSlots: { customRender: 'status' },
       },
       {
+        title: '检查时间',
+        dataIndex: 'checkTime',
+        key: 'checkTime',
+        align:'center',
+        ellipsis:true,
+      },
+      {
+        title: '检查地点',
+        dataIndex: 'checkArea',
+        key: 'checkArea',
+        align:'center',
+        ellipsis:true,
+      },
+      {
         title: '辖区',
-        dataIndex: 'entryTime',
-        key: 'entryTime',
+        dataIndex: 'areaName',
+        key: 'areaName',
         align:'center',
         ellipsis:true,
   
       },
       {
         title: '核准证编号',
-        dataIndex: 'entryTime',
-        key: 'entryTime',
+        dataIndex: 'approvalCertificateNo',
+        key: 'approvalCertificateNo',
         align:'center',
         ellipsis:true,
   
       },
       {
         title: '出土工地',
-        dataIndex: 'entryTime',
-        key: 'entryTime',
+        dataIndex: 'fromFieldName',
+        key: 'fromFieldName',
         align:'center',
         ellipsis:true,
   
       },
       {
         title: '消纳场',
-        dataIndex: 'entryTime',
-        key: 'entryTime',
+        dataIndex: 'toFieldName',
+        key: 'toFieldName',
         align:'center',
         ellipsis:true,
   
       },
       {
         title: '违章类型',
-        dataIndex: 'entryTime',
-        key: 'entryTime',
+        dataIndex: 'violationTypeName',
+        key: 'violationTypeName',
         align:'center',
         ellipsis:true,
   
       },
       {
         title: '暂扣证件',
-        dataIndex: 'entryTime',
-        key: 'entryTime',
+        dataIndex: 'withholdCertificateName',
+        key: 'withholdCertificateName',
         align:'center',
         ellipsis:true,
   
@@ -240,14 +224,11 @@ export default {
       roleVisible:false,
       height:'',
       formParmas: {
+        caseNo:'',
         vehicleNo : '',
         pageNum:1,
         pageSize:20,
-        searchStartTime:'',
-        searchEndTime:'',
-        status:'',
-        reasonType:'',
-        date:[]
+        deptName:''
       },
       advanced:false,
       tableData:[],
@@ -323,19 +304,16 @@ export default {
    
     getData(){
          this.loading = true;
-        VehicleBlackList(this.formParmas).then(res=>{
+        CaseList(this.formParmas).then(res=>{
              this.loading = false;
             if(res.data.code == 0){
                 let data = res.data.data.records;
                 this.tableData = data;
                 this.tableData.forEach(cur=>{
-                    cur.entryTime = this.$moment.unix(cur.entryTime).format('YYYY-MM-DD hh:mm:ss')
-                    cur.createTime = this.$moment.unix(cur.createTime).format('YYYY-MM-DD hh:mm:ss') 
-                    if(cur.expireTime != 0){
-                      cur.expireTime = this.$moment.unix(cur.expireTime).format('YYYY-MM-DD hh:mm:ss')
-                    }else{
-                      cur.expireTime = ''
-                    }
+                    cur.checkTime = this.$moment.unix(cur.checkTime).format('YYYY-MM-DD hh:mm:ss')
+                    cur.violationTime = this.$moment.unix(cur.violationTime).format('YYYY-MM-DD hh:mm:ss')
+                    cur.dealTime = this.$moment.unix(cur.dealTime).format('YYYY-MM-DD hh:mm:ss')
+                 
                       
                 });
                 this.pagination.total = res.data.data.total;
@@ -367,18 +345,14 @@ export default {
       this.formParmas.pageNum = 1;
       this.pagination.current = 1;
       this.formParmas.vehicleNo = '';
-      this.formParmas.searchStartTime = '';
-      this.formParmas.searchEndTime = '';
-      this.formParmas.status = '';
-      this.formParmas.reasonType = '';
-       this.formParmas.date = [];
+      this.formParmas.deptName = '';
       this.getData()
     },
     record(key){
           return key.id
     },
-    addCase(val){
-      this.$refs.add_case.addCase(val)
+    addCase(val,record){
+      this.$refs.add_case.addCase(val,record)
     },
    
     viewDetails(record){
